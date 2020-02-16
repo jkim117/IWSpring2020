@@ -131,9 +131,9 @@ struct user_metadata_t {
 
     bit<1024> server_name;
     bit<64> hashed_name;
-    bit<10> index_1;
-    bit<10> index_2;
-    bit<10> index_3;
+    bit<32> index_1;
+    bit<32> index_2;
+    bit<32> index_3;
     bit<64> temp_counter;
     bit<32> temp_cip;
     bit<32> temp_sip;
@@ -221,7 +221,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query2 {
-        bit<32> part1_size = p.dns_query.label1.label;
+        bit<32> part1_size = (bit<32>)p.dns_query.label1.label;
         pkt.extract(p.dns_query.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
         pkt.extract(p.dns_query.label2);
 
@@ -237,7 +237,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query3 {
-        bit<32> part2_size = p.dns_query.label2.label;
+        bit<32> part2_size = (bit<32>)p.dns_query.label2.label;
         pkt.extract(p.dns_query.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
         pkt.extract(p.dns_query.label3);
 
@@ -253,7 +253,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query4 {
-        bit<32> part3_size = p.dns_query.label3.label;
+        bit<32> part3_size = (bit<32>)p.dns_query.label3.label;
         pkt.extract(p.dns_query.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
         pkt.extract(p.dns_query.label4);
 
@@ -269,7 +269,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query5 {
-        bit<32> part4_size = p.dns_query.label4.label;
+        bit<32> part4_size = (bit<32>)p.dns_query.label4.label;
         pkt.extract(p.dns_query.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
         pkt.extract(p.dns_query.label5);
 
