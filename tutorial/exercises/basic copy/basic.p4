@@ -476,7 +476,7 @@ control Pipe(inout Parsed_packet headers,
 // Deparser Implementation
 control Deparser(packet_out b,
                     in Parsed_packet p,
-                    in user_met1adata_t user_metadata) { 
+                    in user_metadata_t user_metadata) { 
     apply {
         /*b.emit(p.ethernet);
         b.emit(p.ipv4);
