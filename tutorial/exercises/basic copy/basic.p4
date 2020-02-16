@@ -145,7 +145,7 @@ struct user_metadata_t {
 // parsers
 parser TopParser(packet_in pkt,
            out Parsed_packet p,
-           out user_metadata_t user_metadata,
+           inout user_metadata_t user_metadata,
            inout standard_metadata_t standard_metadata) {
     state start {
         pkt.extract(p.ethernet);
