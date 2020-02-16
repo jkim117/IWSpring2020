@@ -1,34 +1,9 @@
 #include <core.p4>
-#include <sume_switch.p4>
+#include <v1model.p4>
 
-// How many bits fit in the query name.
-#define QNAME_LENGTH 56
-// How many bits we can return as a reponse.
-#define DNS_RESPONSE_SIZE 128
-// We can only send 256 bits to the CPU per packet.
-// 64 are already taken with the Ethernet address for the learning
-// switch.  I think we could take that down to 48 if this is a limit.
-#define BITS_USED_FOR_DIGEST_FLAGS 8
-#define BITS_USED_FOR_PORT_ID 8
-#define IP_ADDR_LENGTH 32
-#define DNS_TTL 32
-#define UNUSED_DIGEST_BITS_COMPUTED 256 - 64 - BITS_USED_FOR_DIGEST_FLAGS - BITS_USED_FOR_PORT_ID
-#if UNUSED_DIGEST_BITS_COMPUTED < 0
-#error "Unused digest bits must be greater than or equal to 0"
-#endif
-// The preprocessor can't compute, so this actually needs to be done manually.
-#define UNUSED_DIGEST_BITS 176
-#if UNUSED_DIGEST_BITS != UNUSED_DIGEST_BITS_COMPUTED
-#error "UNUSED_DIGEST_BITS must be updated whenever any lengths are updated"
-#error "Also make sure to update sss_digest_header.py"
-#endif
-
-#define CPU_PORTS 8w0b10101010
-
-#define IS_DNS 1
-#define IS_DNS_RESPONSE 2
-#define RECURSION_REQUESTED 4
-#define FORWARDING_ENTRY 8
+#define TABLE_SIZE 1024
+#define HASH_TABLE_BASE 10w0
+#define HASH_TABLE_MAX 10w1023
 
 typedef bit<48> MacAddress;
 typedef bit<32> IPv4Address;
@@ -82,18 +57,6 @@ header udp_h {
     bit<16> chksum; 
 }
 
-header dns_question_record_h {
-    bit<QNAME_LENGTH> dns_qname;
-    bit<16> qtype;
-    bit<16> qclass;
-}
-
-header dns_question_record_h_48 {
-	bit<48> dns_qname;
-	bit<16> qtype;
-	bit<16> qclass;
-}
-
 header dns_h {
     bit<16> id;
     bit<1> is_response;
@@ -112,23 +75,48 @@ header dns_h {
     bit<16> addn_rec;
 }
 
-struct dns_query {
-    dns_h dns_header;
-    dns_question_record_h question;
+header dns_q_label {
+    bit<8> label;
 }
 
-header dns_response_h {
-    bit<DNS_RESPONSE_SIZE> answer;
+header dns_q_part {
+    varbit<256> part; // For 32 bytes max
+}
+
+header dns_qtype_class {
+    bit<32> type_class;
+}
+
+struct dns_q {
+    dns_q_label label1;
+    dns_q_part part1;
+    dns_q_label label2;
+    dns_q_part part2;
+    dns_q_label label3;
+    dns_q_part part3;
+    dns_q_label label4;
+    dns_q_part part4;
+    dns_q_label label5;
+    bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+    dns_qtype_class tc;
+}
+
+header dns_a {
+    bit<16> qname_pointer;
+    dns_qtype_class tc;
+    bit<32> ttl;
+    bit<16> rd_length;
+    bit<32> rdata; //IPV4 is always 32 bit.
 }
 
 // List of all recognized headers
 struct Parsed_packet { 
     ethernet_h ethernet;
     ipv4_h ipv4;
-    udp_h udp; 
-    dns_query dns;
-    dns_response_h dns_response_fields;
-	dns_question_record_h_48 question_48;
+    udp_h udp;
+    dns_h dns_header; 
+    dns_q dns_query;
+    dns_a dns_answer;
 }
 // digest data to send to cpu if desired.  Note that everything must be a
 // multiple of 8 bits or scapy can't process it.
@@ -152,6 +140,18 @@ struct user_metadata_t {
 	bit<1> is_dns;
 	bit<1> is_ip;
     bit<3>  unused;
+
+    bit<1024> server_name;
+    bit<64> hashed_name;
+    bit<10> index_1;
+    bit<10> index_2;
+    bit<10> index_3;
+    bit<64> temp_counter;
+    bit<32> temp_cip;
+    bit<32> temp_sip;
+    bit<1> already_matched;
+    bit<64> min_counter;
+    bit<2> min_table;
 }
 
 @Xilinx_MaxLatency(3)
@@ -171,12 +171,10 @@ extern void compute_ip_chksum(in bit<4> version,
                          out bit<16> result);
 
 // parsers
-@Xilinx_MaxPacketRegion(16384)
-parser TopParser(packet_in pkt,
+parser Parser(packet_in pkt,
            out Parsed_packet p,
            out user_metadata_t user_metadata,
-           out digest_data_t digest_data,
-           inout sume_metadata_t sume_metadata) {
+           out digest_data_t digest_data) {
     state start {
         pkt.extract(p.ethernet);
         // These are set appropriately in the TopPipe.
@@ -216,216 +214,257 @@ parser TopParser(packet_in pkt,
 	}
 
 	state parse_dns_header {
-        pkt.extract(p.dns.dns_header);
+        pkt.extract(p.dns_header);
 		user_metadata.is_dns = 1;
 
-		transition select(p.dns.dns_header.q_count) {
-			1: select_dns_length;
+		transition select(p.dns_header.is_response) {
+			1: parse_dns_query1;
 			default: accept;
 		}
 	}
 
-	state select_dns_length {
-		transition select(p.ipv4.len) {
-			51: parse_dns_question_56;
-			50: parse_dns_question_48;
-			default: accept;
-		}
-	}
+    state parse_dns_query1 {
+        pkt.extract(p.dns_query.label1);
 
-	#if QNAME_LENGTH != 56
-	#error "Qname means the states need to be updated maybe."
-	#endif
-	state parse_dns_question_56 {
-        pkt.extract(p.dns.question);
-		transition accept;
-	}
+        transition select(p.dns_query.label1) {
+            0: dns_query_end1;
+            default: parse_dns_query2;
+        }
+    }
 
-	state parse_dns_question_48 {
-		pkt.extract(p.question_48);
-		transition accept;
-	}
+    state dns_query_end1 {
+        p.dns_query.last_label = 1;
+        transition parse_dns_answer;
+    }
+
+    state parse_dns_query2 {
+        bit<32> part1_size = p.dns_query.label1;
+        pkt.extract(p.dns_query.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
+        pkt.extract(p.dns_query.label2);
+
+        transition select(p.dns_query.label2) {
+            0: dns_query_end2;
+            default: parse_dns_query3;
+        }
+    }
+
+    state dns_query_end2 {
+        p.dns_query.last_label = 2;
+        transition parse_dns_answer;
+    }
+
+    state parse_dns_query3 {
+        bit<32> part2_size = p.dns_query.label2;
+        pkt.extract(p.dns_query.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
+        pkt.extract(p.dns_query.label3);
+
+        transition select(p.dns_query.label3) {
+            0: dns_query_end3;
+            default: parse_dns_query4;
+        }
+    }
+
+    state dns_query_end3 {
+        p.dns_query.last_label = 3;
+        transition parse_dns_answer;
+    }
+
+    state parse_dns_query4 {
+        bit<32> part3_size = p.dns_query.label3;
+        pkt.extract(p.dns_query.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
+        pkt.extract(p.dns_query.label4);
+
+        transition select(p.dns_query.label4) {
+            0: dns_query_end4;
+            default: parse_dns_query5;
+        }
+    }
+
+    state dns_query_end4 {
+        p.dns_query.last_label = 4;
+        transition parse_dns_answer;
+    }
+
+    state parse_dns_query5 {
+        bit<32> part4_size = p.dns_query.label4;
+        pkt.extract(p.dns_query.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
+        pkt.extract(p.dns_query.label5);
+
+        transition select(p.dns_query.label5) {
+            0: dns_query_end5;
+            default: domain_too_long;
+        }
+    }
+
+    state dns_query_end5 {
+        p.dns_query.last_label = 5;
+        transition parse_dns_answer;
+    }
+
+    state domain_too_long {
+        p.dns_query.last_label = 0;
+        transition accept;
+    }
+
+    state parse_dns_answer {
+        pkt.extract(p.dns_query.tc);
+        pkt.extract(p.dns_answer);
+
+        transition accept;
+    }
 }
 
-control TopPipe(inout Parsed_packet headers,
+control Pipe(inout Parsed_packet headers,
                 inout user_metadata_t user_metadata, 
-                inout digest_data_t digest_data, 
-                inout sume_metadata_t sume_metadata) {
+                inout digest_data_t digest_data) {
 
-    // MY CODE HERE:
-    table requests {
-        key = {
-            headers.dns.dns_header.id: exact;
-            headers.ipv4.src: exact;
-        }
-    }
+    register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
+    register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
+    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_1;
+    register<bit<64>>(TABLE_SIZE) dns_counter_table_1;
 
-    // MY CODE ENDS:
+    register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
+    register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
+    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_2;
+    register<bit<64>>(TABLE_SIZE) dns_counter_table_2;
 
-    action set_output_port(port_t port) {
-        sume_metadata.dst_port = sume_metadata.dst_port | port;
-    }
+    register<bit<32>>(TABLE_SIZE) dns_cip_table_3;
+    register<bit<32>>(TABLE_SIZE) dns_sip_table_3;
+    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_3;
+    register<bit<64>>(TABLE_SIZE) dns_counter_table_3;
 
-    table forward {
-        key = { headers.ethernet.dst: exact; }
-
-        actions = {
-            set_output_port;
-            NoAction;
-        }
-        size = 64;
-        default_action = NoAction;
-    }
-
-    action set_broadcast(port_t port) {
-        sume_metadata.dst_port = sume_metadata.dst_port | port;
-    }
-
-    table broadcast {
-        key = { sume_metadata.src_port: exact; }
+    
+    table known_domain_list {
+        key = {user_metadata.server_name: exact;}
 
         actions = {
-            set_broadcast;
-            NoAction;
+            add_domain_entry;
         }
-        size = 64;
-        default_action = NoAction;
+        size = 2048; //tbd
+        default_action = No_Action;
     }
 
-    table smac {
-        key = { headers.ethernet.src: exact; }
+    action add_domain_entry() {
+        bit<64> NAME_HASH_MIN = 64w0;
+        bit<64> NAME_HASH_MAX = (65w2 << 64) - 1;
 
-        actions = {
-            NoAction;
-        }
-        size = 64;
-        default_action = NoAction;
-    }
-
-    action dma_send_to_control() {
-        sume_metadata.dst_port = sume_metadata.dst_port | 8w0b00000010;
-		sume_metadata.send_dig_to_cpu = 1;
-    }
-
-    action dns_dig_send_to_control() {
-		// It would be better to send this as a digest.  However,
-		// because we can't expand our parser and still close timing,
-		// we can't process the DNS response header.
-		// (Without going off the end of a DNS request packet).
-		// So, we have to send the whole packet via DMA to be processed..
-        sume_metadata.dst_port = sume_metadata.dst_port | 8w0b00000010;
-		sume_metadata.send_dig_to_cpu = 1;
-    }
-
-    action mac_dig_send_to_control() {
-        digest_data.flags = digest_data.flags | FORWARDING_ENTRY;
-        digest_data.src_port = sume_metadata.src_port;
-        digest_data.eth_src_addr = 16w0 ++ headers.ethernet.src;
-        sume_metadata.send_dig_to_cpu = 1;
-    }
-
-    action NoDNSMatch() {
-        user_metadata.response_set = 0;
-    }
-
-    action DNSMatch(bit<DNS_RESPONSE_SIZE> answer) {
-        // Flip the sender and receiver addresses:
-        bit<48> tmpEther = headers.ethernet.src;
-        headers.ethernet.src = headers.ethernet.dst;
-        headers.ethernet.dst = tmpEther;
-
-        // Do the IPv4 swap:
-        bit<32> tmpIpv4Addr = headers.ipv4.src;
-        headers.ipv4.src = headers.ipv4.dst;
-        headers.ipv4.dst = tmpIpv4Addr;
-        headers.ipv4.len = headers.ipv4.len + DNS_RESPONSE_SIZE / 8;
-
-
-        bit<16> tmpPort = headers.udp.sport;
-        headers.udp.sport = headers.udp.dport;
-        headers.udp.dport = tmpPort;
-        // TODO -- Recalculate the UDP checksum.  For now, set it to zero.
-        // Zero disables the UDP checksum.
-        headers.udp.chksum = 0;
-		headers.udp.len = headers.udp.len + DNS_RESPONSE_SIZE / 8;
-
-        headers.dns.dns_header.is_response = 1;
-        headers.dns.dns_header.opcode = 0;
-        headers.dns.dns_header.answer_count = 1;
-        headers.dns.dns_header.resp_code = 0;
-        headers.dns_response_fields = {answer};
-
-        user_metadata.response_set = 1;
-
-        headers.dns_response_fields.setValid();
-    }
-
-    table dns {
-        key = { headers.dns.question.dns_qname: exact; }
-        
-        actions = {
-            DNSMatch;
-            NoDNSMatch;
+        if (headers.dns_query.last_label == 1) {
+            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label}, NAME_HASH_MAX);
+        } else if (headers.dns_query.last_label == 2) {
+            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, NAME_HASH_MAX);
+        } else if (headers.dns_query.last_label == 3) {
+            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, NAME_HASH_MAX);
+        } else if (headers.dns_query.last_label == 4) {
+            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, NAME_HASH_MAX);
+        } else if (headers.dns_query.last_label == 5) {
+            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, NAME_HASH_MAX);
         }
 
-        size = 64;
+        // headers.dns_answer.rdata; server ip
+        // headers.ipv4.dst; client ip
 
-        default_action = NoDNSMatch;
+        hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
+        hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
+        hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_answer.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+
+        user_metadata.already_matched = 0;
+        // access table 1
+        dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
+        dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
+        dns_counter_table_1.read(user_metadata.temp_counter, user_metadata.index_1);
+        if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+            dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
+            dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
+            dns_counter_table_1.write(user_metadata.index_1, user_metadata.temp_counter + 1);
+            dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
+            user_metadata.already_matched = 1;
+        }
+        else {
+            user_metadata.min_counter = user_metadata.temp_counter;
+            user_metadata.min_table = 1;
+        }
+
+        // access table 2
+        if (user_metadata.already_matched == 0) {
+            dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+            dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+            dns_counter_table_2.read(user_metadata.temp_counter, user_metadata.index_2);
+            if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
+                dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
+                dns_counter_table_2.write(user_metadata.index_2, user_metadata.temp_counter + 1);
+                dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
+                user_metadata.already_matched = 1;
+            }
+            else {
+                if (user_metadata.temp_counter < user_metadata.min_counter) {
+                    user_metadata.min_counter = user_metadata.temp_counter;
+                    user_metadata.min_table = 2;
+                }
+            }
+        }
+
+        // access table 3
+        if (user_metadata.already_matched == 0) {
+            dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+            dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+            dns_counter_table_3.read(user_metadata.temp_counter, user_metadata.index_3);
+            if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
+                dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
+                dns_counter_table_3.write(user_metadata.index_3, user_metadata.temp_counter + 1);
+                dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
+                user_metadata.already_matched = 1;
+            }
+            else {
+                if (user_metadata.temp_counter < user_metadata.min_counter) {
+                    user_metadata.min_counter = user_metadata.temp_counter;
+                    user_metadata.min_table = 3;
+                }
+            }
+        }
+
+        // recirculate
+        if (user_metadata.already_matched == 0) {
+            if(user_metadata.min_table == 1) {
+                dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
+                dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
+                dns_counter_table_1.write(user_metadata.index_1, 1);
+                dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
+            }
+            else if (user_metadata.min_table == 2) {
+                dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
+                dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
+                dns_counter_table_2.write(user_metadata.index_2, 1);
+                dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
+            }
+            else if (user_metadata.min_table == 3) {
+                dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
+                dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
+                dns_counter_table_3.write(user_metadata.index_3, 1);
+                dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
+            }
+        }
+
     }
 
     apply {
-		if ((headers.ipv4.isValid() && headers.ipv4.len == 50) ||
-			headers.question_48.isValid()) {
-			headers.dns.question.dns_qname = headers.question_48.dns_qname ++ 8w0;
-			headers.dns.question.qtype = headers.question_48.qtype;
-			headers.dns.question.qclass = headers.question_48.qclass;
+        bit<1024> SERVER_MIN = 0;
+        bit<1024> SERVER_MAX = (11w2 << 10) - 1;
 
-			headers.dns.question.setValid();
-		}
-
-        bool to_control_only = false;
-        bool came_from_control = (sume_metadata.src_port & CPU_PORTS) > 0;
-        if (user_metadata.is_dns == 1) {
-            user_metadata.do_dns = (bit) (user_metadata.is_dns == 1 && headers.dns.dns_header.is_response == 0 && headers.dns.dns_header.q_count == 1 && headers.dns.dns_header.answer_count == 0 && headers.dns.question.qtype == 1 && headers.dns.question.qclass == 1);
-
-            // This will be set to true if we match the appropriate parts.
-            user_metadata.response_set = (bit) (headers.dns.dns_header.is_response == 1);
-            
-            // Make sure that the response settings aren't triggered.
-            // The are set in the dns table if required.
-
-            // Try to perform DNS work.
-            if (user_metadata.do_dns == 1) {
-                user_metadata.recur_desired = (bit) (headers.dns.dns_header.recur_desired == 1);
-
-                // If we miss the table and requested recursion, then pass on to the control
-                // plane.
-                if (!dns.apply().hit && user_metadata.recur_desired == 1 && !came_from_control) {
-                    // This packet will be held in the control plane until recursion finishes.
-                    // Do not send it out with the switch functionality
-                    dma_send_to_control();
-                    to_control_only = true;
-                }
-            } else if (user_metadata.response_set == 1 && !came_from_control) {
-                // Send to control as before.  In this case, we will send the packet
-                // anyway.
-                dns_dig_send_to_control();
-            }
+        if (headers.dns_query.last_label == 1) {
+            hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label}, SERVER_MAX);
+        } else if (headers.dns_query.last_label == 2) {
+            hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, SERVER_MAX);
+        } else if (headers.dns_query.last_label == 3) {
+            hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, SERVER_MAX);
+        } else if (headers.dns_query.last_label == 4) {
+            hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, SERVER_MAX);
+        } else if (headers.dns_query.last_label == 5) {
+            hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, SERVER_MAX);
         }
-        
-        if (!to_control_only) {
-            // try to forward based on destination Ethernet address
-            if (!forward.apply().hit) {
-                // miss in forwarding table
-                broadcast.apply();
-            }
 
-            /* // check if src Ethernet address is in the forwarding database */
-            if (!smac.apply().hit && !came_from_control) {
-                // unknown source MAC address
-                mac_dig_send_to_control();
-            }
-	}
+        known_domain_list.apply();
 
 	if (user_metadata.is_ip == 1) {
             bit<16> result;
@@ -446,22 +485,14 @@ control TopPipe(inout Parsed_packet headers,
                                 result);
             headers.ipv4.chksum = result;
 	}
-
-	if (headers.question_48.isValid()) {
-		// If we parsed a 48 bit long DNS name, then we shouldn't emit
-		// the 56 bit long DNS names.
-		headers.dns.question.setInvalid();
-	}
 	}
 }
 
 // Deparser Implementation
-@Xilinx_MaxPacketRegion(16384)
-control TopDeparser(packet_out b,
+control Deparser(packet_out b,
                     in Parsed_packet p,
-                    in user_metadata_t user_metadata,
-                    inout digest_data_t digest_data,
-                    inout sume_metadata_t sume_metadata) { 
+                    in user_met1adata_t user_metadata,
+                    inout digest_data_t digest_data) { 
     apply {
         b.emit(p.ethernet);
         b.emit(p.ipv4);
@@ -476,4 +507,4 @@ control TopDeparser(packet_out b,
 }
 
 // Instantiate the switch
-SimpleSumeSwitch(TopParser(), TopPipe(), TopDeparser()) main;
+V1Switch(Parser(), Pipe(), Deparser()) main;
