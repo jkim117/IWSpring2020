@@ -315,17 +315,6 @@ control TopPipe(inout Parsed_packet headers,
     register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_3;
     register<bit<64>>(TABLE_SIZE) dns_counter_table_3;
 
-    
-    table known_domain_list {
-        key = {user_metadata.server_name: exact;}
-
-        actions = {
-            add_domain_entry;
-        }
-        size = 2048; //tbd
-        default_action = No_Action;
-    }
-
     action add_domain_entry() {
         bit<64> NAME_HASH_MIN = 64w0;
         bit<64> NAME_HASH_MAX = (65w2 << 64) - 1;
@@ -428,6 +417,16 @@ control TopPipe(inout Parsed_packet headers,
             }
         }
 
+    }
+
+    table known_domain_list {
+        key = {user_metadata.server_name: exact;}
+
+        actions = {
+            add_domain_entry;
+        }
+        size = 2048; //tbd
+        default_action = NoAction();
     }
 
     apply {
