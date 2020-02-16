@@ -159,7 +159,7 @@ extern void compute_ip_chksum(in bit<4> version,
                          out bit<16> result);*/
 
 // parsers
-parser Parser(packet_in pkt,
+parser TopParser(packet_in pkt,
            out Parsed_packet p,
            out user_metadata_t user_metadata) {
     state start {
@@ -297,7 +297,7 @@ parser Parser(packet_in pkt,
     }
 }
 
-control Pipe(inout Parsed_packet headers,
+control TopPipe(inout Parsed_packet headers,
                 inout user_metadata_t user_metadata) {
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
@@ -474,7 +474,7 @@ control Pipe(inout Parsed_packet headers,
 }
 
 // Deparser Implementation
-control Deparser(packet_out b,
+control TopDeparser(packet_out b,
                     in Parsed_packet p,
                     in user_metadata_t user_metadata) { 
     apply {
@@ -491,4 +491,4 @@ control Deparser(packet_out b,
 }
 
 // Instantiate the switch
-V1Switch(Parser(), Pipe(), Deparser()) main;
+V1Switch(TopParser(), TopPipe(), TopDeparser()) main;
