@@ -87,19 +87,6 @@ struct dns_qtype_class {
     bit<32> type_class;
 }
 
-header dns_q {
-    dns_q_label label1;
-    dns_q_part part1;
-    dns_q_label label2;
-    dns_q_part part2;
-    dns_q_label label3;
-    dns_q_part part3;
-    dns_q_label label4;
-    dns_q_part part4;
-    dns_q_label label5;
-    bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
-}
-
 header dns_a {
     dns_qtype_class tc_query;
     bit<16> qname_pointer;
@@ -114,8 +101,16 @@ struct Parsed_packet {
     ethernet_h ethernet;
     ipv4_h ipv4;
     udp_h udp;
-    dns_h dns_header; 
-    dns_q dns_query;
+    dns_h dns_header;
+    dns_q_label label1;
+    dns_q_part part1;
+    dns_q_label label2;
+    dns_q_part part2;
+    dns_q_label label3;
+    dns_q_part part3;
+    dns_q_label label4;
+    dns_q_part part4;
+    dns_q_label label5;
     dns_a dns_answer;
 }
 
@@ -129,6 +124,7 @@ struct user_metadata_t {
 	bit<1> is_ip;
     bit<3>  unused;
 
+    bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
     bit<1> matched_domain;
     bit<1024> server_name;
     bit<64> hashed_name;
@@ -193,85 +189,85 @@ parser TopParser(packet_in pkt,
 	}
 
     state parse_dns_query1 {
-        pkt.extract(p.dns_query.label1);
+        pkt.extract(p.label1);
 
-        transition select(p.dns_query.label1.label) {
+        transition select(p.label1.label) {
             0: dns_query_end1;
             default: parse_dns_query2;
         }
     }
 
     state dns_query_end1 {
-        p.dns_query.last_label = 1;
+        user_metadata.last_label = 1;
         transition parse_dns_answer;
     }
 
     state parse_dns_query2 {
-        bit<32> part1_size = (bit<32>)p.dns_query.label1.label;
-        pkt.extract(p.dns_query.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
-        pkt.extract(p.dns_query.label2);
+        bit<32> part1_size = (bit<32>)p.label1.label;
+        pkt.extract(p.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
+        pkt.extract(p.label2);
 
-        transition select(p.dns_query.label2.label) {
+        transition select(p.label2.label) {
             0: dns_query_end2;
             default: parse_dns_query3;
         }
     }
 
     state dns_query_end2 {
-        p.dns_query.last_label = 2;
+        user_metadata.last_label = 2;
         transition parse_dns_answer;
     }
 
     state parse_dns_query3 {
-        bit<32> part2_size = (bit<32>)p.dns_query.label2.label;
-        pkt.extract(p.dns_query.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
-        pkt.extract(p.dns_query.label3);
+        bit<32> part2_size = (bit<32>)p.label2.label;
+        pkt.extract(p.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
+        pkt.extract(p.label3);
 
-        transition select(p.dns_query.label3.label) {
+        transition select(p.label3.label) {
             0: dns_query_end3;
             default: parse_dns_query4;
         }
     }
 
     state dns_query_end3 {
-        p.dns_query.last_label = 3;
+        user_metadata.last_label = 3;
         transition parse_dns_answer;
     }
 
     state parse_dns_query4 {
-        bit<32> part3_size = (bit<32>)p.dns_query.label3.label;
-        pkt.extract(p.dns_query.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
-        pkt.extract(p.dns_query.label4);
+        bit<32> part3_size = (bit<32>)p.label3.label;
+        pkt.extract(p.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
+        pkt.extract(p.label4);
 
-        transition select(p.dns_query.label4.label) {
+        transition select(p.label4.label) {
             0: dns_query_end4;
             default: parse_dns_query5;
         }
     }
 
     state dns_query_end4 {
-        p.dns_query.last_label = 4;
+        user_metadata.last_label = 4;
         transition parse_dns_answer;
     }
 
     state parse_dns_query5 {
-        bit<32> part4_size = (bit<32>)p.dns_query.label4.label;
-        pkt.extract(p.dns_query.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
-        pkt.extract(p.dns_query.label5);
+        bit<32> part4_size = (bit<32>)p.label4.label;
+        pkt.extract(p.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
+        pkt.extract(p.label5);
 
-        transition select(p.dns_query.label5.label) {
+        transition select(p.label5.label) {
             0: dns_query_end5;
             default: domain_too_long;
         }
     }
 
     state dns_query_end5 {
-        p.dns_query.last_label = 5;
+        user_metadata.last_label = 5;
         transition parse_dns_answer;
     }
 
     state domain_too_long {
-        p.dns_query.last_label = 0;
+        user_metadata.last_label = 0;
         transition accept;
     }
 
@@ -324,16 +320,16 @@ control TopIngress(inout Parsed_packet headers,
         bit<1024> SERVER_MIN = 0;
         bit<1024> SERVER_MAX = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
         if(headers.dns_answer.isValid()) {
-            if (headers.dns_query.last_label == 1) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label}, SERVER_MAX);
-            } else if (headers.dns_query.last_label == 2) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, SERVER_MAX);
-            } else if (headers.dns_query.last_label == 3) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, SERVER_MAX);
-            } else if (headers.dns_query.last_label == 4) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, SERVER_MAX);
-            } else if (headers.dns_query.last_label == 5) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, SERVER_MAX);
+            if (headers.last_label == 1) {
+                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label}, SERVER_MAX);
+            } else if (headers.last_label == 2) {
+                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, SERVER_MAX);
+            } else if (headers.last_label == 3) {
+                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, SERVER_MAX);
+            } else if (headers.last_label == 4) {
+                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, SERVER_MAX);
+            } else if (headers.last_label == 5) {
+                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, SERVER_MAX);
             }
 
             user_metadata.matched_domain = 0;
@@ -345,16 +341,16 @@ control TopIngress(inout Parsed_packet headers,
                 bit<64> NAME_HASH_MIN = 64w0;
                 bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
 
-                if (headers.dns_query.last_label == 1) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label}, NAME_HASH_MAX);
-                } else if (headers.dns_query.last_label == 2) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, NAME_HASH_MAX);
-                } else if (headers.dns_query.last_label == 3) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, NAME_HASH_MAX);
-                } else if (headers.dns_query.last_label == 4) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, NAME_HASH_MAX);
-                } else if (headers.dns_query.last_label == 5) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, NAME_HASH_MAX);
+                if (headers.last_label == 1) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label}, NAME_HASH_MAX);
+                } else if (headers.last_label == 2) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, NAME_HASH_MAX);
+                } else if (headers.last_label == 3) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, NAME_HASH_MAX);
+                } else if (headers.last_label == 4) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, NAME_HASH_MAX);
+                } else if (headers.last_label == 5) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, NAME_HASH_MAX);
                 }
 
                 // headers.dns_answer.rdata; server ip
