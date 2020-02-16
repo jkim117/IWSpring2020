@@ -209,7 +209,7 @@ parser TopParser(packet_in pkt,
     state parse_dns_query1 {
         pkt.extract(p.dns_query.label1);
 
-        transition select(p.dns_query.label1) {
+        transition select(p.dns_query.label1.label) {
             0: dns_query_end1;
             default: parse_dns_query2;
         }
@@ -221,11 +221,11 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query2 {
-        bit<32> part1_size = p.dns_query.label1;
+        bit<32> part1_size = p.dns_query.label1.label;
         pkt.extract(p.dns_query.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
         pkt.extract(p.dns_query.label2);
 
-        transition select(p.dns_query.label2) {
+        transition select(p.dns_query.label2.label) {
             0: dns_query_end2;
             default: parse_dns_query3;
         }
@@ -237,11 +237,11 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query3 {
-        bit<32> part2_size = p.dns_query.label2;
+        bit<32> part2_size = p.dns_query.label2.label;
         pkt.extract(p.dns_query.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
         pkt.extract(p.dns_query.label3);
 
-        transition select(p.dns_query.label3) {
+        transition select(p.dns_query.label3.label) {
             0: dns_query_end3;
             default: parse_dns_query4;
         }
@@ -253,11 +253,11 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query4 {
-        bit<32> part3_size = p.dns_query.label3;
+        bit<32> part3_size = p.dns_query.label3.label;
         pkt.extract(p.dns_query.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
         pkt.extract(p.dns_query.label4);
 
-        transition select(p.dns_query.label4) {
+        transition select(p.dns_query.label4.label) {
             0: dns_query_end4;
             default: parse_dns_query5;
         }
@@ -269,11 +269,11 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_query5 {
-        bit<32> part4_size = p.dns_query.label4;
+        bit<32> part4_size = p.dns_query.label4.label;
         pkt.extract(p.dns_query.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
         pkt.extract(p.dns_query.label5);
 
-        transition select(p.dns_query.label5) {
+        transition select(p.dns_query.label5.label) {
             0: dns_query_end5;
             default: domain_too_long;
         }
