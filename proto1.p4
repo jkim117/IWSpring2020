@@ -475,15 +475,6 @@ control TopComputeChecksum(inout Parsed_packet headers, inout user_metadata_t us
 control TopDeparser(packet_out b,
                     in Parsed_packet p) { 
     apply {
-        /*b.emit(p.ethernet);
-        b.emit(p.ipv4);
-        b.emit(p.udp);
-        b.emit(p.dns.dns_header);
-		// Only one of these can ever be valid at once.  See the end of
-		// the top pipe.
-        b.emit(p.dns.question);
-		b.emit(p.question_48);
-        b.emit(p.dns_response_fields);*/
     }
 }
 
