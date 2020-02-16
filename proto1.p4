@@ -320,15 +320,15 @@ control TopIngress(inout Parsed_packet headers,
         bit<1024> SERVER_MIN = 0;
         bit<1024> SERVER_MAX = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
         if(headers.dns_answer.isValid()) {
-            if (headers.last_label == 1) {
+            if (user_metadata.last_label == 1) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label}, SERVER_MAX);
-            } else if (headers.last_label == 2) {
+            } else if (user_metadata.last_label == 2) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, SERVER_MAX);
-            } else if (headers.last_label == 3) {
+            } else if (user_metadata.last_label == 3) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, SERVER_MAX);
-            } else if (headers.last_label == 4) {
+            } else if (user_metadata.last_label == 4) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, SERVER_MAX);
-            } else if (headers.last_label == 5) {
+            } else if (user_metadata.last_label == 5) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, SERVER_MAX);
             }
 
@@ -341,15 +341,15 @@ control TopIngress(inout Parsed_packet headers,
                 bit<64> NAME_HASH_MIN = 64w0;
                 bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
 
-                if (headers.last_label == 1) {
+                if (user_metadata.last_label == 1) {
                     hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label}, NAME_HASH_MAX);
-                } else if (headers.last_label == 2) {
+                } else if (user_metadata.last_label == 2) {
                     hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, NAME_HASH_MAX);
-                } else if (headers.last_label == 3) {
+                } else if (user_metadata.last_label == 3) {
                     hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, NAME_HASH_MAX);
-                } else if (headers.last_label == 4) {
+                } else if (user_metadata.last_label == 4) {
                     hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, NAME_HASH_MAX);
-                } else if (headers.last_label == 5) {
+                } else if (user_metadata.last_label == 5) {
                     hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, NAME_HASH_MAX);
                 }
 
