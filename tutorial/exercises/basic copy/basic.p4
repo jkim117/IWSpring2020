@@ -423,6 +423,7 @@ control TopPipe(inout Parsed_packet headers,
 
         actions = {
             add_domain_entry;
+            NoAction;
         }
         size = 2048; //tbd
         default_action = NoAction();
@@ -449,26 +450,49 @@ control TopPipe(inout Parsed_packet headers,
 
         
 
-	/*if (user_metadata.is_ip == 1) {
-            bit<16> result;
-            headers.ipv4.chksum = 0;
+        /*if (user_metadata.is_ip == 1) {
+                bit<16> result;
+                headers.ipv4.chksum = 0;
 
-            compute_ip_chksum(headers.ipv4.version, 
-                                headers.ipv4.ihl,
-                                headers.ipv4.tos,
-                                headers.ipv4.len,
-                                headers.ipv4.id,
-                                headers.ipv4.flags,
-                                headers.ipv4.frag,
-                                headers.ipv4.ttl,
-                                headers.ipv4.proto,
-                                headers.ipv4.chksum,
-                                headers.ipv4.src,
-                                headers.ipv4.dst,
-                                result);
-            headers.ipv4.chksum = result;
-	}*/
+                compute_ip_chksum(headers.ipv4.version, 
+                                    headers.ipv4.ihl,
+                                    headers.ipv4.tos,
+                                    headers.ipv4.len,
+                                    headers.ipv4.id,
+                                    headers.ipv4.flags,
+                                    headers.ipv4.frag,
+                                    headers.ipv4.ttl,
+                                    headers.ipv4.proto,
+                                    headers.ipv4.chksum,
+                                    headers.ipv4.src,
+                                    headers.ipv4.dst,
+                                    result);
+                headers.ipv4.chksum = result;
+        }*/
 	}
+}
+
+control TopComputeChecksum(inout Parsed_packet headers,
+                inout user_metadata_t user_metadata) {
+     apply {
+	update_checksum(
+	    headers.ipv4.isValid(),
+            {
+                headers.ipv4.version,
+                headers.ipv4.ihl,
+                headers.ipv4.tos,
+                headers.ipv4.len,
+                headers.ipv4.id,
+                headers.ipv4.flags,
+                headers.ipv4.frag,
+                headers.ipv4.ttl,
+                headers.ipv4.proto,
+                headers.ipv4.src,
+                headers.ipv4.dst,
+            },
+            headers.ipv4.chksum,
+            HashAlgorithm.csum16);
+    }
 }
 
 // Deparser Implementation
@@ -489,4 +513,4 @@ control TopDeparser(packet_out b,
 }
 
 // Instantiate the switch
-V1Switch(TopParser(), TopPipe(), TopDeparser()) main;
+V1Switch(TopParser(), TopPipe(), TopComputeChecksum(), TopDeparser()) main;
