@@ -83,7 +83,7 @@ header dns_q_part {
     varbit<256> part; // For 32 bytes max
 }
 
-header dns_qtype_class {
+struct dns_qtype_class {
     bit<32> type_class;
 }
 
@@ -98,12 +98,12 @@ struct dns_q {
     dns_q_part part4;
     dns_q_label label5;
     bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
-    dns_qtype_class tc;
 }
 
 header dns_a {
+    dns_qtype_class tc_query;
     bit<16> qname_pointer;
-    dns_qtype_class tc;
+    dns_qtype_class tc_ans;
     bit<32> ttl;
     bit<16> rd_length;
     bit<32> rdata; //IPV4 is always 32 bit.
@@ -290,7 +290,6 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_answer {
-        pkt.extract(p.dns_query.tc);
         pkt.extract(p.dns_answer);
 
         transition accept;
@@ -317,7 +316,7 @@ control TopPipe(inout Parsed_packet headers,
 
     action add_domain_entry() {
         bit<64> NAME_HASH_MIN = 64w0;
-        bit<64> NAME_HASH_MAX = (65w2 << 64) - 1;
+        bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
 
         if (headers.dns_query.last_label == 1) {
             hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label}, NAME_HASH_MAX);
@@ -431,7 +430,7 @@ control TopPipe(inout Parsed_packet headers,
 
     apply {
         bit<1024> SERVER_MIN = 0;
-        bit<1024> SERVER_MAX = (11w2 << 10) - 1;
+        bit<1024> SERVER_MAX = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
         if(headers.dns_answer.isValid()) {
             if (headers.dns_query.last_label == 1) {
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label}, SERVER_MAX);
