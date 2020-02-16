@@ -129,6 +129,7 @@ struct user_metadata_t {
 	bit<1> is_ip;
     bit<3>  unused;
 
+    bit<1> matched_domain;
     bit<1024> server_name;
     bit<64> hashed_name;
     bit<32> index_1;
@@ -304,115 +305,15 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_3;
     register<bit<64>>(TABLE_SIZE) dns_counter_table_3;
 
-    action add_domain_entry() {
-        bit<64> NAME_HASH_MIN = 64w0;
-        bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
-
-        if (headers.dns_query.last_label == 1) {
-            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label}, NAME_HASH_MAX);
-        } else if (headers.dns_query.last_label == 2) {
-            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, NAME_HASH_MAX);
-        } else if (headers.dns_query.last_label == 3) {
-            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, NAME_HASH_MAX);
-        } else if (headers.dns_query.last_label == 4) {
-            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, NAME_HASH_MAX);
-        } else if (headers.dns_query.last_label == 5) {
-            hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, NAME_HASH_MAX);
-        }
-
-        // headers.dns_answer.rdata; server ip
-        // headers.ipv4.dst; client ip
-
-        hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
-        hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
-        hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_answer.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
-
-        user_metadata.already_matched = 0;
-        // access table 1
-        dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
-        dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
-        dns_counter_table_1.read(user_metadata.temp_counter, user_metadata.index_1);
-        if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
-            dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
-            dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
-            dns_counter_table_1.write(user_metadata.index_1, user_metadata.temp_counter + 1);
-            dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
-            user_metadata.already_matched = 1;
-        }
-        else {
-            user_metadata.min_counter = user_metadata.temp_counter;
-            user_metadata.min_table = 1;
-        }
-
-        // access table 2
-        if (user_metadata.already_matched == 0) {
-            dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
-            dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
-            dns_counter_table_2.read(user_metadata.temp_counter, user_metadata.index_2);
-            if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
-                dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
-                dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
-                dns_counter_table_2.write(user_metadata.index_2, user_metadata.temp_counter + 1);
-                dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
-                user_metadata.already_matched = 1;
-            }
-            else {
-                if (user_metadata.temp_counter < user_metadata.min_counter) {
-                    user_metadata.min_counter = user_metadata.temp_counter;
-                    user_metadata.min_table = 2;
-                }
-            }
-        }
-
-        // access table 3
-        if (user_metadata.already_matched == 0) {
-            dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
-            dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
-            dns_counter_table_3.read(user_metadata.temp_counter, user_metadata.index_3);
-            if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
-                dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
-                dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
-                dns_counter_table_3.write(user_metadata.index_3, user_metadata.temp_counter + 1);
-                dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
-                user_metadata.already_matched = 1;
-            }
-            else {
-                if (user_metadata.temp_counter < user_metadata.min_counter) {
-                    user_metadata.min_counter = user_metadata.temp_counter;
-                    user_metadata.min_table = 3;
-                }
-            }
-        }
-
-        // recirculate
-        if (user_metadata.already_matched == 0) {
-            if(user_metadata.min_table == 1) {
-                dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
-                dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
-                dns_counter_table_1.write(user_metadata.index_1, 1);
-                dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
-            }
-            else if (user_metadata.min_table == 2) {
-                dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
-                dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
-                dns_counter_table_2.write(user_metadata.index_2, 1);
-                dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
-            }
-            else if (user_metadata.min_table == 3) {
-                dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
-                dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
-                dns_counter_table_3.write(user_metadata.index_3, 1);
-                dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
-            }
-        }
-
+    action match_domain() {
+        user_metadata.matched_domain = 1;
     }
 
     table known_domain_list {
         key = {user_metadata.server_name: exact;}
 
         actions = {
-            add_domain_entry;
+            match_domain;
             NoAction;
         }
         size = 2048; //tbd
@@ -435,7 +336,113 @@ control TopIngress(inout Parsed_packet headers,
                 hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, SERVER_MAX);
             }
 
+            user_metadata.matched_domain = 0;
+
             known_domain_list.apply();
+
+            if (user_metadata.matched_domain == 1) {
+
+                bit<64> NAME_HASH_MIN = 64w0;
+                bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
+
+                if (headers.dns_query.last_label == 1) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label}, NAME_HASH_MAX);
+                } else if (headers.dns_query.last_label == 2) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label}, NAME_HASH_MAX);
+                } else if (headers.dns_query.last_label == 3) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label}, NAME_HASH_MAX);
+                } else if (headers.dns_query.last_label == 4) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label}, NAME_HASH_MAX);
+                } else if (headers.dns_query.last_label == 5) {
+                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.dns_query.label1.label, headers.dns_query.part1.part, headers.dns_query.label2.label, headers.dns_query.part2.part, headers.dns_query.label3.label, headers.dns_query.part3.part, headers.dns_query.label4.label, headers.dns_query.part4.part, headers.dns_query.label5.label}, NAME_HASH_MAX);
+                }
+
+                // headers.dns_answer.rdata; server ip
+                // headers.ipv4.dst; client ip
+
+                hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
+                hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
+                hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_answer.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+
+                user_metadata.already_matched = 0;
+                // access table 1
+                dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
+                dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
+                dns_counter_table_1.read(user_metadata.temp_counter, user_metadata.index_1);
+                if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                    dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
+                    dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
+                    dns_counter_table_1.write(user_metadata.index_1, user_metadata.temp_counter + 1);
+                    dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
+                    user_metadata.already_matched = 1;
+                }
+                else {
+                    user_metadata.min_counter = user_metadata.temp_counter;
+                    user_metadata.min_table = 1;
+                }
+
+                // access table 2
+                if (user_metadata.already_matched == 0) {
+                    dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+                    dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+                    dns_counter_table_2.read(user_metadata.temp_counter, user_metadata.index_2);
+                    if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                        dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
+                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
+                        dns_counter_table_2.write(user_metadata.index_2, user_metadata.temp_counter + 1);
+                        dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
+                        user_metadata.already_matched = 1;
+                    }
+                    else {
+                        if (user_metadata.temp_counter < user_metadata.min_counter) {
+                            user_metadata.min_counter = user_metadata.temp_counter;
+                            user_metadata.min_table = 2;
+                        }
+                    }
+                }
+
+                // access table 3
+                if (user_metadata.already_matched == 0) {
+                    dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+                    dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+                    dns_counter_table_3.read(user_metadata.temp_counter, user_metadata.index_3);
+                    if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                        dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
+                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
+                        dns_counter_table_3.write(user_metadata.index_3, user_metadata.temp_counter + 1);
+                        dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
+                        user_metadata.already_matched = 1;
+                    }
+                    else {
+                        if (user_metadata.temp_counter < user_metadata.min_counter) {
+                            user_metadata.min_counter = user_metadata.temp_counter;
+                            user_metadata.min_table = 3;
+                        }
+                    }
+                }
+
+                // recirculate
+                if (user_metadata.already_matched == 0) {
+                    if(user_metadata.min_table == 1) {
+                        dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
+                        dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
+                        dns_counter_table_1.write(user_metadata.index_1, 1);
+                        dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
+                    }
+                    else if (user_metadata.min_table == 2) {
+                        dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
+                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
+                        dns_counter_table_2.write(user_metadata.index_2, 1);
+                        dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
+                    }
+                    else if (user_metadata.min_table == 3) {
+                        dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
+                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
+                        dns_counter_table_3.write(user_metadata.index_3, 1);
+                        dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
+                    }
+                }
+            }
         }
 	}
 }
