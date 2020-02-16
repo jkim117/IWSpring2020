@@ -439,7 +439,7 @@ control TopIngress(inout Parsed_packet headers,
 }
 
 control TopEgress(inout Parsed_packet headers,
-                 inout user_metdata_t user_metadata) {
+                 inout user_metadata_t user_metadata) {
     apply {  }
 }
 
