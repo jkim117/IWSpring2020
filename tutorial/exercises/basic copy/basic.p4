@@ -118,18 +118,6 @@ struct Parsed_packet {
     dns_q dns_query;
     dns_a dns_answer;
 }
-// digest data to send to cpu if desired.  Note that everything must be a
-// multiple of 8 bits or scapy can't process it.
-struct digest_data_t {
-    #if UNUSED_DIGEST_BITS != 0
-    bit<UNUSED_DIGEST_BITS> unused;
-    #endif
-    // These bits tell the control plane what
-    // to do in addition to updating the ethernet tables.
-    bit<64> eth_src_addr;  // 64 bits so we can use the LELongField type for scapy
-    bit<8> flags;
-    port_t src_port;
-}
 
 // user defined metadata: can be used to share information between
 // TopParser, TopPipe, and TopDeparser 
@@ -173,8 +161,7 @@ extern void compute_ip_chksum(in bit<4> version,
 // parsers
 parser Parser(packet_in pkt,
            out Parsed_packet p,
-           out user_metadata_t user_metadata,
-           out digest_data_t digest_data) {
+           out user_metadata_t user_metadata) {
     state start {
         pkt.extract(p.ethernet);
         // These are set appropriately in the TopPipe.
@@ -183,10 +170,6 @@ parser Parser(packet_in pkt,
         user_metadata.response_set = 0;
 		user_metadata.is_dns = 0;
 		user_metadata.is_ip = 0;
-
-        digest_data.flags = 0;
-        digest_data.src_port = 0;
-        digest_data.eth_src_addr = 0;
 
         transition select(p.ethernet.etherType) {
 			0x800: parse_ip;
@@ -315,8 +298,7 @@ parser Parser(packet_in pkt,
 }
 
 control Pipe(inout Parsed_packet headers,
-                inout user_metadata_t user_metadata, 
-                inout digest_data_t digest_data) {
+                inout user_metadata_t user_metadata) {
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
@@ -494,8 +476,7 @@ control Pipe(inout Parsed_packet headers,
 // Deparser Implementation
 control Deparser(packet_out b,
                     in Parsed_packet p,
-                    in user_met1adata_t user_metadata,
-                    inout digest_data_t digest_data) { 
+                    in user_met1adata_t user_metadata) { 
     apply {
         /*b.emit(p.ethernet);
         b.emit(p.ipv4);
