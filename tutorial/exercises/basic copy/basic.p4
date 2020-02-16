@@ -467,8 +467,7 @@ control TopComputeChecksum(inout Parsed_packet headers, inout user_metadata_t us
 
 // Deparser Implementation
 control TopDeparser(packet_out b,
-                    in Parsed_packet p,
-                    in user_metadata_t user_metadata) { 
+                    in Parsed_packet p) { 
     apply {
         /*b.emit(p.ethernet);
         b.emit(p.ipv4);
