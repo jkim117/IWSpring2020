@@ -87,7 +87,7 @@ struct dns_qtype_class {
     bit<32> type_class;
 }
 
-struct dns_q {
+header dns_q {
     dns_q_label label1;
     dns_q_part part1;
     dns_q_label label2;
