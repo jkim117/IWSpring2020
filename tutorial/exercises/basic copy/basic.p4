@@ -142,22 +142,6 @@ struct user_metadata_t {
     bit<2> min_table;
 }
 
-/*@Xilinx_MaxLatency(3)
-@Xilinx_ControlWidth(0)
-extern void compute_ip_chksum(in bit<4> version, 
-                         in bit<4> ihl,
-                         in bit<8> tos,
-                         in bit<16> totalLen,
-                         in bit<16> identification,
-                         in bit<3> flags,
-                         in bit<13> fragOffset,
-                         in bit<8> ttl,
-                         in bit<8> protocol,
-                         in bit<16> hdrChecksum,
-                         in bit<32> srcAddr,
-                         in bit<32> dstAddr,
-                         out bit<16> result);*/
-
 // parsers
 parser TopParser(packet_in pkt,
            out Parsed_packet p,
@@ -296,7 +280,11 @@ parser TopParser(packet_in pkt,
     }
 }
 
-control TopPipe(inout Parsed_packet headers,
+control TopVerifyChecksum(inout Parsed_packet headers, inout user_metadata_t user_metadata) {   
+    apply {  }
+}
+
+control TopIngress(inout Parsed_packet headers,
                 inout user_metadata_t user_metadata) {
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
@@ -447,29 +435,12 @@ control TopPipe(inout Parsed_packet headers,
 
             known_domain_list.apply();
         }
-
-        
-
-        /*if (user_metadata.is_ip == 1) {
-                bit<16> result;
-                headers.ipv4.chksum = 0;
-
-                compute_ip_chksum(headers.ipv4.version, 
-                                    headers.ipv4.ihl,
-                                    headers.ipv4.tos,
-                                    headers.ipv4.len,
-                                    headers.ipv4.id,
-                                    headers.ipv4.flags,
-                                    headers.ipv4.frag,
-                                    headers.ipv4.ttl,
-                                    headers.ipv4.proto,
-                                    headers.ipv4.chksum,
-                                    headers.ipv4.src,
-                                    headers.ipv4.dst,
-                                    result);
-                headers.ipv4.chksum = result;
-        }*/
 	}
+}
+
+control TopEgress(inout Parsed_packet headers,
+                 inout user_metdata_t user_metadata) {
+    apply {  }
 }
 
 control TopComputeChecksum(inout Parsed_packet headers, inout user_metadata_t user_metadata) {
@@ -512,4 +483,4 @@ control TopDeparser(packet_out b,
 }
 
 // Instantiate the switch
-V1Switch(TopParser(), TopPipe(), TopComputeChecksum(), TopDeparser()) main;
+V1Switch(TopParser(), TopVerifyChecksum(), TopIngress(), TopEgress(), TopComputeChecksum(), TopDeparser()) main;
