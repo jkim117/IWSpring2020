@@ -145,7 +145,8 @@ struct user_metadata_t {
 // parsers
 parser TopParser(packet_in pkt,
            out Parsed_packet p,
-           out user_metadata_t user_metadata) {
+           out user_metadata_t user_metadata,
+           inout standard_metadata_t standard_metadata) {
     state start {
         pkt.extract(p.ethernet);
         // These are set appropriately in the TopPipe.
@@ -285,7 +286,8 @@ control TopVerifyChecksum(inout Parsed_packet headers, inout user_metadata_t use
 }
 
 control TopIngress(inout Parsed_packet headers,
-                inout user_metadata_t user_metadata) {
+                inout user_metadata_t user_metadata,
+                inout standard_metadata_t standard_metadata) {
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
@@ -439,7 +441,8 @@ control TopIngress(inout Parsed_packet headers,
 }
 
 control TopEgress(inout Parsed_packet headers,
-                 inout user_metadata_t user_metadata) {
+                 inout user_metadata_t user_metadata,
+                 inout standard_metadata_t standard_metadata) {
     apply {  }
 }
 
