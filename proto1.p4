@@ -1065,7 +1065,7 @@ control TopIngress(inout Parsed_packet headers,
         else if (user_metadata.is_ip == 1 && user_metadata.is_dns == 0) {
             hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.src, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
             hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.src, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
-            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, hheaders.ipv4.src, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.src, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
 
             dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
             dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
@@ -1099,7 +1099,7 @@ control TopIngress(inout Parsed_packet headers,
 
             hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.ipv4.src}, HASH_TABLE_MAX);
             hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.ipv4.src}, HASH_TABLE_MAX);
-            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, hheaders.ipv4.dst, 1w1, headers.ipv4.src}, HASH_TABLE_MAX);
+            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.ipv4.src}, HASH_TABLE_MAX);
 
             dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
             dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
