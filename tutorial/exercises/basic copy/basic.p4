@@ -166,7 +166,7 @@ struct user_metadata_t {
 
     bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
     bit<1> matched_domain;
-    bit<10> domain_id;
+    bit<32> domain_id;
     bit<32> index_1;
     bit<32> index_2;
     bit<32> index_3;
@@ -487,7 +487,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q2_len16 {
-        pkt.extract(p.q2_part6);
+        pkt.extract(p.q2_part16);
         transition parse_dns_query3;
     }
 
@@ -733,7 +733,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q3_len16 {
-        pkt.extract(p.q3_part6);
+        pkt.extract(p.q3_part16);
         transition parse_dns_query4;
     }
 
@@ -969,23 +969,23 @@ control TopIngress(inout Parsed_packet headers,
 
     table known_domain_list {
         key = {
-            headers.q1_part1: exact;
-            headers.q1_part2: exact;
-            headers.q1_part4: exact;
-            headers.q1_part8: exact;
-            headers.q2_part1: exact;
-            headers.q2_part2: exact;
-            headers.q2_part4: exact;
-            headers.q2_part8: exact;
-            headers.q2_part16: exact;
-            headers.q3_part1: exact;
-            headers.q3_part2: exact;
-            headers.q3_part4: exact;
-            headers.q3_part8: exact;
-            headers.q3_part16: exact;
-            headers.q4_part1: exact;
-            headers.q4_part2: exact;
-            headers.q4_part4: exact;
+            headers.q1_part1.part: exact;
+            headers.q1_part2.part: exact;
+            headers.q1_part4.part: exact;
+            headers.q1_part8.part: exact;
+            headers.q2_part1.part: exact;
+            headers.q2_part2.part: exact;
+            headers.q2_part4.part: exact;
+            headers.q2_part8.part: exact;
+            headers.q2_part16.part: exact;
+            headers.q3_part1.part: exact;
+            headers.q3_part2.part: exact;
+            headers.q3_part4.part: exact;
+            headers.q3_part8.part: exact;
+            headers.q3_part16.part: exact;
+            headers.q4_part1.part: exact;
+            headers.q4_part2.part: exact;
+            headers.q4_part4.part: exact;
         }
 
         actions = {
