@@ -6,10 +6,28 @@
     {
       "table": "TopIngress.known_domain_list",
       "match": {
-        "user_metadata.server_name": ["0x046538373201670a616b616d616965646765036e657400", 1024]
+        "headers.q1_part1": 0,
+        "headers.q1_part2": 0,
+        "headers.q1_part4": ["e872", 32],
+        "headers.q1_part8": 0,
+        "headers.q2_part1": ["g", 8],
+        "headers.q2_part2": 0,
+        "headers.q2_part4": 0,
+        "headers.q2_part8": 0,
+        "headers.q2_part16": 0,
+        "headers.q3_part1": 0,
+        "headers.q3_part2": ["ak", 16],
+        "headers.q3_part4": 0,
+        "headers.q3_part8": ["amaiedge", 64],
+        "headers.q3_part16": 0,
+        "headers.q4_part1": ["n", 8],
+        "headers.q4_part2": ["et", 16],
+        "headers.q4_part4": 0
       },
       "action_name": "TopIngress.match_domain",
-      "action_params": {}
+      "action_params": {
+        "id": 0
+      }
     }
   ]
 }
