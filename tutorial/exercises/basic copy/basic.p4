@@ -1,13 +1,17 @@
 #include <core.p4>
 #include <v1model.p4>
 
+#define NUM_KNOWN_DOMAINS 1024
+#define NUM_KNOWN_DOMAINS_BITS 10
 #define TABLE_SIZE 1024
 #define HASH_TABLE_BASE 10w0
 #define HASH_TABLE_MAX 10w1023
+#define TIMEOUT 600000000 // 10 minutes
 
 typedef bit<48> MacAddress;
 typedef bit<32> IPv4Address;
 typedef bit<128> IPv6Address;
+typedef bit<10> known_domain_id;
 
 header ethernet_h {
     MacAddress dst;
@@ -79,12 +83,29 @@ header dns_q_label {
     bit<8> label;
 }
 
-header dns_q_part {
-    varbit<256> part; // For 32 bytes max
+header dns_q_part_1 {
+    bit<8> part;
+}
+
+header dns_q_part_2 {
+    bit<16> part;
+}
+
+header dns_q_part_4 {
+    bit<32> part;
+}
+
+header dns_q_part_8 {
+    bit<64> part;
+}
+
+header dns_q_part_16 {
+    bit<128> part;
 }
 
 struct dns_qtype_class {
-    bit<32> type_class;
+    bit<16> type;
+    bit<16> class;
 }
 
 header dns_a {
@@ -102,15 +123,34 @@ struct Parsed_packet {
     ipv4_h ipv4;
     udp_h udp;
     dns_h dns_header;
+
     dns_q_label label1;
-    dns_q_part part1;
+    dns_q_part_1 q1_part1;
+    dns_q_part_2 q1_part2;
+    dns_q_part_4 q1_part4;
+    dns_q_part_8 q1_part8;
+
     dns_q_label label2;
-    dns_q_part part2;
+    dns_q_part_1 q2_part1;
+    dns_q_part_2 q2_part2;
+    dns_q_part_4 q2_part4;
+    dns_q_part_8 q2_part8;
+    dns_q_part_16 q2_part16;
+
     dns_q_label label3;
-    dns_q_part part3;
+    dns_q_part_1 q3_part1;
+    dns_q_part_2 q3_part2;
+    dns_q_part_4 q3_part4;
+    dns_q_part_8 q3_part8;
+    dns_q_part_16 q3_part16;
+
     dns_q_label label4;
-    dns_q_part part4;
+    dns_q_part_1 q4_part1;
+    dns_q_part_2 q4_part2;
+    dns_q_part_4 q4_part4;
+
     dns_q_label label5;
+
     dns_a dns_answer;
 }
 
@@ -126,17 +166,22 @@ struct user_metadata_t {
 
     bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
     bit<1> matched_domain;
-    bit<1024> server_name;
-    bit<64> hashed_name;
+    bit<10> domain_id;
     bit<32> index_1;
     bit<32> index_2;
     bit<32> index_3;
-    bit<64> temp_counter;
+    bit<48> temp_timestamp;
     bit<32> temp_cip;
     bit<32> temp_sip;
     bit<1> already_matched;
     bit<64> min_counter;
     bit<2> min_table;
+    bit<64> temp_packet_counter;
+    bit<64> temp_byte_counter;
+
+    bit<64> temp_total_dns;
+    bit<64> temp_total_missed;
+    bit<1> parsed_answer;
 }
 
 // parsers
@@ -163,6 +208,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.ipv4);
 
 		user_metadata.is_ip = 1;
+        user_metadata.is_dns = 0;
 		transition select(p.ipv4.proto) {
 			17: parse_udp;
 			default: accept;
@@ -188,95 +234,701 @@ parser TopParser(packet_in pkt,
 		}
 	}
 
+    // Parsel DNS Query Label 1
     state parse_dns_query1 {
         pkt.extract(p.label1);
+        user_metadata.last_label = 1;
 
         transition select(p.label1.label) {
-            0: dns_query_end1;
-            default: parse_dns_query2;
+            0: parse_dns_answer;
+            1: parse_dns_q1_len1;
+            2: parse_dns_q1_len2;
+            3: parse_dns_q1_len3;
+            4: parse_dns_q1_len4;
+            5: parse_dns_q1_len5;
+            6: parse_dns_q1_len6;
+            7: parse_dns_q1_len7;
+            8: parse_dns_q1_len8;
+            9: parse_dns_q1_len9;
+            10: parse_dns_q1_len10;
+            11: parse_dns_q1_len11;
+            12: parse_dns_q1_len12;
+            13: parse_dns_q1_len13;
+            14: parse_dns_q1_len14;
+            15: parse_dns_q1_len15;
+            default: accept;
         }
     }
 
-    state dns_query_end1 {
-        user_metadata.last_label = 1;
-        transition parse_dns_answer;
+    state parse_dns_q1_len1 {
+        pkt.extract(p.q1_part1);
+        transition parse_dns_query2;
     }
 
+    state parse_dns_q1_len2 {
+        pkt.extract(p.q1_part2);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len3 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part2);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len4 {
+        pkt.extract(p.q1_part4);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len5 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part4);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len6 {
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part4);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len7 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part4);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len8 {
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len9 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len10 {
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len11 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len12 {
+        pkt.extract(p.q1_part4);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len13 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part4);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len14 {
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part4);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    state parse_dns_q1_len15 {
+        pkt.extract(p.q1_part1);
+        pkt.extract(p.q1_part2);
+        pkt.extract(p.q1_part4);
+        pkt.extract(p.q1_part8);
+        transition parse_dns_query2;
+    }
+
+    // Parsel DNS Query Label 2
     state parse_dns_query2 {
-        bit<32> part1_size = (bit<32>)p.label1.label;
-        pkt.extract(p.part1, part1_size << 3); // extract varbit equal to 8 times the number of bytes in label1
         pkt.extract(p.label2);
+        user_metadata.last_label = 2;
 
         transition select(p.label2.label) {
-            0: dns_query_end2;
-            default: parse_dns_query3;
+            0: parse_dns_answer;
+            1: parse_dns_q2_len1;
+            2: parse_dns_q2_len2;
+            3: parse_dns_q2_len3;
+            4: parse_dns_q2_len4;
+            5: parse_dns_q2_len5;
+            6: parse_dns_q2_len6;
+            7: parse_dns_q2_len7;
+            8: parse_dns_q2_len8;
+            9: parse_dns_q2_len9;
+            10: parse_dns_q2_len10;
+            11: parse_dns_q2_len11;
+            12: parse_dns_q2_len12;
+            13: parse_dns_q2_len13;
+            14: parse_dns_q2_len14;
+            15: parse_dns_q2_len15;
+            16: parse_dns_q2_len16;
+            17: parse_dns_q2_len17;
+            18: parse_dns_q2_len18;
+            19: parse_dns_q2_len19;
+            20: parse_dns_q2_len20;
+            21: parse_dns_q2_len21;
+            22: parse_dns_q2_len22;
+            23: parse_dns_q2_len23;
+            24: parse_dns_q2_len24;
+            25: parse_dns_q2_len25;
+            26: parse_dns_q2_len26;
+            27: parse_dns_q2_len27;
+            28: parse_dns_q2_len28;
+            29: parse_dns_q2_len29;
+            30: parse_dns_q2_len30;
+            31: parse_dns_q2_len31;
+            default: accept;
         }
     }
 
-    state dns_query_end2 {
-        user_metadata.last_label = 2;
-        transition parse_dns_answer;
+    state parse_dns_q2_len1 {
+        pkt.extract(p.q2_part1);
+        transition parse_dns_query3;
     }
 
+    state parse_dns_q2_len2 {
+        pkt.extract(p.q2_part2);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len3 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len4 {
+        pkt.extract(p.q2_part4);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len5 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part4);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len6 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len7 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len8 {
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len9 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len10 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len11 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len12 {
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len13 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len14 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len15 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len16 {
+        pkt.extract(p.q2_part6);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len17 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len18 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len19 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len20 {
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len21 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len22 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len23 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len24 {
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len25 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len26 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len27 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len28 {
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len29 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len30 {
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    state parse_dns_q2_len31 {
+        pkt.extract(p.q2_part1);
+        pkt.extract(p.q2_part2);
+        pkt.extract(p.q2_part4);
+        pkt.extract(p.q2_part8);
+        pkt.extract(p.q2_part16);
+        transition parse_dns_query3;
+    }
+
+    // Parsel DNS Query Label 3
     state parse_dns_query3 {
-        bit<32> part2_size = (bit<32>)p.label2.label;
-        pkt.extract(p.part2, part2_size << 3); // extract varbit equal to 8 times the number of bytes in label2
         pkt.extract(p.label3);
+        user_metadata.last_label = 3;
 
         transition select(p.label3.label) {
-            0: dns_query_end3;
-            default: parse_dns_query4;
+            0: parse_dns_answer;
+            1: parse_dns_q3_len1;
+            2: parse_dns_q3_len2;
+            3: parse_dns_q3_len3;
+            4: parse_dns_q3_len4;
+            5: parse_dns_q3_len5;
+            6: parse_dns_q3_len6;
+            7: parse_dns_q3_len7;
+            8: parse_dns_q3_len8;
+            9: parse_dns_q3_len9;
+            10: parse_dns_q3_len10;
+            11: parse_dns_q3_len11;
+            12: parse_dns_q3_len12;
+            13: parse_dns_q3_len13;
+            14: parse_dns_q3_len14;
+            15: parse_dns_q3_len15;
+            16: parse_dns_q3_len16;
+            17: parse_dns_q3_len17;
+            18: parse_dns_q3_len18;
+            19: parse_dns_q3_len19;
+            20: parse_dns_q3_len20;
+            21: parse_dns_q3_len21;
+            22: parse_dns_q3_len22;
+            23: parse_dns_q3_len23;
+            24: parse_dns_q3_len24;
+            25: parse_dns_q3_len25;
+            26: parse_dns_q3_len26;
+            27: parse_dns_q3_len27;
+            28: parse_dns_q3_len28;
+            29: parse_dns_q3_len29;
+            30: parse_dns_q3_len30;
+            31: parse_dns_q3_len31;
+            default: accept;
         }
     }
 
-    state dns_query_end3 {
-        user_metadata.last_label = 3;
-        transition parse_dns_answer;
+    state parse_dns_q3_len1 {
+        pkt.extract(p.q3_part1);
+        transition parse_dns_query4;
     }
 
+    state parse_dns_q3_len2 {
+        pkt.extract(p.q3_part2);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len3 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len4 {
+        pkt.extract(p.q3_part4);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len5 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part4);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len6 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len7 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len8 {
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len9 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len10 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len11 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len12 {
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len13 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len14 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len15 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len16 {
+        pkt.extract(p.q3_part6);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len17 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len18 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len19 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len20 {
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len21 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len22 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len23 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len24 {
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len25 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len26 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len27 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len28 {
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len29 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len30 {
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    state parse_dns_q3_len31 {
+        pkt.extract(p.q3_part1);
+        pkt.extract(p.q3_part2);
+        pkt.extract(p.q3_part4);
+        pkt.extract(p.q3_part8);
+        pkt.extract(p.q3_part16);
+        transition parse_dns_query4;
+    }
+
+    // Parsel DNS Query Label 4
     state parse_dns_query4 {
-        bit<32> part3_size = (bit<32>)p.label3.label;
-        pkt.extract(p.part3, part3_size << 3); // extract varbit equal to 8 times the number of bytes in label3
         pkt.extract(p.label4);
+        user_metadata.last_label = 4;
 
         transition select(p.label4.label) {
-            0: dns_query_end4;
-            default: parse_dns_query5;
+            0: parse_dns_answer;
+            1: parse_dns_q4_len1;
+            2: parse_dns_q4_len2;
+            3: parse_dns_q4_len3;
+            4: parse_dns_q4_len4;
+            5: parse_dns_q4_len5;
+            6: parse_dns_q4_len6;
+            7: parse_dns_q4_len7;
+            default: accept;
         }
     }
 
-    state dns_query_end4 {
-        user_metadata.last_label = 4;
-        transition parse_dns_answer;
+    state parse_dns_q4_len1 {
+        pkt.extract(p.q4_part1);
+        transition parse_dns_query5;
     }
 
+    state parse_dns_q4_len2 {
+        pkt.extract(p.q4_part2);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len3 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part2);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len4 {
+        pkt.extract(p.q4_part4);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len5 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part4);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len6 {
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part4);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len7 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part4);
+        transition parse_dns_query5;
+    }
+
+    // Parsel DNS Query Label 5
     state parse_dns_query5 {
-        bit<32> part4_size = (bit<32>)p.label4.label;
-        pkt.extract(p.part4, part4_size << 3); // extract varbit equal to 8 times the number of bytes in label4
         pkt.extract(p.label5);
+        user_metadata.last_label = 5;
 
         transition select(p.label5.label) {
-            0: dns_query_end5;
-            default: domain_too_long;
+            0: parse_dns_answer;
+            default: accept;
         }
-    }
-
-    state dns_query_end5 {
-        user_metadata.last_label = 5;
-        transition parse_dns_answer;
-    }
-
-    state domain_too_long {
-        user_metadata.last_label = 0;
-        transition accept;
     }
 
     state parse_dns_answer {
         pkt.extract(p.dns_answer);
+        user_metadata.parsed_answer = 0;
 
+        transition select(p.dns_answer.tc_ans.type) {
+            1: set_metadata;
+            default: accept;
+        }
+    }
+
+    state set_metadata {
+        user_metadata.parsed_answer = 1;
         transition accept;
     }
 }
+/**************************END OF PARSER**************************/
 
 control TopVerifyChecksum(inout Parsed_packet headers, inout user_metadata_t user_metadata) {   
     apply {  }
@@ -286,51 +938,66 @@ control TopIngress(inout Parsed_packet headers,
                 inout user_metadata_t user_metadata,
                 inout standard_metadata_t standard_metadata) {
 
+    // PRECISION STYLE TABLES
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
-    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_1;
-    register<bit<64>>(TABLE_SIZE) dns_counter_table_1;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_1;
+    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_1;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
-    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_2;
-    register<bit<64>>(TABLE_SIZE) dns_counter_table_2;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_2;
+    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_2;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_3;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_3;
-    register<bit<64>>(TABLE_SIZE) dns_hashed_name_table_3;
-    register<bit<64>>(TABLE_SIZE) dns_counter_table_3;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_3;
+    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_3;
 
-    action match_domain() {
+    // REGISTER ARRAY FOR COLLECTING COUNTS ON TRAFFIC WITH KNOWN DOMAINS
+    register<bit<64>>(NUM_KNOWN_DOMAINS) packet_counts_table;
+    register<bit<64>>(NUM_KNOWN_DOMAINS) byte_counts_table;
+
+    // REGISTER ARRAY FOR KEEPING TRACK OF OVERFLOW DNS RESPONSES
+    register<bit<64>>(NUM_KNOWN_DOMAINS) dns_total_queried;
+    register<bit<64>>(NUM_KNOWN_DOMAINS) dns_total_missed;
+
+    action match_domain(known_domain_id id) {
+        user_metadata.domain_id = id;
         user_metadata.matched_domain = 1;
     }
 
     table known_domain_list {
-        key = {user_metadata.server_name: exact;}
+        key = {
+            headers.q1_part1: exact;
+            headers.q1_part2: exact;
+            headers.q1_part4: exact;
+            headers.q1_part8: exact;
+            headers.q2_part1: exact;
+            headers.q2_part2: exact;
+            headers.q2_part4: exact;
+            headers.q2_part8: exact;
+            headers.q2_part16: exact;
+            headers.q3_part1: exact;
+            headers.q3_part2: exact;
+            headers.q3_part4: exact;
+            headers.q3_part8: exact;
+            headers.q3_part16: exact;
+            headers.q4_part1: exact;
+            headers.q4_part2: exact;
+            headers.q4_part4: exact;
+        }
 
         actions = {
             match_domain;
             NoAction;
         }
-        size = 2048; //tbd
+        size = NUM_KNOWN_DOMAINS;
         default_action = NoAction();
     }
 
     apply {
-        bit<1024> SERVER_MIN = 0;
-        bit<1024> SERVER_MAX = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
-        if(headers.dns_answer.isValid()) {
-            if (user_metadata.last_label == 1) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label}, SERVER_MAX);
-            } else if (user_metadata.last_label == 2) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, SERVER_MAX);
-            } else if (user_metadata.last_label == 3) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, SERVER_MAX);
-            } else if (user_metadata.last_label == 4) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, SERVER_MAX);
-            } else if (user_metadata.last_label == 5) {
-                hash(user_metadata.server_name, HashAlgorithm.identity, SERVER_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, SERVER_MAX);
-            }
+        if(user_metadata.parsed_answer == 1) {
 
             user_metadata.matched_domain = 0;
 
@@ -338,23 +1005,9 @@ control TopIngress(inout Parsed_packet headers,
 
             if (user_metadata.matched_domain == 1) {
 
-                bit<64> NAME_HASH_MIN = 64w0;
-                bit<64> NAME_HASH_MAX = 0xffffffffffffffff;
-
-                if (user_metadata.last_label == 1) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label}, NAME_HASH_MAX);
-                } else if (user_metadata.last_label == 2) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label}, NAME_HASH_MAX);
-                } else if (user_metadata.last_label == 3) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label}, NAME_HASH_MAX);
-                } else if (user_metadata.last_label == 4) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label}, NAME_HASH_MAX);
-                } else if (user_metadata.last_label == 5) {
-                    hash(user_metadata.hashed_name, HashAlgorithm.crc16, NAME_HASH_MIN, {headers.label1.label, headers.part1.part, headers.label2.label, headers.part2.part, headers.label3.label, headers.part3.part, headers.label4.label, headers.part4.part, headers.label5.label}, NAME_HASH_MAX);
-                }
-
-                // headers.dns_answer.rdata; server ip
-                // headers.ipv4.dst; client ip
+                // Increment total DNS queries for this domain name
+                dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
+                dns_total_queried.write(user_metadata.domain_id, user_metadata.temp_total_dns + 1);
 
                 hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
                 hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
@@ -364,36 +1017,26 @@ control TopIngress(inout Parsed_packet headers,
                 // access table 1
                 dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
                 dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
-                dns_counter_table_1.read(user_metadata.temp_counter, user_metadata.index_1);
-                if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                dns_timestamp_table_1.read(user_metadata.temp_timestamp, user_metadata.index_1);
+                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
                     dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
                     dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
-                    dns_counter_table_1.write(user_metadata.index_1, user_metadata.temp_counter + 1);
-                    dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
+                    dns_timestamp_table_1.write(user_metadata.index_1, standard_metadata.ingress_global_timestamp);
+                    dns_name_table_1.write(user_metadata.index_1, user_metadata.domain_id);
                     user_metadata.already_matched = 1;
-                }
-                else {
-                    user_metadata.min_counter = user_metadata.temp_counter;
-                    user_metadata.min_table = 1;
                 }
 
                 // access table 2
                 if (user_metadata.already_matched == 0) {
                     dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
                     dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
-                    dns_counter_table_2.read(user_metadata.temp_counter, user_metadata.index_2);
-                    if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                    dns_timestamp_table_2.read(user_metadata.temp_timestamp, user_metadata.index_2);
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
                         dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
                         dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
-                        dns_counter_table_2.write(user_metadata.index_2, user_metadata.temp_counter + 1);
-                        dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
+                        dns_timestamp_table_2.write(user_metadata.index_2, standard_metadata.ingress_global_timestamp);
+                        dns_name_table_2.write(user_metadata.index_2, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
-                    }
-                    else {
-                        if (user_metadata.temp_counter < user_metadata.min_counter) {
-                            user_metadata.min_counter = user_metadata.temp_counter;
-                            user_metadata.min_table = 2;
-                        }
                     }
                 }
 
@@ -401,43 +1044,91 @@ control TopIngress(inout Parsed_packet headers,
                 if (user_metadata.already_matched == 0) {
                     dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
                     dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
-                    dns_counter_table_3.read(user_metadata.temp_counter, user_metadata.index_3);
-                    if (user_metadata.temp_counter == 0 || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                    dns_timestamp_table_3.read(user_metadata.temp_timestamp, user_metadata.index_3);
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
                         dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
                         dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
-                        dns_counter_table_3.write(user_metadata.index_3, user_metadata.temp_counter + 1);
-                        dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
+                        dns_timestamp_table_3.write(user_metadata.index_3, standard_metadata.ingress_global_timestamp);
+                        dns_name_table_3.write(user_metadata.index_3, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
-                    }
-                    else {
-                        if (user_metadata.temp_counter < user_metadata.min_counter) {
-                            user_metadata.min_counter = user_metadata.temp_counter;
-                            user_metadata.min_table = 3;
-                        }
                     }
                 }
 
-                // recirculate
                 if (user_metadata.already_matched == 0) {
-                    if(user_metadata.min_table == 1) {
-                        dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
-                        dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
-                        dns_counter_table_1.write(user_metadata.index_1, 1);
-                        dns_hashed_name_table_1.write(user_metadata.index_1, user_metadata.hashed_name);
-                    }
-                    else if (user_metadata.min_table == 2) {
-                        dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
-                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
-                        dns_counter_table_2.write(user_metadata.index_2, 1);
-                        dns_hashed_name_table_2.write(user_metadata.index_2, user_metadata.hashed_name);
-                    }
-                    else if (user_metadata.min_table == 3) {
-                        dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
-                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
-                        dns_counter_table_3.write(user_metadata.index_3, 1);
-                        dns_hashed_name_table_3.write(user_metadata.index_3, user_metadata.hashed_name);
-                    }
+                    // Increment total DNS queries missed for this domain name
+                    dns_total_missed.read(user_metadata.temp_total_missed, user_metadata.domain_id);
+                    dns_total_missed.write(user_metadata.domain_id, user_metadata.temp_total_missed + 1);
                 }
+            }
+        }
+        // HANDLE NORMAL, NON-DNS PACKETS
+        else if (user_metadata.is_ip == 1 && user_metadata.is_dns == 0) {
+            hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.src, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
+            hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.src, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
+            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, hheaders.ipv4.src, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+
+            dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
+            dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
+            if (headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) {
+                dns_name_table_1.read(user_metadata.domain_id, user_metadata.index_1);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+            }
+
+            dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+            dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+            if (headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) {
+                dns_name_table_2.read(user_metadata.domain_id, user_metadata.index_2);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+            }
+
+            dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+            dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+            if (headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) {
+                dns_name_table_3.read(user_metadata.domain_id, user_metadata.index_3);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+            }
+
+            hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.ipv4.src}, HASH_TABLE_MAX);
+            hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.ipv4.src}, HASH_TABLE_MAX);
+            hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, hheaders.ipv4.dst, 1w1, headers.ipv4.src}, HASH_TABLE_MAX);
+
+            dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
+            dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
+            if (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip) {
+                dns_name_table_1.read(user_metadata.domain_id, user_metadata.index_1);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+            }
+
+            dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+            dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+            if (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip) {
+                dns_name_table_2.read(user_metadata.domain_id, user_metadata.index_2);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+            }
+
+            dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+            dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+            if (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip) {
+                dns_name_table_3.read(user_metadata.domain_id, user_metadata.index_3);
+                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
             }
         }
 	}
@@ -475,15 +1166,6 @@ control TopComputeChecksum(inout Parsed_packet headers, inout user_metadata_t us
 control TopDeparser(packet_out b,
                     in Parsed_packet p) { 
     apply {
-        /*b.emit(p.ethernet);
-        b.emit(p.ipv4);
-        b.emit(p.udp);
-        b.emit(p.dns.dns_header);
-		// Only one of these can ever be valid at once.  See the end of
-		// the top pipe.
-        b.emit(p.dns.question);
-		b.emit(p.question_48);
-        b.emit(p.dns_response_fields);*/
     }
 }
 
