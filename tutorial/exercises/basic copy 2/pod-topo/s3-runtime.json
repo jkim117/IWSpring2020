@@ -1,0 +1,33 @@
+{
+  "target": "bmv2",
+  "p4info": "build/basic.p4.p4info.txt",
+  "bmv2_json": "build/basic.json",
+  "table_entries": [
+    {
+      "table": "TopIngress.known_domain_list",
+      "match": {
+        "headers.q1_part1.part": 0,
+        "headers.q1_part2.part": 0,
+        "headers.q1_part4.part": ["e872", 32],
+        "headers.q1_part8.part": 0,
+        "headers.q2_part1.part": ["g", 8],
+        "headers.q2_part2.part": 0,
+        "headers.q2_part4.part": 0,
+        "headers.q2_part8.part": 0,
+        "headers.q2_part16.part": 0,
+        "headers.q3_part1.part": 0,
+        "headers.q3_part2.part": ["ak", 16],
+        "headers.q3_part4.part": 0,
+        "headers.q3_part8.part": ["amaiedge", 64],
+        "headers.q3_part16.part": 0,
+        "headers.q4_part1.part": ["n", 8],
+        "headers.q4_part2.part": ["et", 16],
+        "headers.q4_part4.part": 0
+      },
+      "action_name": "TopIngress.match_domain",
+      "action_params": {
+        "id": 0
+      }
+    }
+  ]
+}
