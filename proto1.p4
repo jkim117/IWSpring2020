@@ -11,7 +11,7 @@
 typedef bit<48> MacAddress;
 typedef bit<32> IPv4Address;
 typedef bit<128> IPv6Address;
-typedef bit<NUM_KNOWN_DOMAINS_BITS> known_domain_id;
+typedef bit<10> known_domain_id;
 
 header ethernet_h {
     MacAddress dst;
@@ -166,7 +166,7 @@ struct user_metadata_t {
 
     bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
     bit<1> matched_domain;
-    bit<NUM_KNOWN_DOMAINS_BITS> domain_id;
+    bit<10> domain_id;
     bit<32> index_1;
     bit<32> index_2;
     bit<32> index_3;
@@ -941,17 +941,17 @@ control TopIngress(inout Parsed_packet headers,
     // PRECISION STYLE TABLES
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
-    register<bit<NUM_KNOWN_DOMAINS_BITS>>(TABLE_SIZE) dns_name_table_1;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_1;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_1;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
-    register<bit<NUM_KNOWN_DOMAINS_BITS>>(TABLE_SIZE) dns_name_table_2;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_2;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_2;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_3;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_3;
-    register<bit<NUM_KNOWN_DOMAINS_BITS>>(TABLE_SIZE) dns_name_table_3;
+    register<bit<10>>(TABLE_SIZE) dns_name_table_3;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_3;
 
     // REGISTER ARRAY FOR COLLECTING COUNTS ON TRAFFIC WITH KNOWN DOMAINS
