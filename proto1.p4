@@ -11,7 +11,7 @@
 typedef bit<48> MacAddress;
 typedef bit<32> IPv4Address;
 typedef bit<128> IPv6Address;
-typedef bit<10> known_domain_id;
+typedef bit<32> known_domain_id;
 
 header ethernet_h {
     MacAddress dst;
@@ -941,17 +941,17 @@ control TopIngress(inout Parsed_packet headers,
     // PRECISION STYLE TABLES
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
-    register<bit<10>>(TABLE_SIZE) dns_name_table_1;
+    register<bit<32>>(TABLE_SIZE) dns_name_table_1;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_1;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
-    register<bit<10>>(TABLE_SIZE) dns_name_table_2;
+    register<bit<32>>(TABLE_SIZE) dns_name_table_2;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_2;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_3;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_3;
-    register<bit<10>>(TABLE_SIZE) dns_name_table_3;
+    register<bit<32>>(TABLE_SIZE) dns_name_table_3;
     register<bit<48>>(TABLE_SIZE) dns_timestamp_table_3;
 
     // REGISTER ARRAY FOR COLLECTING COUNTS ON TRAFFIC WITH KNOWN DOMAINS
@@ -1074,7 +1074,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
 
             dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
@@ -1084,7 +1084,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
 
             dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
@@ -1094,7 +1094,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
 
             hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.ipv4.src}, HASH_TABLE_MAX);
@@ -1108,7 +1108,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
 
             dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
@@ -1118,7 +1118,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
 
             dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
@@ -1128,7 +1128,7 @@ control TopIngress(inout Parsed_packet headers,
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + headers.ipv4.len);
+                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<64>)headers.ipv4.len);
             }
         }
 	}
