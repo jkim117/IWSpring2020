@@ -214,6 +214,7 @@ addDomainToTable("com")
 addDomainToTable("gov")
 addDomainToTable("edu")
 addDomainToTable("mil")
+addDomainToTable("org")
 addDomainToTable("")
 
 with open('s1-runtime.json', 'w') as outFile:
