@@ -26,3 +26,5 @@ packet_counts_table (number of packets sent or received to this domain. Index is
 byte_counts_table (number of bytes sent or received to this domain. Index is domain ID)
 dns_total_queried (number of total dns responses that were parsed)
 dns_total_missed (number of dns responses that could not be fully processed because there is not enough room in the dns responses table)
+
+When done, use "make stop" and "make clean"
