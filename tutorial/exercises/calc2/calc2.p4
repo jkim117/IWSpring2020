@@ -1009,7 +1009,7 @@ control TopIngress(inout Parsed_packet headers,
                 dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
                 dns_total_queried.write(user_metadata.domain_id, user_metadata.temp_total_dns + 1);
 
-                if (headers.dns_ip.rdata > headers.ipv4.dst) {
+                if (headers.dns_answer.rdata > headers.ipv4.dst) {
                     hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
                     hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
                     hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_answer.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
