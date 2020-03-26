@@ -1,5 +1,12 @@
 import json
 
+globalID = 0
+data = {}
+data["target"] = "bmv2"
+data["p4info"] = "build/calc2.p4.p4info.txt"
+data["bmv2_json"] = "build/calc2.json"
+data["table_entries"] = []
+
 def dictSetUp():
     partsDict = {
         "headers.q1_part1.part": "",
@@ -110,6 +117,7 @@ def addPart4ToDict(part, partsDict):
 
 
 def packageDict(dict_t):
+    global globalID
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list",
         "match": dict_t,
@@ -198,25 +206,24 @@ knownlist = open('known_domains.txt', 'r')
 domains = knownlist.read().split()
 knownlist.close()
 
-globalID = 0
-data = {}
-data["target"] = "bmv2"
-data["p4info"] = "build/calc2.p4.p4info.txt"
-data["bmv2_json"] = "build/calc2.json"
-data["table_entries"] = []
-
 for d in domains:
     addDomainToTable(d)
     globalID = globalID + 1
 
 addDomainToTable("princeton.edu")
+globalID = globalID + 1
 addDomainToTable("com")
+globalID = globalID + 1
 addDomainToTable("gov")
+globalID = globalID + 1
 addDomainToTable("edu")
+globalID = globalID + 1
 addDomainToTable("mil")
+globalID = globalID + 1
 addDomainToTable("org")
+globalID = globalID + 1
 addDomainToTable("")
 
 with open('s1-runtime.json', 'w') as outFile:
-    json.dump(data, outFile)
+    json.dump(data, outFile, indent='\t')
 
