@@ -179,7 +179,7 @@ struct user_metadata_t {
     bit<32> index_1;
     bit<32> index_2;
     bit<32> index_3;
-    bit<48> temp_timestamp;
+    bit<32> temp_timestamp;
     bit<32> temp_cip;
     bit<32> temp_sip;
     bit<1> already_matched;
@@ -964,17 +964,17 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_name_table_1;
-    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_1;
+    register<bit<32>>(TABLE_SIZE) dns_timestamp_table_1;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_name_table_2;
-    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_2;
+    register<bit<32>>(TABLE_SIZE) dns_timestamp_table_2;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_3;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_3;
     register<bit<32>>(TABLE_SIZE) dns_name_table_3;
-    register<bit<48>>(TABLE_SIZE) dns_timestamp_table_3;
+    register<bit<32>>(TABLE_SIZE) dns_timestamp_table_3;
 
     // REGISTER ARRAY FOR COLLECTING COUNTS ON TRAFFIC WITH KNOWN DOMAINS
     register<bit<32>>(NUM_KNOWN_DOMAINS) packet_counts_table;
@@ -1047,10 +1047,10 @@ control TopIngress(inout Parsed_packet headers,
                 dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
                 dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
                 dns_timestamp_table_1.read(user_metadata.temp_timestamp, user_metadata.index_1);
-                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
+                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                     dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
                     dns_sip_table_1.write(user_metadata.index_1, headers.dns_ip.rdata);
-                    dns_timestamp_table_1.write(user_metadata.index_1, standard_metadata.ingress_global_timestamp);
+                    dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
                     dns_name_table_1.write(user_metadata.index_1, user_metadata.domain_id);
                     user_metadata.already_matched = 1;
                 }
@@ -1060,10 +1060,10 @@ control TopIngress(inout Parsed_packet headers,
                     dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
                     dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
                     dns_timestamp_table_2.read(user_metadata.temp_timestamp, user_metadata.index_2);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                         dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
                         dns_sip_table_2.write(user_metadata.index_2, headers.dns_ip.rdata);
-                        dns_timestamp_table_2.write(user_metadata.index_2, standard_metadata.ingress_global_timestamp);
+                        dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
                         dns_name_table_2.write(user_metadata.index_2, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
                     }
@@ -1074,10 +1074,10 @@ control TopIngress(inout Parsed_packet headers,
                     dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
                     dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
                     dns_timestamp_table_3.read(user_metadata.temp_timestamp, user_metadata.index_3);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                         dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
                         dns_sip_table_3.write(user_metadata.index_3, headers.dns_ip.rdata);
-                        dns_timestamp_table_3.write(user_metadata.index_3, standard_metadata.ingress_global_timestamp);
+                        dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
                         dns_name_table_3.write(user_metadata.index_3, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
                     }
@@ -1113,7 +1113,7 @@ control TopIngress(inout Parsed_packet headers,
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
                 byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
-                dns_timestamp_table_1.write(user_metadata.index_1, standard_metadata.ingress_global_timestamp);
+                dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
             }
 
             dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
@@ -1124,7 +1124,7 @@ control TopIngress(inout Parsed_packet headers,
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
                 byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
-                dns_timestamp_table_2.write(user_metadata.index_2, standard_metadata.ingress_global_timestamp);
+                dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
             }
 
             dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
@@ -1135,7 +1135,7 @@ control TopIngress(inout Parsed_packet headers,
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
                 packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
                 byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
-                dns_timestamp_table_3.write(user_metadata.index_3, standard_metadata.ingress_global_timestamp);
+                dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
             }
         }
 	}

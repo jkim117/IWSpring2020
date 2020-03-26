@@ -170,7 +170,7 @@ struct user_metadata_t {
     bit<32> index_1;
     bit<32> index_2;
     bit<32> index_3;
-    bit<32> temp_timestamp; //48
+    bit<32> temp_timestamp;
     bit<32> temp_cip;
     bit<32> temp_sip;
     bit<1> already_matched;
@@ -942,7 +942,7 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(TABLE_SIZE) dns_cip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_1;
     register<bit<32>>(TABLE_SIZE) dns_name_table_1;
-    register<bit<32>>(TABLE_SIZE) dns_timestamp_table_1;//48
+    register<bit<32>>(TABLE_SIZE) dns_timestamp_table_1;
 
     register<bit<32>>(TABLE_SIZE) dns_cip_table_2;
     register<bit<32>>(TABLE_SIZE) dns_sip_table_2;
