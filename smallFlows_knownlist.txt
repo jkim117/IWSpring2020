@@ -1,0 +1,13 @@
+login.live.com
+messenger.hotmail.com
+config.messenger.msn.com
+rad.msn.com
+cp.intl.match.com
+www.gowindowslive.com
+local-bay.contacts.msn.com
+view.atdmt.com
+www3.smartadserver.com
+akamai.smartadserver.com
+sup.live.com
+www.salesforce.com
+
