@@ -1357,7 +1357,7 @@ control TopIngress(inout Parsed_packet headers,
             match_domain4_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain4fail();
+        default_action = match_domain4_fail();
     }
 
     table known_domain_list_q3 {
@@ -1375,7 +1375,7 @@ control TopIngress(inout Parsed_packet headers,
             match_domain3_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain3fail();
+        default_action = match_domain3_fail();
     }
 
     table known_domain_list_q2 {
@@ -1393,7 +1393,7 @@ control TopIngress(inout Parsed_packet headers,
             match_domain2_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain2fail();
+        default_action = match_domain2_fail();
     }
 
     table known_domain_list_q1 {
@@ -1411,7 +1411,7 @@ control TopIngress(inout Parsed_packet headers,
             match_domain1_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain1fail();
+        default_action = match_domain1_fail();
     }
 
     apply {
