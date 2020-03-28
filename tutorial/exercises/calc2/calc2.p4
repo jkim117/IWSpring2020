@@ -1489,7 +1489,7 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
     //TESTING
-    register<bit<128>>(TABLE_SIZE) test;
+    register<bit<128>>(20) test;
 
     action match_domain4_fail() {
         user_metadata.domain_id = 0; // Completely misc. domain
@@ -1602,7 +1602,7 @@ control TopIngress(inout Parsed_packet headers,
     apply {
         if(user_metadata.parsed_answer == 1) {
 
-            /*if (user_metadata.last_label == 5) {
+            if (user_metadata.last_label == 5) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1651,8 +1651,8 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
-            }*/
-            user_metadata.q4_part1.part = headers.q4_part1.part;
+            }
+            /*user_metadata.q4_part1.part = headers.q4_part1.part;
             user_metadata.q4_part2.part = headers.q4_part2.part;
             user_metadata.q4_part4.part = headers.q4_part4.part;
             user_metadata.q4_part8.part = headers.q4_part8.part;
@@ -1674,7 +1674,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = headers.q1_part2.part;
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;*/
 
             test.write(0, (bit<128>) user_metadata.q1_part1.part);
             test.write(1, (bit<128>) user_metadata.q1_part2.part);
