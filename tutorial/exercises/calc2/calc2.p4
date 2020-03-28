@@ -1488,6 +1488,9 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
+    //TESTING
+    register<bit<128>>(TABLE_SIZE) test;
+
     action match_domain4_fail() {
         user_metadata.domain_id = 0; // Completely misc. domain
         user_metadata.matched_domain4 = 0;
@@ -1599,7 +1602,7 @@ control TopIngress(inout Parsed_packet headers,
     apply {
         if(user_metadata.parsed_answer == 1) {
 
-            if (user_metadata.last_label == 5) {
+            /*if (user_metadata.last_label == 5) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1648,7 +1651,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
-            }
+            }*/
             user_metadata.q4_part1.part = headers.q4_part1.part;
             user_metadata.q4_part2.part = headers.q4_part2.part;
             user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1672,6 +1675,27 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
+
+            test.write(0, (bit<128>) user_metadata.q1_part1.part);
+            test.write(1, (bit<128>) user_metadata.q1_part2.part);
+            test.write(2, (bit<128>) user_metadata.q1_part4.part);
+            test.write(3, (bit<128>) user_metadata.q1_part8.part);
+            test.write(4, (bit<128>) user_metadata.q1_part16.part);
+            test.write(5, (bit<128>) user_metadata.q2_part1.part);
+            test.write(6, (bit<128>) user_metadata.q2_part2.part);
+            test.write(7, (bit<128>) user_metadata.q2_part4.part);
+            test.write(8, (bit<128>) user_metadata.q2_part8.part);
+            test.write(9, (bit<128>) user_metadata.q2_part16.part);
+            test.write(10, (bit<128>) user_metadata.q3_part1.part);
+            test.write(11, (bit<128>) user_metadata.q3_part2.part);
+            test.write(12, (bit<128>) user_metadata.q3_part4.part);
+            test.write(13, (bit<128>) user_metadata.q3_part8.part);
+            test.write(14, (bit<128>) user_metadata.q3_part16.part);
+            test.write(15, (bit<128>) user_metadata.q4_part1.part);
+            test.write(16, (bit<128>) user_metadata.q4_part2.part);
+            test.write(17, (bit<128>) user_metadata.q4_part4.part);
+            test.write(18, (bit<128>) user_metadata.q4_part8.part);
+            test.write(19, (bit<128>) user_metadata.q4_part16.part);
             // Shift over domain parts if necessary
             
 
