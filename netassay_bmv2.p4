@@ -1440,11 +1440,11 @@ control TopIngress(inout Parsed_packet headers,
                 headers.q2_part8.part = headers.q1_part8.part;
                 headers.q2_part16.part = headers.q1_part16.part;
 
-                headers.q4_part1.part = 0;
-                headers.q4_part2.part = 0;
-                headers.q4_part4.part = 0;
-                headers.q4_part8.part = 0;
-                headers.q4_part16.part = 0;
+                headers.q1_part1.part = 0;
+                headers.q1_part2.part = 0;
+                headers.q1_part4.part = 0;
+                headers.q1_part8.part = 0;
+                headers.q1_part16.part = 0;
             }
             else if (user_metadata.last_label == 3) {
                 headers.q4_part1.part = headers.q2_part1.part;
@@ -1465,11 +1465,11 @@ control TopIngress(inout Parsed_packet headers,
                 headers.q2_part8.part = 0;
                 headers.q2_part16.part = 0;
 
-                headers.q4_part1.part = 0;
-                headers.q4_part2.part = 0;
-                headers.q4_part4.part = 0;
-                headers.q4_part8.part = 0;
-                headers.q4_part16.part = 0;
+                headers.q1_part1.part = 0;
+                headers.q1_part2.part = 0;
+                headers.q1_part4.part = 0;
+                headers.q1_part8.part = 0;
+                headers.q1_part16.part = 0;
             }
             else if (user_metadata.last_label == 2) {
                 headers.q4_part1.part = headers.q1_part1.part;
@@ -1490,11 +1490,11 @@ control TopIngress(inout Parsed_packet headers,
                 headers.q2_part8.part = 0;
                 headers.q2_part16.part = 0;
 
-                headers.q4_part1.part = 0;
-                headers.q4_part2.part = 0;
-                headers.q4_part4.part = 0;
-                headers.q4_part8.part = 0;
-                headers.q4_part16.part = 0;
+                headers.q1_part1.part = 0;
+                headers.q1_part2.part = 0;
+                headers.q1_part4.part = 0;
+                headers.q1_part8.part = 0;
+                headers.q1_part16.part = 0;
             }
 
             known_domain_list_q4.apply();
