@@ -1299,7 +1299,7 @@ parser TopParser(packet_in pkt,
             3: parse_last_label_3;
             4: parse_last_label_4;
             5: parse_last_label_5;
-            default accept;
+            default: accept;
         }
     }
 
