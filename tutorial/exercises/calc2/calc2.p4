@@ -1625,6 +1625,29 @@ control TopIngress(inout Parsed_packet headers,
             // if (user_metadata.last_label == 5): no shift necessary
 
             if (user_metadata.last_label_5 == 1) {
+                /*user_metadata.q4_part1.part = headers.q4_part1.part;
+                user_metadata.q4_part2.part = headers.q4_part2.part;
+                user_metadata.q4_part4.part = headers.q4_part4.part;
+                user_metadata.q4_part8.part = headers.q4_part8.part;
+                user_metadata.q4_part16.part = headers.q4_part16.part;
+
+                user_metadata.q3_part1.part = headers.q3_part1.part;
+                user_metadata.q3_part2.part = headers.q3_part2.part;
+                user_metadata.q3_part4.part = headers.q3_part4.part;
+                user_metadata.q3_part8.part = headers.q3_part8.part;
+                user_metadata.q3_part16.part = headers.q3_part16.part;
+
+                user_metadata.q2_part1.part = headers.q2_part1.part;
+                user_metadata.q2_part2.part = headers.q2_part2.part;
+                user_metadata.q2_part4.part = headers.q2_part4.part;
+                user_metadata.q2_part8.part = headers.q2_part8.part;
+                user_metadata.q2_part16.part = headers.q2_part16.part;
+
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;*/
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1649,9 +1672,8 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
             }
-            // Shift over by one
             else if (user_metadata.last_label_4 == 1) {
-                user_metadata.q4_part1.part = headers.q3_part1.part;
+                /*user_metadata.q4_part1.part = headers.q3_part1.part;
                 user_metadata.q4_part2.part = headers.q3_part2.part;
                 user_metadata.q4_part4.part = headers.q3_part4.part;
                 user_metadata.q4_part8.part = headers.q3_part8.part;
@@ -1673,10 +1695,33 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = 0;
                 user_metadata.q1_part4.part = 0;
                 user_metadata.q1_part8.part = 0;
-                user_metadata.q1_part16.part = 0;
+                user_metadata.q1_part16.part = 0;*/
+                user_metadata.q4_part1.part = headers.q4_part1.part;
+                user_metadata.q4_part2.part = headers.q4_part2.part;
+                user_metadata.q4_part4.part = headers.q4_part4.part;
+                user_metadata.q4_part8.part = headers.q4_part8.part;
+                user_metadata.q4_part16.part = headers.q4_part16.part;
+
+                user_metadata.q3_part1.part = headers.q3_part1.part;
+                user_metadata.q3_part2.part = headers.q3_part2.part;
+                user_metadata.q3_part4.part = headers.q3_part4.part;
+                user_metadata.q3_part8.part = headers.q3_part8.part;
+                user_metadata.q3_part16.part = headers.q3_part16.part;
+
+                user_metadata.q2_part1.part = headers.q2_part1.part;
+                user_metadata.q2_part2.part = headers.q2_part2.part;
+                user_metadata.q2_part4.part = headers.q2_part4.part;
+                user_metadata.q2_part8.part = headers.q2_part8.part;
+                user_metadata.q2_part16.part = headers.q2_part16.part;
+
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             else if (user_metadata.last_label_3 == 1) {
-                user_metadata.q4_part1.part = headers.q2_part1.part;
+                /*user_metadata.q4_part1.part = headers.q2_part1.part;
                 user_metadata.q4_part2.part = headers.q2_part2.part;
                 user_metadata.q4_part4.part = headers.q2_part4.part;
                 user_metadata.q4_part8.part = headers.q2_part8.part;
@@ -1698,10 +1743,33 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = 0;
                 user_metadata.q1_part4.part = 0;
                 user_metadata.q1_part8.part = 0;
-                user_metadata.q1_part16.part = 0;
+                user_metadata.q1_part16.part = 0;*/
+                user_metadata.q4_part1.part = headers.q4_part1.part;
+                user_metadata.q4_part2.part = headers.q4_part2.part;
+                user_metadata.q4_part4.part = headers.q4_part4.part;
+                user_metadata.q4_part8.part = headers.q4_part8.part;
+                user_metadata.q4_part16.part = headers.q4_part16.part;
+
+                user_metadata.q3_part1.part = headers.q3_part1.part;
+                user_metadata.q3_part2.part = headers.q3_part2.part;
+                user_metadata.q3_part4.part = headers.q3_part4.part;
+                user_metadata.q3_part8.part = headers.q3_part8.part;
+                user_metadata.q3_part16.part = headers.q3_part16.part;
+
+                user_metadata.q2_part1.part = headers.q2_part1.part;
+                user_metadata.q2_part2.part = headers.q2_part2.part;
+                user_metadata.q2_part4.part = headers.q2_part4.part;
+                user_metadata.q2_part8.part = headers.q2_part8.part;
+                user_metadata.q2_part16.part = headers.q2_part16.part;
+
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             else if (user_metadata.last_label_2 == 1) {
-                user_metadata.q4_part1.part = headers.q1_part1.part;
+                /*user_metadata.q4_part1.part = headers.q1_part1.part;
                 user_metadata.q4_part2.part = headers.q1_part2.part;
                 user_metadata.q4_part4.part = headers.q1_part4.part;
                 user_metadata.q4_part8.part = headers.q1_part8.part;
@@ -1723,10 +1791,33 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = 0;
                 user_metadata.q1_part4.part = 0;
                 user_metadata.q1_part8.part = 0;
-                user_metadata.q1_part16.part = 0;
+                user_metadata.q1_part16.part = 0;*/
+                user_metadata.q4_part1.part = headers.q4_part1.part;
+                user_metadata.q4_part2.part = headers.q4_part2.part;
+                user_metadata.q4_part4.part = headers.q4_part4.part;
+                user_metadata.q4_part8.part = headers.q4_part8.part;
+                user_metadata.q4_part16.part = headers.q4_part16.part;
+
+                user_metadata.q3_part1.part = headers.q3_part1.part;
+                user_metadata.q3_part2.part = headers.q3_part2.part;
+                user_metadata.q3_part4.part = headers.q3_part4.part;
+                user_metadata.q3_part8.part = headers.q3_part8.part;
+                user_metadata.q3_part16.part = headers.q3_part16.part;
+
+                user_metadata.q2_part1.part = headers.q2_part1.part;
+                user_metadata.q2_part2.part = headers.q2_part2.part;
+                user_metadata.q2_part4.part = headers.q2_part4.part;
+                user_metadata.q2_part8.part = headers.q2_part8.part;
+                user_metadata.q2_part16.part = headers.q2_part16.part;
+
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             else if (user_metadata.last_label_1 == 1){
-                user_metadata.q4_part1.part = 0;
+                /*user_metadata.q4_part1.part = 0;
                 user_metadata.q4_part2.part = 0;
                 user_metadata.q4_part4.part = 0;
                 user_metadata.q4_part8.part = 0;
@@ -1748,7 +1839,30 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = 0;
                 user_metadata.q1_part4.part = 0;
                 user_metadata.q1_part8.part = 0;
-                user_metadata.q1_part16.part = 0;
+                user_metadata.q1_part16.part = 0;*/
+                user_metadata.q4_part1.part = headers.q4_part1.part;
+                user_metadata.q4_part2.part = headers.q4_part2.part;
+                user_metadata.q4_part4.part = headers.q4_part4.part;
+                user_metadata.q4_part8.part = headers.q4_part8.part;
+                user_metadata.q4_part16.part = headers.q4_part16.part;
+
+                user_metadata.q3_part1.part = headers.q3_part1.part;
+                user_metadata.q3_part2.part = headers.q3_part2.part;
+                user_metadata.q3_part4.part = headers.q3_part4.part;
+                user_metadata.q3_part8.part = headers.q3_part8.part;
+                user_metadata.q3_part16.part = headers.q3_part16.part;
+
+                user_metadata.q2_part1.part = headers.q2_part1.part;
+                user_metadata.q2_part2.part = headers.q2_part2.part;
+                user_metadata.q2_part4.part = headers.q2_part4.part;
+                user_metadata.q2_part8.part = headers.q2_part8.part;
+                user_metadata.q2_part16.part = headers.q2_part16.part;
+
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             else {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
