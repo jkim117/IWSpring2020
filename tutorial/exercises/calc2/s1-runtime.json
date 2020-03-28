@@ -6,11 +6,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "c",
-				"headers.q4_part2.part": "om",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "c",
+				"user_metadata.q4_part2.part": "om",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -20,11 +20,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "n",
-				"headers.q4_part2.part": "et",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "n",
+				"user_metadata.q4_part2.part": "et",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -34,11 +34,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "g",
-				"headers.q4_part2.part": "ov",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "g",
+				"user_metadata.q4_part2.part": "ov",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -48,11 +48,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "e",
-				"headers.q4_part2.part": "du",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "e",
+				"user_metadata.q4_part2.part": "du",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -62,11 +62,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "m",
-				"headers.q4_part2.part": "il",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "m",
+				"user_metadata.q4_part2.part": "il",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -76,11 +76,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"headers.q4_part1.part": "o",
-				"headers.q4_part2.part": "rg",
-				"headers.q4_part4.part": 0,
-				"headers.q4_part8.part": 0,
-				"headers.q4_part16.part": 0
+				"user_metadata.q4_part1.part": "o",
+				"user_metadata.q4_part2.part": "rg",
+				"user_metadata.q4_part4.part": 0,
+				"user_metadata.q4_part8.part": 0,
+				"user_metadata.q4_part16.part": 0
 			},
 			"action_name": "TopIngress.match_domain4",
 			"action_params": {
@@ -90,11 +90,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "p",
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": 0,
-				"headers.q3_part8.part": "rinceton",
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "p",
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": 0,
+				"user_metadata.q3_part8.part": "rinceton",
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 4
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -105,11 +105,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": 0,
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": "live",
-				"headers.q3_part8.part": 0,
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": 0,
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": "live",
+				"user_metadata.q3_part8.part": 0,
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -120,11 +120,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "l",
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": "ogin",
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "l",
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": "ogin",
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 8
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -135,11 +135,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "h",
-				"headers.q3_part2.part": "ot",
-				"headers.q3_part4.part": "mail",
-				"headers.q3_part8.part": 0,
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "h",
+				"user_metadata.q3_part2.part": "ot",
+				"user_metadata.q3_part4.part": "mail",
+				"user_metadata.q3_part8.part": 0,
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -150,11 +150,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "m",
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": "essenger",
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "m",
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": "essenger",
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 10
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -165,11 +165,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "m",
-				"headers.q3_part2.part": "sn",
-				"headers.q3_part4.part": 0,
-				"headers.q3_part8.part": 0,
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "m",
+				"user_metadata.q3_part2.part": "sn",
+				"user_metadata.q3_part4.part": 0,
+				"user_metadata.q3_part8.part": 0,
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -180,11 +180,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "m",
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": "essenger",
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "m",
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": "essenger",
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 12
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -195,11 +195,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q1",
 			"match": {
-				"headers.q1_part1.part": 0,
-				"headers.q1_part2.part": "co",
-				"headers.q1_part4.part": "nfig",
-				"headers.q1_part8.part": 0,
-				"headers.q1_part16.part": 0,
+				"user_metadata.q1_part1.part": 0,
+				"user_metadata.q1_part2.part": "co",
+				"user_metadata.q1_part4.part": "nfig",
+				"user_metadata.q1_part8.part": 0,
+				"user_metadata.q1_part16.part": 0,
 				"user_metadata.domain_id": 13
 			},
 			"action_name": "TopIngress.match_domain1",
@@ -210,11 +210,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "r",
-				"headers.q2_part2.part": "ad",
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "r",
+				"user_metadata.q2_part2.part": "ad",
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 12
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -225,11 +225,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "m",
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": "atch",
-				"headers.q3_part8.part": 0,
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "m",
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": "atch",
+				"user_metadata.q3_part8.part": 0,
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -240,11 +240,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": 0,
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": "intl",
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": 0,
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": "intl",
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 16
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -255,11 +255,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q1",
 			"match": {
-				"headers.q1_part1.part": 0,
-				"headers.q1_part2.part": "cp",
-				"headers.q1_part4.part": 0,
-				"headers.q1_part8.part": 0,
-				"headers.q1_part16.part": 0,
+				"user_metadata.q1_part1.part": 0,
+				"user_metadata.q1_part2.part": "cp",
+				"user_metadata.q1_part4.part": 0,
+				"user_metadata.q1_part8.part": 0,
+				"user_metadata.q1_part16.part": 0,
 				"user_metadata.domain_id": 17
 			},
 			"action_name": "TopIngress.match_domain1",
@@ -270,11 +270,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "g",
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": "owin",
-				"headers.q3_part8.part": "dowslive",
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "g",
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": "owin",
+				"user_metadata.q3_part8.part": "dowslive",
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -285,11 +285,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "w",
-				"headers.q2_part2.part": "ww",
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "w",
+				"user_metadata.q2_part2.part": "ww",
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 19
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -300,11 +300,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": 0,
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": "contacts",
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": 0,
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": "contacts",
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 12
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -315,11 +315,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q1",
 			"match": {
-				"headers.q1_part1.part": "l",
-				"headers.q1_part2.part": 0,
-				"headers.q1_part4.part": 0,
-				"headers.q1_part8.part": "ocal-bay",
-				"headers.q1_part16.part": 0,
+				"user_metadata.q1_part1.part": "l",
+				"user_metadata.q1_part2.part": 0,
+				"user_metadata.q1_part4.part": 0,
+				"user_metadata.q1_part8.part": "ocal-bay",
+				"user_metadata.q1_part16.part": 0,
 				"user_metadata.domain_id": 21
 			},
 			"action_name": "TopIngress.match_domain1",
@@ -330,11 +330,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "a",
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": "tdmt",
-				"headers.q3_part8.part": 0,
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "a",
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": "tdmt",
+				"user_metadata.q3_part8.part": 0,
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -345,11 +345,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": 0,
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": "view",
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": 0,
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": "view",
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 23
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -360,11 +360,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": "s",
-				"headers.q3_part2.part": 0,
-				"headers.q3_part4.part": "mart",
-				"headers.q3_part8.part": "adserver",
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": "s",
+				"user_metadata.q3_part2.part": 0,
+				"user_metadata.q3_part4.part": "mart",
+				"user_metadata.q3_part8.part": "adserver",
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -375,11 +375,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": 0,
-				"headers.q2_part2.part": 0,
-				"headers.q2_part4.part": "www3",
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": 0,
+				"user_metadata.q2_part2.part": 0,
+				"user_metadata.q2_part4.part": "www3",
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 25
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -390,11 +390,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": 0,
-				"headers.q2_part2.part": "ak",
-				"headers.q2_part4.part": "amai",
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": 0,
+				"user_metadata.q2_part2.part": "ak",
+				"user_metadata.q2_part4.part": "amai",
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 25
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -405,11 +405,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "s",
-				"headers.q2_part2.part": "up",
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "s",
+				"user_metadata.q2_part2.part": "up",
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 8
 			},
 			"action_name": "TopIngress.match_domain2",
@@ -420,11 +420,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q3",
 			"match": {
-				"headers.q3_part1.part": 0,
-				"headers.q3_part2.part": "sa",
-				"headers.q3_part4.part": 0,
-				"headers.q3_part8.part": "lesforce",
-				"headers.q3_part16.part": 0,
+				"user_metadata.q3_part1.part": 0,
+				"user_metadata.q3_part2.part": "sa",
+				"user_metadata.q3_part4.part": 0,
+				"user_metadata.q3_part8.part": "lesforce",
+				"user_metadata.q3_part16.part": 0,
 				"user_metadata.domain_id": 1
 			},
 			"action_name": "TopIngress.match_domain3",
@@ -435,11 +435,11 @@
 		{
 			"table": "TopIngress.known_domain_list_q2",
 			"match": {
-				"headers.q2_part1.part": "w",
-				"headers.q2_part2.part": "ww",
-				"headers.q2_part4.part": 0,
-				"headers.q2_part8.part": 0,
-				"headers.q2_part16.part": 0,
+				"user_metadata.q2_part1.part": "w",
+				"user_metadata.q2_part2.part": "ww",
+				"user_metadata.q2_part4.part": 0,
+				"user_metadata.q2_part8.part": 0,
+				"user_metadata.q2_part16.part": 0,
 				"user_metadata.domain_id": 29
 			},
 			"action_name": "TopIngress.match_domain2",
