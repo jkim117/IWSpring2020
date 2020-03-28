@@ -176,7 +176,13 @@ struct user_metadata_t {
 	bit<1> is_ip;
     bit<3>  unused;
 
-    bit<16> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+    //bit<16> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+    bit<1> last_label_1;
+    bit<1> last_label_2;
+    bit<1> last_label_3;
+    bit<1> last_label_4;
+    bit<1> last_label_5;
+
     bit<1> matched_domain4;
     bit<1> matched_domain3;
     bit<1> matched_domain2;
@@ -267,6 +273,12 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.dns_header);
 		user_metadata.is_dns = 1;
 
+        user_metadata.last_label_1 = 0;
+        user_metadata.last_label_2 = 0;
+        user_metadata.last_label_3 = 0;
+        user_metadata.last_label_4 = 0;
+        user_metadata.last_label_5 = 0;
+
 		transition select(p.dns_header.is_response) {
 			1: parse_dns_query1;
 			default: accept;
@@ -276,7 +288,7 @@ parser TopParser(packet_in pkt,
     // Parsel DNS Query Label 1
     state parse_dns_query1 {
         pkt.extract(p.label1);
-        user_metadata.last_label = 1;
+        user_metadata.last_label_1 = 1;
 
         transition select(p.label1.label) {
             0: parse_dns_answer;
@@ -522,7 +534,7 @@ parser TopParser(packet_in pkt,
     // Parsel DNS Query Label 2
     state parse_dns_query2 {
         pkt.extract(p.label2);
-        user_metadata.last_label = 2;
+        user_metadata.last_label_2 = 1;
 
         transition select(p.label2.label) {
             0: parse_dns_answer;
@@ -768,7 +780,7 @@ parser TopParser(packet_in pkt,
     // Parsel DNS Query Label 3
     state parse_dns_query3 {
         pkt.extract(p.label3);
-        user_metadata.last_label = 3;
+        user_metadata.last_label_3= 1;
 
         transition select(p.label3.label) {
             0: parse_dns_answer;
@@ -1014,7 +1026,7 @@ parser TopParser(packet_in pkt,
     // Parsel DNS Query Label 4
     state parse_dns_query4 {
         pkt.extract(p.label4);
-        user_metadata.last_label = 4;
+        user_metadata.last_label_4 = 1;
 
         transition select(p.label4.label) {
             0: parse_dns_answer;
@@ -1260,7 +1272,7 @@ parser TopParser(packet_in pkt,
     // Parsel DNS Query Label 5
     state parse_dns_query5 {
         pkt.extract(p.label5);
-        user_metadata.last_label = 5;
+        user_metadata.last_label_5 = 1;
 
         transition select(p.label5.label) {
             0: parse_query_tc;
@@ -1304,7 +1316,7 @@ parser TopParser(packet_in pkt,
         }*/
     }
 
-    state parse_last_label_1 {
+    /*state parse_last_label_1 {
         user_metadata.q4_part1.part = 0;
         user_metadata.q4_part2.part = 0;
         user_metadata.q4_part4.part = 0;
@@ -1439,7 +1451,7 @@ parser TopParser(packet_in pkt,
         user_metadata.q1_part16.part = p.q1_part16.part;
 
         transition accept;
-    }
+    }*/
 }
 /**************************END OF PARSER**************************/
 
@@ -1612,7 +1624,7 @@ control TopIngress(inout Parsed_packet headers,
             // Shift over domain parts if necessary
             // if (user_metadata.last_label == 5): no shift necessary
 
-            if (user_metadata.last_label == (bit<16>)5) {
+            if (user_metadata.last_label_5 == 1) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1638,7 +1650,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             // Shift over by one
-            if (user_metadata.last_label == (bit<16>)4) {
+            else if (user_metadata.last_label_4 == 1) {
                 user_metadata.q4_part1.part = headers.q3_part1.part;
                 user_metadata.q4_part2.part = headers.q3_part2.part;
                 user_metadata.q4_part4.part = headers.q3_part4.part;
@@ -1663,7 +1675,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = 0;
                 user_metadata.q1_part16.part = 0;
             }
-            else if (user_metadata.last_label == (bit<16>)3) {
+            else if (user_metadata.last_label_3 == 1) {
                 user_metadata.q4_part1.part = headers.q2_part1.part;
                 user_metadata.q4_part2.part = headers.q2_part2.part;
                 user_metadata.q4_part4.part = headers.q2_part4.part;
@@ -1688,7 +1700,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = 0;
                 user_metadata.q1_part16.part = 0;
             }
-            else if (user_metadata.last_label == (bit<16>)2) {
+            else if (user_metadata.last_label_2 == 1) {
                 user_metadata.q4_part1.part = headers.q1_part1.part;
                 user_metadata.q4_part2.part = headers.q1_part2.part;
                 user_metadata.q4_part4.part = headers.q1_part4.part;
@@ -1713,7 +1725,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = 0;
                 user_metadata.q1_part16.part = 0;
             }
-            else if (user_metadata.last_label == (bit<16>)1){
+            else if (user_metadata.last_label_1 == 1){
                 user_metadata.q4_part1.part = 0;
                 user_metadata.q4_part2.part = 0;
                 user_metadata.q4_part4.part = 0;
@@ -1738,7 +1750,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = 0;
                 user_metadata.q1_part16.part = 0;
             }
-            else if (user_metadata.last_label == (bit<16>)0){
+            else {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
