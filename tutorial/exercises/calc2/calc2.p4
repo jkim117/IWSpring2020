@@ -1516,7 +1516,7 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(1) did;
 
     action match_domain4_fail() {
-        user_metadata.domain_id = 0; // Completely misc. domain
+        user_metadata.domain_id = 1; // Completely misc. domain
         user_metadata.matched_domain4 = 0;
     }
 
