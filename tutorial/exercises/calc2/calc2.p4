@@ -1513,6 +1513,7 @@ control TopIngress(inout Parsed_packet headers,
 
     //TESTING
     register<bit<128>>(20) test;
+    register<bit<32>>(1) did;
 
     action match_domain4_fail() {
         user_metadata.domain_id = 0; // Completely misc. domain
@@ -1735,6 +1736,7 @@ control TopIngress(inout Parsed_packet headers,
                     }
                 }
             }
+            did.write(0, user_metadata.domain_id);
 
             // Increment total DNS queries for this domain name
             dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
