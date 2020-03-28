@@ -176,7 +176,7 @@ struct user_metadata_t {
 	bit<1> is_ip;
     bit<3>  unused;
 
-    bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+    bit<16> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
     bit<1> matched_domain4;
     bit<1> matched_domain3;
     bit<1> matched_domain2;
@@ -1584,7 +1584,7 @@ control TopIngress(inout Parsed_packet headers,
 
     apply {
         if(user_metadata.parsed_answer == 1) {
-            user_metadata.q4_part1.part = headers.q4_part1.part;
+            /*user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
                 user_metadata.q4_part8.part = headers.q4_part8.part;
@@ -1606,7 +1606,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = headers.q1_part2.part;
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;*/
 
             // Shift over domain parts if necessary
             // if (user_metadata.last_label == 5): no shift necessary
