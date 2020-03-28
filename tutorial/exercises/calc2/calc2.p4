@@ -1672,7 +1672,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
-            }*/
+            }
 
             dns_total_queried.write(1023, user_metadata.last_label);
             
