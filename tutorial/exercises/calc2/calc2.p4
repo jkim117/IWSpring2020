@@ -1293,6 +1293,150 @@ parser TopParser(packet_in pkt,
     state parse_a_ip {
         pkt.extract(p.dns_ip);
         user_metadata.parsed_answer = 1;
+        transition select(user_metadata.last_label) {
+            1: parse_last_label_1;
+            2: parse_last_label_2;
+            3: parse_last_label_3;
+            4: parse_last_label_4;
+            5: parse_last_label_5;
+            default accept;
+        }
+    }
+
+    state parse_last_label_1 {
+        user_metadata.q4_part1.part = 0;
+        user_metadata.q4_part2.part = 0;
+        user_metadata.q4_part4.part = 0;
+        user_metadata.q4_part8.part = 0;
+        user_metadata.q4_part16.part = 0;
+
+        user_metadata.q3_part1.part = 0;
+        user_metadata.q3_part2.part = 0;
+        user_metadata.q3_part4.part = 0;
+        user_metadata.q3_part8.part = 0;
+        user_metadata.q3_part16.part = 0;
+
+        user_metadata.q2_part1.part = 0;
+        user_metadata.q2_part2.part = 0;
+        user_metadata.q2_part4.part = 0;
+        user_metadata.q2_part8.part = 0;
+        user_metadata.q2_part16.part = 0;
+
+        user_metadata.q1_part1.part = 0;
+        user_metadata.q1_part2.part = 0;
+        user_metadata.q1_part4.part = 0;
+        user_metadata.q1_part8.part = 0;
+        user_metadata.q1_part16.part = 0;
+        transition accept;
+    }
+
+    state parse_last_label_2 {
+        user_metadata.q4_part1.part = p.q1_part1.part;
+        user_metadata.q4_part2.part = p.q1_part2.part;
+        user_metadata.q4_part4.part = p.q1_part4.part;
+        user_metadata.q4_part8.part = p.q1_part8.part;
+        user_metadata.q4_part16.part = p.q1_part16.part;
+
+        user_metadata.q3_part1.part = 0;
+        user_metadata.q3_part2.part = 0;
+        user_metadata.q3_part4.part = 0;
+        user_metadata.q3_part8.part = 0;
+        user_metadata.q3_part16.part = 0;
+
+        user_metadata.q2_part1.part = 0;
+        user_metadata.q2_part2.part = 0;
+        user_metadata.q2_part4.part = 0;
+        user_metadata.q2_part8.part = 0;
+        user_metadata.q2_part16.part = 0;
+
+        user_metadata.q1_part1.part = 0;
+        user_metadata.q1_part2.part = 0;
+        user_metadata.q1_part4.part = 0;
+        user_metadata.q1_part8.part = 0;
+        user_metadata.q1_part16.part = 0;
+        transition accept;
+    }
+
+    state parse_last_label_3 {
+        user_metadata.q4_part1.part = p.q2_part1.part;
+        user_metadata.q4_part2.part = p.q2_part2.part;
+        user_metadata.q4_part4.part = p.q2_part4.part;
+        user_metadata.q4_part8.part = p.q2_part8.part;
+        user_metadata.q4_part16.part = p.q2_part16.part;
+
+        user_metadata.q3_part1.part = p.q1_part1.part;
+        user_metadata.q3_part2.part = p.q1_part2.part;
+        user_metadata.q3_part4.part = p.q1_part4.part;
+        user_metadata.q3_part8.part = p.q1_part8.part;
+        user_metadata.q3_part16.part = p.q1_part16.part;
+
+        user_metadata.q2_part1.part = 0;
+        user_metadata.q2_part2.part = 0;
+        user_metadata.q2_part4.part = 0;
+        user_metadata.q2_part8.part = 0;
+        user_metadata.q2_part16.part = 0;
+
+        user_metadata.q1_part1.part = 0;
+        user_metadata.q1_part2.part = 0;
+        user_metadata.q1_part4.part = 0;
+        user_metadata.q1_part8.part = 0;
+        user_metadata.q1_part16.part = 0;
+        transition accept;
+    }
+
+    state parse_last_label_4 {
+        user_metadata.q4_part1.part = p.q3_part1.part;
+        user_metadata.q4_part2.part = p.q3_part2.part;
+        user_metadata.q4_part4.part = p.q3_part4.part;
+        user_metadata.q4_part8.part = p.q3_part8.part;
+        user_metadata.q4_part16.part = p.q3_part16.part;
+
+        user_metadata.q3_part1.part = p.q2_part1.part;
+        user_metadata.q3_part2.part = p.q2_part2.part;
+        user_metadata.q3_part4.part = p.q2_part4.part;
+        user_metadata.q3_part8.part = p.q2_part8.part;
+        user_metadata.q3_part16.part = p.q2_part16.part;
+
+        user_metadata.q2_part1.part = p.q1_part1.part;
+        user_metadata.q2_part2.part = p.q1_part2.part;
+        user_metadata.q2_part4.part = p.q1_part4.part;
+        user_metadata.q2_part8.part = p.q1_part8.part;
+        user_metadata.q2_part16.part = p.q1_part16.part;
+
+        user_metadata.q1_part1.part = 0;
+        user_metadata.q1_part2.part = 0;
+        user_metadata.q1_part4.part = 0;
+        user_metadata.q1_part8.part = 0;
+        user_metadata.q1_part16.part = 0;
+
+        transition accept;
+    }
+
+    state parse_last_label_5 {
+        user_metadata.q4_part1.part = p.q4_part1.part;
+        user_metadata.q4_part2.part = p.q4_part2.part;
+        user_metadata.q4_part4.part = p.q4_part4.part;
+        user_metadata.q4_part8.part = p.q4_part8.part;
+        user_metadata.q4_part16.part = p.q4_part16.part;
+
+        user_metadata.q3_part1.part = p.q3_part1.part;
+        user_metadata.q3_part2.part = p.q3_part2.part;
+        user_metadata.q3_part4.part = p.q3_part4.part;
+        user_metadata.q3_part8.part = p.q3_part8.part;
+        user_metadata.q3_part16.part = p.q3_part16.part;
+
+        user_metadata.q2_part1.part = p.q2_part1.part;
+        user_metadata.q2_part2.part = p.q2_part2.part;
+        user_metadata.q2_part4.part = p.q2_part4.part;
+        user_metadata.q2_part8.part = p.q2_part8.part;
+        user_metadata.q2_part16.part = p.q2_part16.part;
+
+        user_metadata.q1_part1.part = p.q1_part1.part;
+        user_metadata.q1_part2.part = p.q1_part2.part;
+        user_metadata.q1_part4.part = p.q1_part4.part;
+        user_metadata.q1_part8.part = p.q1_part8.part;
+        user_metadata.q1_part16.part = p.q1_part16.part;
+
         transition accept;
     }
 }
@@ -1443,7 +1587,7 @@ control TopIngress(inout Parsed_packet headers,
 
             // Shift over domain parts if necessary
             // if (user_metadata.last_label == 5): no shift necessary
-
+/*
             if (user_metadata.last_label == 5) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
@@ -1463,11 +1607,11 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q2_part8.part = headers.q2_part8.part;
                 user_metadata.q2_part16.part = headers.q2_part16.part;
 
-                user_metadata.q1_part1.part = headers.q1_part1.part;;
-                user_metadata.q1_part2.part = headers.q1_part2.part;;
-                user_metadata.q1_part4.part = headers.q1_part4.part;;
-                user_metadata.q1_part8.part = headers.q1_part8.part;;
-                user_metadata.q1_part16.part = headers.q1_part16.part;;
+                user_metadata.q1_part1.part = headers.q1_part1.part;
+                user_metadata.q1_part2.part = headers.q1_part2.part;
+                user_metadata.q1_part4.part = headers.q1_part4.part;
+                user_metadata.q1_part8.part = headers.q1_part8.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;
             }
             // Shift over by one
             if (user_metadata.last_label == 4) {
@@ -1569,7 +1713,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = 0;
                 user_metadata.q1_part8.part = 0;
                 user_metadata.q1_part16.part = 0;
-            }
+            }*/
 
             known_domain_list_q4.apply();
             if (user_metadata.matched_domain4 == 1) {
