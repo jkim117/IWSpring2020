@@ -1330,17 +1330,17 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.dns_ip);
         user_metadata.parsed_answer = 1;
         transition accept;
-        /*transition select(user_metadata.last_label) {
+        transition select(user_metadata.last_label) {
             1: parse_last_label_1;
             2: parse_last_label_2;
             3: parse_last_label_3;
             4: parse_last_label_4;
             5: parse_last_label_5;
             default: accept;
-        }*/
+        }
     }
 
-    /*state parse_last_label_1 {
+    state parse_last_label_1 {
         user_metadata.q4_part1.part = 0;
         user_metadata.q4_part2.part = 0;
         user_metadata.q4_part4.part = 0;
@@ -1475,7 +1475,7 @@ parser TopParser(packet_in pkt,
         user_metadata.q1_part16.part = p.q1_part16.part;
 
         transition accept;
-    }*/
+    }
 }
 /**************************END OF PARSER**************************/
 
@@ -1626,7 +1626,7 @@ control TopIngress(inout Parsed_packet headers,
     apply {
         if(user_metadata.parsed_answer == 1) {
 
-            if (user_metadata.last_label == 5) {
+            /*if (user_metadata.last_label == 5) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1650,7 +1650,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
-            }
+            }*/
             /*user_metadata.q4_part1.part = headers.q4_part1.part;
             user_metadata.q4_part2.part = headers.q4_part2.part;
             user_metadata.q4_part4.part = headers.q4_part4.part;
