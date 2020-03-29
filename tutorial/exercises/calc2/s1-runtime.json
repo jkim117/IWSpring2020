@@ -6,8 +6,8 @@
 		{
 			"table": "TopIngress.known_domain_list_q4",
 			"match": {
-				"user_metadata.q4_part1.part": 99,
-				"user_metadata.q4_part2.part": 28525,
+				"user_metadata.q4_part1.part": "c",
+				"user_metadata.q4_part2.part": "om",
 				"user_metadata.q4_part4.part": 0,
 				"user_metadata.q4_part8.part": 0,
 				"user_metadata.q4_part16.part": 0
