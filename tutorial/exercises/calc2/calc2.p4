@@ -1329,7 +1329,7 @@ parser TopParser(packet_in pkt,
     state parse_a_ip {
         pkt.extract(p.dns_ip);
         user_metadata.parsed_answer = 1;
-        transition accept;
+        //transition accept;
         transition select(user_metadata.last_label) {
             1: parse_last_label_1;
             2: parse_last_label_2;
