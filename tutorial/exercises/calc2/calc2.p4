@@ -1626,7 +1626,7 @@ control TopIngress(inout Parsed_packet headers,
     apply {
         if(user_metadata.parsed_answer == 1) {
 
-            /*if (user_metadata.last_label == 5) {
+            if (user_metadata.last_label == 5) {
                 user_metadata.q4_part1.part = headers.q4_part1.part;
                 user_metadata.q4_part2.part = headers.q4_part2.part;
                 user_metadata.q4_part4.part = headers.q4_part4.part;
@@ -1651,32 +1651,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part8.part = headers.q1_part8.part;
                 user_metadata.q1_part16.part = headers.q1_part16.part;
             }
-            else {
-                user_metadata.q4_part1.part = headers.q4_part1.part;
-                user_metadata.q4_part2.part = headers.q4_part2.part;
-                user_metadata.q4_part4.part = headers.q4_part4.part;
-                user_metadata.q4_part8.part = headers.q4_part8.part;
-                user_metadata.q4_part16.part = headers.q4_part16.part;
-
-                user_metadata.q3_part1.part = headers.q3_part1.part;
-                user_metadata.q3_part2.part = headers.q3_part2.part;
-                user_metadata.q3_part4.part = headers.q3_part4.part;
-                user_metadata.q3_part8.part = headers.q3_part8.part;
-                user_metadata.q3_part16.part = headers.q3_part16.part;
-
-                user_metadata.q2_part1.part = headers.q2_part1.part;
-                user_metadata.q2_part2.part = headers.q2_part2.part;
-                user_metadata.q2_part4.part = headers.q2_part4.part;
-                user_metadata.q2_part8.part = headers.q2_part8.part;
-                user_metadata.q2_part16.part = headers.q2_part16.part;
-
-                user_metadata.q1_part1.part = headers.q1_part1.part;
-                user_metadata.q1_part2.part = headers.q1_part2.part;
-                user_metadata.q1_part4.part = headers.q1_part4.part;
-                user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;
-            }*/
-            user_metadata.q4_part1.part = headers.q4_part1.part;
+            /*user_metadata.q4_part1.part = headers.q4_part1.part;
             user_metadata.q4_part2.part = headers.q4_part2.part;
             user_metadata.q4_part4.part = headers.q4_part4.part;
             user_metadata.q4_part8.part = headers.q4_part8.part;
@@ -1698,7 +1673,7 @@ control TopIngress(inout Parsed_packet headers,
                 user_metadata.q1_part2.part = headers.q1_part2.part;
                 user_metadata.q1_part4.part = headers.q1_part4.part;
                 user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;
+                user_metadata.q1_part16.part = headers.q1_part16.part;*/
 
             test.write(0, (bit<128>) user_metadata.q1_part1.part);
             test.write(1, (bit<128>) user_metadata.q1_part2.part);
