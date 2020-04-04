@@ -2,7 +2,7 @@
 	"target": "bmv2",
 	"p4ino": "build/calc2.p4.p4ino.txt",
 	"bmv2_json": "build/calc2.json",
-	"table_entries": 
+	"table_entries": [
 		{
 			"table": "TopIngress.known_domain_list",
 			"match": {
