@@ -1328,12 +1328,12 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) byte_counts_table;
 
     // REGISTER ARRAY FOR KEEPING TRACK OF OVERFLOW DNS RESPONSES
-    //register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
-    //register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
+    register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
+    register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
     //TESTING
-    register<bit<128>>(20) test;
-    register<bit<32>>(1) did;
+    //register<bit<128>>(20) test;
+    //register<bit<32>>(1) did;
 
     action match_domain_fail() {
         user_metadata.domain_id = 0; // Completely misc. domain
