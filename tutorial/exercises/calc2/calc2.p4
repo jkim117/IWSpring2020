@@ -177,16 +177,8 @@ struct user_metadata_t {
     bit<3>  unused;
 
     bit<32> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
-    /*bit<1> last_label_1;
-    bit<1> last_label_2;
-    bit<1> last_label_3;
-    bit<1> last_label_4;
-    bit<1> last_label_5;*/
 
-    bit<1> matched_domain4;
-    bit<1> matched_domain3;
-    bit<1> matched_domain2;
-    bit<1> matched_domain1;
+    bit<1> matched_domain;
     bit<32> domain_id;
     bit<32> index_1;
     bit<32> index_2;
@@ -203,30 +195,6 @@ struct user_metadata_t {
     bit<32> temp_total_dns;
     bit<32> temp_total_missed;
     bit<1> parsed_answer;
-
-    dns_q_part_1 q1_part1;
-    dns_q_part_2 q1_part2;
-    dns_q_part_4 q1_part4;
-    dns_q_part_8 q1_part8;
-    dns_q_part_16 q1_part16;
-
-    dns_q_part_1 q2_part1;
-    dns_q_part_2 q2_part2;
-    dns_q_part_4 q2_part4;
-    dns_q_part_8 q2_part8;
-    dns_q_part_16 q2_part16;
-
-    dns_q_part_1 q3_part1;
-    dns_q_part_2 q3_part2;
-    dns_q_part_4 q3_part4;
-    dns_q_part_8 q3_part8;
-    dns_q_part_16 q3_part16;
-
-    dns_q_part_1 q4_part1;
-    dns_q_part_2 q4_part2;
-    dns_q_part_4 q4_part4;
-    dns_q_part_8 q4_part8;
-    dns_q_part_16 q4_part16;
 }
 
 // parsers
@@ -274,11 +242,7 @@ parser TopParser(packet_in pkt,
 		user_metadata.is_dns = 1;
 
         user_metadata.last_label = 0;
-        /*user_metadata.last_label_1 = 0;
-        user_metadata.last_label_2 = 0;
-        user_metadata.last_label_3 = 0;
-        user_metadata.last_label_4 = 0;
-        user_metadata.last_label_5 = 0;*/
+
         p.q4_part1.part = 0;
         p.q4_part2.part = 0;
         p.q4_part4.part = 0;
@@ -1329,150 +1293,6 @@ parser TopParser(packet_in pkt,
     state parse_a_ip {
         pkt.extract(p.dns_ip);
         user_metadata.parsed_answer = 1;
-        //transition accept;
-        transition select(user_metadata.last_label) {
-            1: parse_last_label_1;
-            2: parse_last_label_2;
-            3: parse_last_label_3;
-            4: parse_last_label_4;
-            5: parse_last_label_5;
-            default: accept;
-        }
-    }
-
-    state parse_last_label_1 {
-        user_metadata.q4_part1.part = 0;
-        user_metadata.q4_part2.part = 0;
-        user_metadata.q4_part4.part = 0;
-        user_metadata.q4_part8.part = 0;
-        user_metadata.q4_part16.part = 0;
-
-        user_metadata.q3_part1.part = 0;
-        user_metadata.q3_part2.part = 0;
-        user_metadata.q3_part4.part = 0;
-        user_metadata.q3_part8.part = 0;
-        user_metadata.q3_part16.part = 0;
-
-        user_metadata.q2_part1.part = 0;
-        user_metadata.q2_part2.part = 0;
-        user_metadata.q2_part4.part = 0;
-        user_metadata.q2_part8.part = 0;
-        user_metadata.q2_part16.part = 0;
-
-        user_metadata.q1_part1.part = 0;
-        user_metadata.q1_part2.part = 0;
-        user_metadata.q1_part4.part = 0;
-        user_metadata.q1_part8.part = 0;
-        user_metadata.q1_part16.part = 0;
-        transition accept;
-    }
-
-    state parse_last_label_2 {
-        user_metadata.q4_part1.part = p.q1_part1.part;
-        user_metadata.q4_part2.part = p.q1_part2.part;
-        user_metadata.q4_part4.part = p.q1_part4.part;
-        user_metadata.q4_part8.part = p.q1_part8.part;
-        user_metadata.q4_part16.part = p.q1_part16.part;
-
-        user_metadata.q3_part1.part = 0;
-        user_metadata.q3_part2.part = 0;
-        user_metadata.q3_part4.part = 0;
-        user_metadata.q3_part8.part = 0;
-        user_metadata.q3_part16.part = 0;
-
-        user_metadata.q2_part1.part = 0;
-        user_metadata.q2_part2.part = 0;
-        user_metadata.q2_part4.part = 0;
-        user_metadata.q2_part8.part = 0;
-        user_metadata.q2_part16.part = 0;
-
-        user_metadata.q1_part1.part = 0;
-        user_metadata.q1_part2.part = 0;
-        user_metadata.q1_part4.part = 0;
-        user_metadata.q1_part8.part = 0;
-        user_metadata.q1_part16.part = 0;
-        transition accept;
-    }
-
-    state parse_last_label_3 {
-        user_metadata.q4_part1.part = p.q2_part1.part;
-        user_metadata.q4_part2.part = p.q2_part2.part;
-        user_metadata.q4_part4.part = p.q2_part4.part;
-        user_metadata.q4_part8.part = p.q2_part8.part;
-        user_metadata.q4_part16.part = p.q2_part16.part;
-
-        user_metadata.q3_part1.part = p.q1_part1.part;
-        user_metadata.q3_part2.part = p.q1_part2.part;
-        user_metadata.q3_part4.part = p.q1_part4.part;
-        user_metadata.q3_part8.part = p.q1_part8.part;
-        user_metadata.q3_part16.part = p.q1_part16.part;
-
-        user_metadata.q2_part1.part = 0;
-        user_metadata.q2_part2.part = 0;
-        user_metadata.q2_part4.part = 0;
-        user_metadata.q2_part8.part = 0;
-        user_metadata.q2_part16.part = 0;
-
-        user_metadata.q1_part1.part = 0;
-        user_metadata.q1_part2.part = 0;
-        user_metadata.q1_part4.part = 0;
-        user_metadata.q1_part8.part = 0;
-        user_metadata.q1_part16.part = 0;
-        transition accept;
-    }
-
-    state parse_last_label_4 {
-        user_metadata.q4_part1.part = p.q3_part1.part;
-        user_metadata.q4_part2.part = p.q3_part2.part;
-        user_metadata.q4_part4.part = p.q3_part4.part;
-        user_metadata.q4_part8.part = p.q3_part8.part;
-        user_metadata.q4_part16.part = p.q3_part16.part;
-
-        user_metadata.q3_part1.part = p.q2_part1.part;
-        user_metadata.q3_part2.part = p.q2_part2.part;
-        user_metadata.q3_part4.part = p.q2_part4.part;
-        user_metadata.q3_part8.part = p.q2_part8.part;
-        user_metadata.q3_part16.part = p.q2_part16.part;
-
-        user_metadata.q2_part1.part = p.q1_part1.part;
-        user_metadata.q2_part2.part = p.q1_part2.part;
-        user_metadata.q2_part4.part = p.q1_part4.part;
-        user_metadata.q2_part8.part = p.q1_part8.part;
-        user_metadata.q2_part16.part = p.q1_part16.part;
-
-        user_metadata.q1_part1.part = 0;
-        user_metadata.q1_part2.part = 0;
-        user_metadata.q1_part4.part = 0;
-        user_metadata.q1_part8.part = 0;
-        user_metadata.q1_part16.part = 0;
-
-        transition accept;
-    }
-
-    state parse_last_label_5 {
-        user_metadata.q4_part1.part = p.q4_part1.part;
-        user_metadata.q4_part2.part = p.q4_part2.part;
-        user_metadata.q4_part4.part = p.q4_part4.part;
-        user_metadata.q4_part8.part = p.q4_part8.part;
-        user_metadata.q4_part16.part = p.q4_part16.part;
-
-        user_metadata.q3_part1.part = p.q3_part1.part;
-        user_metadata.q3_part2.part = p.q3_part2.part;
-        user_metadata.q3_part4.part = p.q3_part4.part;
-        user_metadata.q3_part8.part = p.q3_part8.part;
-        user_metadata.q3_part16.part = p.q3_part16.part;
-
-        user_metadata.q2_part1.part = p.q2_part1.part;
-        user_metadata.q2_part2.part = p.q2_part2.part;
-        user_metadata.q2_part4.part = p.q2_part4.part;
-        user_metadata.q2_part8.part = p.q2_part8.part;
-        user_metadata.q2_part16.part = p.q2_part16.part;
-
-        user_metadata.q1_part1.part = p.q1_part1.part;
-        user_metadata.q1_part2.part = p.q1_part2.part;
-        user_metadata.q1_part4.part = p.q1_part4.part;
-        user_metadata.q1_part8.part = p.q1_part8.part;
-        user_metadata.q1_part16.part = p.q1_part16.part;
 
         transition accept;
     }
@@ -1508,210 +1328,62 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) byte_counts_table;
 
     // REGISTER ARRAY FOR KEEPING TRACK OF OVERFLOW DNS RESPONSES
-    register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
-    register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
+    //register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
+    //register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
     //TESTING
     register<bit<128>>(20) test;
     register<bit<32>>(1) did;
 
-    action match_domain4_fail() {
+    action match_domain_fail() {
         user_metadata.domain_id = 0; // Completely misc. domain
-        user_metadata.matched_domain4 = 0;
+        user_metadata.matched_domain = 0;
     }
 
-    action match_domain4(known_domain_id id) {
+    action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
-        user_metadata.matched_domain4 = 1;
+        user_metadata.matched_domain = 1;
     }
 
-    action match_domain3_fail() {
-        user_metadata.matched_domain3 = 0;
-    }
-
-    action match_domain3(known_domain_id id) {
-        user_metadata.domain_id = id;
-        user_metadata.matched_domain3 = 1;
-    }
-
-    action match_domain2_fail() {
-        user_metadata.matched_domain2 = 0;
-    }
-
-    action match_domain2(known_domain_id id) {
-        user_metadata.domain_id = id;
-        user_metadata.matched_domain2 = 1;
-    }
-
-    action match_domain1_fail() {
-        user_metadata.matched_domain1 = 0;
-    }
-
-    action match_domain1(known_domain_id id) {
-        user_metadata.domain_id = id;
-        user_metadata.matched_domain1 = 1;
-    }
-
-    table known_domain_list_q4 {
+    table known_domain_list {
         key = {
-            user_metadata.q4_part1.part: exact;
-            user_metadata.q4_part2.part: exact;
-            user_metadata.q4_part4.part: exact;
-            user_metadata.q4_part8.part: exact;
-            user_metadata.q4_part16.part: exact;
+            headers.q1_part1.part: ternary;
+            headers.q1_part2.part: ternary;
+            headers.q1_part4.part: ternary;
+            headers.q1_part8.part: ternary;
+            headers.q1_part16.part: ternary;
+
+            headers.q2_part1.part: ternary;
+            headers.q2_part2.part: ternary;
+            headers.q2_part4.part: ternary;
+            headers.q2_part8.part: ternary;
+            headers.q2_part16.part: ternary;
+
+            headers.q3_part1.part: ternary;
+            headers.q3_part2.part: ternary;
+            headers.q3_part4.part: ternary;
+            headers.q3_part8.part: ternary;
+            headers.q3_part16.part: ternary;
+
+            headers.q4_part1.part: ternary;
+            headers.q4_part2.part: ternary;
+            headers.q4_part4.part: ternary;
+            headers.q4_part8.part: ternary;
+            headers.q4_part16.part: ternary;
         }
 
         actions = {
-            match_domain4;
-            match_domain4_fail;
+            match_domain;
+            match_domain_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain4_fail();
-    }
-
-    table known_domain_list_q3 {
-        key = {
-            user_metadata.q3_part1.part: exact;
-            user_metadata.q3_part2.part: exact;
-            user_metadata.q3_part4.part: exact;
-            user_metadata.q3_part8.part: exact;
-            user_metadata.q3_part16.part: exact;
-            user_metadata.domain_id: exact;
-        }
-
-        actions = {
-            match_domain3;
-            match_domain3_fail;
-        }
-        size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain3_fail();
-    }
-
-    table known_domain_list_q2 {
-        key = {
-            user_metadata.q2_part1.part: exact;
-            user_metadata.q2_part2.part: exact;
-            user_metadata.q2_part4.part: exact;
-            user_metadata.q2_part8.part: exact;
-            user_metadata.q2_part16.part: exact;
-            user_metadata.domain_id: exact;
-        }
-
-        actions = {
-            match_domain2;
-            match_domain2_fail;
-        }
-        size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain2_fail();
-    }
-
-    table known_domain_list_q1 {
-        key = {
-            user_metadata.q1_part1.part: exact;
-            user_metadata.q1_part2.part: exact;
-            user_metadata.q1_part4.part: exact;
-            user_metadata.q1_part8.part: exact;
-            user_metadata.q1_part16.part: exact;
-            user_metadata.domain_id: exact;
-        }
-
-        actions = {
-            match_domain1;
-            match_domain1_fail;
-        }
-        size = NUM_KNOWN_DOMAINS;
-        default_action = match_domain1_fail();
+        default_action = match_domain_fail();
     }
 
     apply {
         if(user_metadata.parsed_answer == 1) {
-
-            /*if (user_metadata.last_label == 5) {
-                user_metadata.q4_part1.part = headers.q4_part1.part;
-                user_metadata.q4_part2.part = headers.q4_part2.part;
-                user_metadata.q4_part4.part = headers.q4_part4.part;
-                user_metadata.q4_part8.part = headers.q4_part8.part;
-                user_metadata.q4_part16.part = headers.q4_part16.part;
-
-                user_metadata.q3_part1.part = headers.q3_part1.part;
-                user_metadata.q3_part2.part = headers.q3_part2.part;
-                user_metadata.q3_part4.part = headers.q3_part4.part;
-                user_metadata.q3_part8.part = headers.q3_part8.part;
-                user_metadata.q3_part16.part = headers.q3_part16.part;
-
-                user_metadata.q2_part1.part = headers.q2_part1.part;
-                user_metadata.q2_part2.part = headers.q2_part2.part;
-                user_metadata.q2_part4.part = headers.q2_part4.part;
-                user_metadata.q2_part8.part = headers.q2_part8.part;
-                user_metadata.q2_part16.part = headers.q2_part16.part;
-
-                user_metadata.q1_part1.part = headers.q1_part1.part;
-                user_metadata.q1_part2.part = headers.q1_part2.part;
-                user_metadata.q1_part4.part = headers.q1_part4.part;
-                user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;
-            }*/
-            /*user_metadata.q4_part1.part = headers.q4_part1.part;
-            user_metadata.q4_part2.part = headers.q4_part2.part;
-            user_metadata.q4_part4.part = headers.q4_part4.part;
-            user_metadata.q4_part8.part = headers.q4_part8.part;
-            user_metadata.q4_part16.part = headers.q4_part16.part;
-
-                user_metadata.q3_part1.part = headers.q3_part1.part;
-                user_metadata.q3_part2.part = headers.q3_part2.part;
-                user_metadata.q3_part4.part = headers.q3_part4.part;
-                user_metadata.q3_part8.part = headers.q3_part8.part;
-                user_metadata.q3_part16.part = headers.q3_part16.part;
-
-                user_metadata.q2_part1.part = headers.q2_part1.part;
-                user_metadata.q2_part2.part = headers.q2_part2.part;
-                user_metadata.q2_part4.part = headers.q2_part4.part;
-                user_metadata.q2_part8.part = headers.q2_part8.part;
-                user_metadata.q2_part16.part = headers.q2_part16.part;
-
-                user_metadata.q1_part1.part = headers.q1_part1.part;
-                user_metadata.q1_part2.part = headers.q1_part2.part;
-                user_metadata.q1_part4.part = headers.q1_part4.part;
-                user_metadata.q1_part8.part = headers.q1_part8.part;
-                user_metadata.q1_part16.part = headers.q1_part16.part;*/
-
-            test.write(0, (bit<128>) user_metadata.q1_part1.part);
-            test.write(1, (bit<128>) user_metadata.q1_part2.part);
-            test.write(2, (bit<128>) user_metadata.q1_part4.part);
-            test.write(3, (bit<128>) user_metadata.q1_part8.part);
-            test.write(4, (bit<128>) user_metadata.q1_part16.part);
-            test.write(5, (bit<128>) user_metadata.q2_part1.part);
-            test.write(6, (bit<128>) user_metadata.q2_part2.part);
-            test.write(7, (bit<128>) user_metadata.q2_part4.part);
-            test.write(8, (bit<128>) user_metadata.q2_part8.part);
-            test.write(9, (bit<128>) user_metadata.q2_part16.part);
-            test.write(10, (bit<128>) user_metadata.q3_part1.part);
-            test.write(11, (bit<128>) user_metadata.q3_part2.part);
-            test.write(12, (bit<128>) user_metadata.q3_part4.part);
-            test.write(13, (bit<128>) user_metadata.q3_part8.part);
-            test.write(14, (bit<128>) user_metadata.q3_part16.part);
-            test.write(15, (bit<128>) user_metadata.q4_part1.part);
-            test.write(16, (bit<128>) user_metadata.q4_part2.part);
-            test.write(17, (bit<128>) user_metadata.q4_part4.part);
-            test.write(18, (bit<128>) user_metadata.q4_part8.part);
-            test.write(19, (bit<128>) user_metadata.q4_part16.part);
-            // Shift over domain parts if necessary
             
-
-            dns_total_queried.write(1023, user_metadata.last_label);
-            
-
-            known_domain_list_q4.apply();
-            if (user_metadata.matched_domain4 == 1) {
-                known_domain_list_q3.apply();
-                if (user_metadata.matched_domain3 == 1) {
-                    known_domain_list_q2.apply();
-                    if (user_metadata.matched_domain2 == 1) {
-                        known_domain_list_q1.apply();
-                    }
-                }
-            }
-            did.write(0, user_metadata.domain_id);
+            known_domain_list.apply();
 
             // Increment total DNS queries for this domain name
             dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
