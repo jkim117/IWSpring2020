@@ -231,7 +231,6 @@ parser TopParser(packet_in pkt,
         p.q4_part1.part = 0;
         p.q4_part2.part = 0;
         p.q4_part4.part = 0;
-        p.q4_part8.part = 0;
 
         p.q3_part1.part = 0;
         p.q3_part2.part = 0;
@@ -248,6 +247,7 @@ parser TopParser(packet_in pkt,
         p.q1_part1.part = 0;
         p.q1_part2.part = 0;
         p.q1_part4.part = 0;
+        p.q1_part8.part = 0;
 
 		transition select(p.dns_header.is_response) {
 			1: parse_dns_query1;
