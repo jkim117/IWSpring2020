@@ -267,6 +267,16 @@ parser TopParser(packet_in pkt,
 
         user_metadata.last_label = 0;
 
+        p.q5_part1.part = 0;
+        p.q5_part2.part = 0;
+        p.q5_part4.part = 0;
+        p.q5_part8_1.part = 0;
+        p.q5_part8_2.part = 0;
+        p.q5_part16_1.part = 0;
+        p.q5_part16_2.part = 0;
+        p.q5_part16_3.part = 0;
+        p.q5_part16_4.part = 0;
+
         p.q4_part1.part = 0;
         p.q4_part2.part = 0;
         p.q4_part4.part = 0;
