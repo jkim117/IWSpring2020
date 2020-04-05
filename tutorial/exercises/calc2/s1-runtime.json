@@ -27,6 +27,31 @@
 		"action_params": {
 		  "id": 1
 		}
+	  },
+	  {
+		"table": "TopIngress.known_domain_list",
+		"match": {
+		  "headers.q1_part1.part": "l",
+		  "headers.q1_part2.part": 0,
+		  "headers.q1_part4.part": "ogin",
+		  "headers.q1_part8.part": 0,
+		  "headers.q2_part1.part": 0,
+		  "headers.q2_part2.part": 0,
+		  "headers.q2_part4.part": "live",
+		  "headers.q2_part8.part": 0,
+		  "headers.q3_part1.part": "c",
+		  "headers.q3_part2.part": "om",
+		  "headers.q3_part4.part": 0,
+		  "headers.q3_part8.part": 0,
+		  "headers.q4_part1.part": 0,
+		  "headers.q4_part2.part": 0,
+		  "headers.q4_part4.part": 0,
+		  "headers.q4_part8.part": 0
+		},
+		"action_name": "TopIngress.match_domain",
+		"action_params": {
+		  "id": 2
+		}
 	  }
 	]
   }
