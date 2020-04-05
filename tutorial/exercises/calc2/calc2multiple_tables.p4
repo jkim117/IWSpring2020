@@ -95,6 +95,14 @@ header dns_q_part_4 {
     bit<32> part;
 }
 
+header dns_q_part_8 {
+    bit<64> part;
+}
+
+header dns_q_part_16 {
+    bit<128> part;
+}
+
 struct dns_qtype_class {
     bit<16> type;
     bit<16> class;
@@ -126,29 +134,29 @@ struct Parsed_packet {
     dns_q_part_1 q1_part1;
     dns_q_part_2 q1_part2;
     dns_q_part_4 q1_part4;
-    dns_q_part_4 q1_part8_1;
-    dns_q_part_4 q1_part8_2;
+    dns_q_part_8 q1_part8;
+    dns_q_part_16 q1_part16;
 
     dns_q_label label2;
     dns_q_part_1 q2_part1;
     dns_q_part_2 q2_part2;
     dns_q_part_4 q2_part4;
-    dns_q_part_4 q2_part8_1;
-    dns_q_part_4 q2_part8_2;
+    dns_q_part_8 q2_part8;
+    dns_q_part_16 q2_part16;
 
     dns_q_label label3;
     dns_q_part_1 q3_part1;
     dns_q_part_2 q3_part2;
     dns_q_part_4 q3_part4;
-    dns_q_part_4 q3_part8_1;
-    dns_q_part_4 q3_part8_2;
+    dns_q_part_8 q3_part8;
+    dns_q_part_16 q3_part16;
 
     dns_q_label label4;
     dns_q_part_1 q4_part1;
     dns_q_part_2 q4_part2;
     dns_q_part_4 q4_part4;
-    dns_q_part_4 q4_part8_1;
-    dns_q_part_4 q4_part8_2;
+    dns_q_part_8 q4_part8;
+    dns_q_part_16 q4_part16;
 
     dns_q_label label5;
 
@@ -237,26 +245,22 @@ parser TopParser(packet_in pkt,
         p.q4_part1.part = 0;
         p.q4_part2.part = 0;
         p.q4_part4.part = 0;
-        p.q4_part8_1.part = 0;
-        p.q4_part8_2.part = 0;
+        p.q4_part8.part = 0;
 
         p.q3_part1.part = 0;
         p.q3_part2.part = 0;
         p.q3_part4.part = 0;
-        p.q3_part8_1.part = 0;
-        p.q3_part8_2.part = 0;
+        p.q3_part8.part = 0;
 
         p.q2_part1.part = 0;
         p.q2_part2.part = 0;
         p.q2_part4.part = 0;
-        p.q2_part8_1.part = 0;
-        p.q2_part8_2.part = 0;
+        p.q2_part8.part = 0;
 
         p.q1_part1.part = 0;
         p.q1_part2.part = 0;
         p.q1_part4.part = 0;
-        p.q1_part8_1.part = 0;
-        p.q1_part8_2.part = 0;
+        p.q1_part8.part = 0;
 
 		transition select(p.dns_header.is_response) {
 			1: parse_dns_query1;
@@ -331,53 +335,46 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q1_len8 {
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len9 {
         pkt.extract(p.q1_part1);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len10 {
         pkt.extract(p.q1_part2);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len11 {
         pkt.extract(p.q1_part1);
         pkt.extract(p.q1_part2);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len12 {
         pkt.extract(p.q1_part4);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len13 {
         pkt.extract(p.q1_part1);
         pkt.extract(p.q1_part4);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
     state parse_dns_q1_len14 {
         pkt.extract(p.q1_part2);
         pkt.extract(p.q1_part4);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
@@ -385,8 +382,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.q1_part1);
         pkt.extract(p.q1_part2);
         pkt.extract(p.q1_part4);
-        pkt.extract(p.q1_part8_1);
-        pkt.extract(p.q1_part8_2);
+        pkt.extract(p.q1_part8);
         transition parse_dns_query2;
     }
 
@@ -457,53 +453,46 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q2_len8 {
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len9 {
         pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len10 {
         pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len11 {
         pkt.extract(p.q2_part1);
         pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len12 {
         pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len13 {
         pkt.extract(p.q2_part1);
         pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
     state parse_dns_q2_len14 {
         pkt.extract(p.q2_part2);
         pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
@@ -511,8 +500,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.q2_part1);
         pkt.extract(p.q2_part2);
         pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8_1);
-        pkt.extract(p.q2_part8_2);
+        pkt.extract(p.q2_part8);
         transition parse_dns_query3;
     }
 
@@ -584,53 +572,46 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q3_len8 {
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len9 {
         pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len10 {
         pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len11 {
         pkt.extract(p.q3_part1);
         pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len12 {
         pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len13 {
         pkt.extract(p.q3_part1);
         pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
     state parse_dns_q3_len14 {
         pkt.extract(p.q3_part2);
         pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
@@ -638,8 +619,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.q3_part1);
         pkt.extract(p.q3_part2);
         pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8_1);
-        pkt.extract(p.q3_part8_2);
+        pkt.extract(p.q3_part8);
         transition parse_dns_query4;
     }
 
@@ -711,53 +691,46 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_dns_q4_len8 {
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len9 {
         pkt.extract(p.q4_part1);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len10 {
         pkt.extract(p.q4_part2);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len11 {
         pkt.extract(p.q4_part1);
         pkt.extract(p.q4_part2);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len12 {
         pkt.extract(p.q4_part4);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len13 {
         pkt.extract(p.q4_part1);
         pkt.extract(p.q4_part4);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
     state parse_dns_q4_len14 {
         pkt.extract(p.q4_part2);
         pkt.extract(p.q4_part4);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
@@ -765,8 +738,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.q4_part1);
         pkt.extract(p.q4_part2);
         pkt.extract(p.q4_part4);
-        pkt.extract(p.q4_part8_1);
-        pkt.extract(p.q4_part8_2);
+        pkt.extract(p.q4_part8);
         transition parse_dns_query5;
     }
 
@@ -857,26 +829,22 @@ control TopIngress(inout Parsed_packet headers,
             headers.q1_part1.part: ternary;
             headers.q1_part2.part: ternary;
             headers.q1_part4.part: ternary;
-            headers.q1_part8_1.part: ternary;
-            headers.q1_part8_2.part: ternary;
+            headers.q1_part8.part: ternary;
 
             headers.q2_part1.part: ternary;
             headers.q2_part2.part: ternary;
             headers.q2_part4.part: ternary;
-            headers.q2_part8_1.part: ternary;
-            headers.q2_part8_2.part: ternary;
+            headers.q2_part8.part: ternary;
 
             headers.q3_part1.part: ternary;
             headers.q3_part2.part: ternary;
             headers.q3_part4.part: ternary;
-            headers.q3_part8_1.part: ternary;
-            headers.q3_part8_2.part: ternary;
+            headers.q3_part8.part: ternary;
 
             headers.q4_part1.part: ternary;
             headers.q4_part2.part: ternary;
             headers.q4_part4.part: ternary;
-            headers.q4_part8_1.part: ternary;
-            headers.q4_part8_2.part: ternary;
+            headers.q4_part8.part: ternary;
         }
 
         actions = {

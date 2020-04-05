@@ -9,12 +9,18 @@
 			"headers.q2_part1.part": [0, 255],
 			"headers.q2_part2.part": [0, 65535],
 			"headers.q2_part4.part": ["live", 4294967295],
+			"headers.q2_part8_1.part": [0, 4294967295],
+			"headers.q2_part8_2.part": [0, 4294967295],
 			"headers.q3_part1.part": ["c", 255],
 			"headers.q3_part2.part": ["om", 65535],
 			"headers.q3_part4.part": [0, 4294967295],
+			"headers.q3_part8_1.part": [0, 4294967295],
+			"headers.q3_part8_2.part": [0, 4294967295],
 			"headers.q4_part1.part": [0, 255],
 			"headers.q4_part2.part": [0, 65535],
-			"headers.q4_part4.part": [0, 4294967295]
+			"headers.q4_part4.part": [0, 4294967295],
+			"headers.q4_part8_1.part": [0, 4294967295],
+			"headers.q4_part8_2.part": [0, 4294967295]
 		},
 
 		"action_name": "TopIngress.match_domain",
