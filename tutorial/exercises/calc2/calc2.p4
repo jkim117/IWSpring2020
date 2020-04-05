@@ -135,19 +135,18 @@ struct Parsed_packet {
     dns_q_part_2 q2_part2;
     dns_q_part_4 q2_part4;
     dns_q_part_8 q2_part8;
-    dns_q_part_16 q2_part16;
 
     dns_q_label label3;
     dns_q_part_1 q3_part1;
     dns_q_part_2 q3_part2;
     dns_q_part_4 q3_part4;
     dns_q_part_8 q3_part8;
-    dns_q_part_16 q3_part16;
 
     dns_q_label label4;
     dns_q_part_1 q4_part1;
     dns_q_part_2 q4_part2;
     dns_q_part_4 q4_part4;
+    dns_q_part_8 q4_part8;
 
     dns_q_label label5;
 
@@ -231,18 +230,17 @@ parser TopParser(packet_in pkt,
         p.q4_part1.part = 0;
         p.q4_part2.part = 0;
         p.q4_part4.part = 0;
+        p.q4_part8.part = 0;
 
         p.q3_part1.part = 0;
         p.q3_part2.part = 0;
         p.q3_part4.part = 0;
         p.q3_part8.part = 0;
-        p.q3_part16.part = 0;
 
         p.q2_part1.part = 0;
         p.q2_part2.part = 0;
         p.q2_part4.part = 0;
         p.q2_part8.part = 0;
-        p.q2_part16.part = 0;
 
         p.q1_part1.part = 0;
         p.q1_part2.part = 0;
@@ -395,22 +393,6 @@ parser TopParser(packet_in pkt,
             13: parse_dns_q2_len13;
             14: parse_dns_q2_len14;
             15: parse_dns_q2_len15;
-            16: parse_dns_q2_len16;
-            17: parse_dns_q2_len17;
-            18: parse_dns_q2_len18;
-            19: parse_dns_q2_len19;
-            20: parse_dns_q2_len20;
-            21: parse_dns_q2_len21;
-            22: parse_dns_q2_len22;
-            23: parse_dns_q2_len23;
-            24: parse_dns_q2_len24;
-            25: parse_dns_q2_len25;
-            26: parse_dns_q2_len26;
-            27: parse_dns_q2_len27;
-            28: parse_dns_q2_len28;
-            29: parse_dns_q2_len29;
-            30: parse_dns_q2_len30;
-            31: parse_dns_q2_len31;
             default: accept;
         }
     }
@@ -507,118 +489,7 @@ parser TopParser(packet_in pkt,
         transition parse_dns_query3;
     }
 
-    state parse_dns_q2_len16 {
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len17 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len18 {
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len19 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len20 {
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len21 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len22 {
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len23 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len24 {
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len25 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len26 {
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len27 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len28 {
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len29 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len30 {
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
-    state parse_dns_q2_len31 {
-        pkt.extract(p.q2_part1);
-        pkt.extract(p.q2_part2);
-        pkt.extract(p.q2_part4);
-        pkt.extract(p.q2_part8);
-        pkt.extract(p.q2_part16);
-        transition parse_dns_query3;
-    }
-
+    
     // Parsel DNS Query Label 3
     state parse_dns_query3 {
         pkt.extract(p.label3);
@@ -641,22 +512,6 @@ parser TopParser(packet_in pkt,
             13: parse_dns_q3_len13;
             14: parse_dns_q3_len14;
             15: parse_dns_q3_len15;
-            16: parse_dns_q3_len16;
-            17: parse_dns_q3_len17;
-            18: parse_dns_q3_len18;
-            19: parse_dns_q3_len19;
-            20: parse_dns_q3_len20;
-            21: parse_dns_q3_len21;
-            22: parse_dns_q3_len22;
-            23: parse_dns_q3_len23;
-            24: parse_dns_q3_len24;
-            25: parse_dns_q3_len25;
-            26: parse_dns_q3_len26;
-            27: parse_dns_q3_len27;
-            28: parse_dns_q3_len28;
-            29: parse_dns_q3_len29;
-            30: parse_dns_q3_len30;
-            31: parse_dns_q3_len31;
             default: accept;
         }
     }
@@ -753,118 +608,7 @@ parser TopParser(packet_in pkt,
         transition parse_dns_query4;
     }
 
-    state parse_dns_q3_len16 {
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len17 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len18 {
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len19 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len20 {
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len21 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len22 {
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len23 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len24 {
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len25 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len26 {
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len27 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len28 {
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len29 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len30 {
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
-    state parse_dns_q3_len31 {
-        pkt.extract(p.q3_part1);
-        pkt.extract(p.q3_part2);
-        pkt.extract(p.q3_part4);
-        pkt.extract(p.q3_part8);
-        pkt.extract(p.q3_part16);
-        transition parse_dns_query4;
-    }
-
+    
     // Parsel DNS Query Label 4
     state parse_dns_query4 {
         pkt.extract(p.label4);
@@ -879,6 +623,14 @@ parser TopParser(packet_in pkt,
             5: parse_dns_q4_len5;
             6: parse_dns_q4_len6;
             7: parse_dns_q4_len7;
+            8: parse_dns_q4_len8;
+            9: parse_dns_q4_len9;
+            10: parse_dns_q4_len10;
+            11: parse_dns_q4_len11;
+            12: parse_dns_q4_len12;
+            13: parse_dns_q4_len13;
+            14: parse_dns_q4_len14;
+            15: parse_dns_q4_len15;
             default: accept;
         }
     }
@@ -922,6 +674,59 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.q4_part4);
         transition parse_dns_query5;
     }
+
+    state parse_dns_q4_len8 {
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len9 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len10 {
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len11 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len12 {
+        pkt.extract(p.q4_part4);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len13 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part4);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len14 {
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part4);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
+    state parse_dns_q4_len15 {
+        pkt.extract(p.q4_part1);
+        pkt.extract(p.q4_part2);
+        pkt.extract(p.q4_part4);
+        pkt.extract(p.q4_part8);
+        transition parse_dns_query5;
+    }
+
 
     // Parsel DNS Query Label 5
     state parse_dns_query5 {
@@ -983,7 +788,7 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
-    register<bit<128>>(17) test;
+    //egister<bit<128>>(17) test;
 
     action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
@@ -1000,15 +805,14 @@ control TopIngress(inout Parsed_packet headers,
             headers.q2_part2.part: exact;
             headers.q2_part4.part: exact;
             headers.q2_part8.part: exact;
-            headers.q2_part16.part: exact;
             headers.q3_part1.part: exact;
             headers.q3_part2.part: exact;
             headers.q3_part4.part: exact;
             headers.q3_part8.part: exact;
-            headers.q3_part16.part: exact;
             headers.q4_part1.part: exact;
             headers.q4_part2.part: exact;
             headers.q4_part4.part: exact;
+            headers.q4_part8.part: exact;
         }
 
         actions = {
@@ -1026,7 +830,7 @@ control TopIngress(inout Parsed_packet headers,
 
             known_domain_list.apply();
 
-            test.write(0, (bit<128>)headers.q1_part1.part);
+            /*test.write(0, (bit<128>)headers.q1_part1.part);
             test.write(1, (bit<128>)headers.q1_part2.part);
             test.write(2, (bit<128>)headers.q1_part4.part);
             test.write(3, (bit<128>)headers.q1_part8.part);
@@ -1042,7 +846,7 @@ control TopIngress(inout Parsed_packet headers,
             test.write(13, (bit<128>)headers.q3_part16.part);
             test.write(14, (bit<128>)headers.q4_part1.part);
             test.write(15, (bit<128>)headers.q4_part2.part);
-            test.write(16, (bit<128>)headers.q4_part4.part);
+            test.write(16, (bit<128>)headers.q4_part4.part);*/
 
             if (user_metadata.matched_domain == 1) {
 
