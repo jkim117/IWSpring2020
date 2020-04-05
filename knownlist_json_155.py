@@ -335,7 +335,7 @@ def oneparts(parts):
             "priority": 1,
             "action_params": {"q1id": globalID1}
         })
-        return globalID2
+        return globalID1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q1",
