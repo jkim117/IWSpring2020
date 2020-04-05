@@ -228,6 +228,27 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.dns_header);
 		user_metadata.is_dns = 1;
 
+        p.q4_part1.part = 0;
+        p.q4_part2.part = 0;
+        p.q4_part4.part = 0;
+        p.q4_part8.part = 0;
+
+        p.q3_part1.part = 0;
+        p.q3_part2.part = 0;
+        p.q3_part4.part = 0;
+        p.q3_part8.part = 0;
+        p.q3_part16.part = 0;
+
+        p.q2_part1.part = 0;
+        p.q2_part2.part = 0;
+        p.q2_part4.part = 0;
+        p.q2_part8.part = 0;
+        p.q2_part16.part = 0;
+
+        p.q1_part1.part = 0;
+        p.q1_part2.part = 0;
+        p.q1_part4.part = 0;
+
 		transition select(p.dns_header.is_response) {
 			1: parse_dns_query1;
 			default: accept;
@@ -962,6 +983,8 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
+    register<bit<128>>(17) test;
+
     action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
         user_metadata.matched_domain = 1;
@@ -1002,6 +1025,24 @@ control TopIngress(inout Parsed_packet headers,
             user_metadata.matched_domain = 0;
 
             known_domain_list.apply();
+
+            test.write(0, (bit<128>)headers.q1_part1.part);
+            test.write(1, (bit<128>)headers.q1_part2.part);
+            test.write(2, (bit<128>)headers.q1_part4.part);
+            test.write(3, (bit<128>)headers.q1_part8.part);
+            test.write(4, (bit<128>)headers.q2_part1.part);
+            test.write(5, (bit<128>)headers.q2_part2.part);
+            test.write(6, (bit<128>)headers.q2_part4.part);
+            test.write(7, (bit<128>)headers.q2_part8.part);
+            test.write(8, (bit<128>)headers.q2_part16.part);
+            test.write(9, (bit<128>)headers.q3_part1.part);
+            test.write(10, (bit<128>)headers.q3_part2.part);
+            test.write(11, (bit<128>)headers.q3_part4.part);
+            test.write(12, (bit<128>)headers.q3_part8.part);
+            test.write(13, (bit<128>)headers.q3_part16.part);
+            test.write(14, (bit<128>)headers.q4_part1.part);
+            test.write(15, (bit<128>)headers.q4_part2.part);
+            test.write(16, (bit<128>)headers.q4_part4.part);
 
             if (user_metadata.matched_domain == 1) {
 
