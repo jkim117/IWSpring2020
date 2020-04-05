@@ -5,6 +5,7 @@
 	"table_entries": [
 	  {
 		"table": "TopIngress.known_domain_list",
+		"priority": 1,
 		"match": {
 			"headers.q1_part1.part": [0, 0],
 			"headers.q1_part2.part": [0, 0],
@@ -23,7 +24,6 @@
 			"headers.q4_part4.part": [0, 0],
 			"headers.q4_part8.part": [0, 0]
 		},
-		"priority": 1,
 		"action_name": "TopIngress.match_domain",
 		"action_params": {
 		  "id": 1
