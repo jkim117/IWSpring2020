@@ -822,25 +822,25 @@ control TopIngress(inout Parsed_packet headers,
 
     table known_domain_list {
         key = {
-            headers.q1_part1.part: exact;
-            headers.q1_part2.part: exact;
-            headers.q1_part4.part: exact;
-            headers.q1_part8.part: exact;
+            headers.q1_part1.part: ternary;
+            headers.q1_part2.part: ternary;
+            headers.q1_part4.part: ternary;
+            headers.q1_part8.part: ternary;
 
-            headers.q2_part1.part: exact;
-            headers.q2_part2.part: exact;
-            headers.q2_part4.part: exact;
-            headers.q2_part8.part: exact;
+            headers.q2_part1.part: ternary;
+            headers.q2_part2.part: ternary;
+            headers.q2_part4.part: ternary;
+            headers.q2_part8.part: ternary;
 
-            headers.q3_part1.part: exact;
-            headers.q3_part2.part: exact;
-            headers.q3_part4.part: exact;
-            headers.q3_part8.part: exact;
+            headers.q3_part1.part: ternary;
+            headers.q3_part2.part: ternary;
+            headers.q3_part4.part: ternary;
+            headers.q3_part8.part: ternary;
 
-            headers.q4_part1.part: exact;
-            headers.q4_part2.part: exact;
-            headers.q4_part4.part: exact;
-            headers.q4_part8.part: exact;
+            headers.q4_part1.part: ternary;
+            headers.q4_part2.part: ternary;
+            headers.q4_part4.part: ternary;
+            headers.q4_part8.part: ternary;
         }
 
         actions = {
