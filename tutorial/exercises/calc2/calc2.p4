@@ -172,7 +172,8 @@ struct user_metadata_t {
 	bit<1> is_ip;
     bit<3>  unused;
 
-    bit<3> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+    bit<32> last_label; // Value is 1,2,3,4,5 or 0 corresponding to which dns_q_label is the last label (of value 0). If this value is 0, there is an error.
+
     bit<1> matched_domain;
     bit<32> domain_id;
     bit<32> index_1;
@@ -500,7 +501,7 @@ parser TopParser(packet_in pkt,
         transition parse_dns_query3;
     }
 
-    
+
     // Parsel DNS Query Label 3
     state parse_dns_query3 {
         pkt.extract(p.label3);
@@ -619,7 +620,7 @@ parser TopParser(packet_in pkt,
         transition parse_dns_query4;
     }
 
-    
+
     // Parsel DNS Query Label 4
     state parse_dns_query4 {
         pkt.extract(p.label4);
@@ -813,7 +814,14 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
-    //egister<bit<128>>(17) test;
+    //TESTING
+    //register<bit<128>>(20) test;
+    //register<bit<32>>(1) did;
+
+    action match_domain_fail() {
+        user_metadata.domain_id = 0; // Completely misc. domain
+        user_metadata.matched_domain = 0;
+    }
 
     action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
@@ -845,87 +853,83 @@ control TopIngress(inout Parsed_packet headers,
 
         actions = {
             match_domain;
-            NoAction;
+            match_domain_fail;
         }
         size = NUM_KNOWN_DOMAINS;
-        default_action = NoAction();
+        default_action = match_domain_fail();
     }
 
     apply {
         if(user_metadata.parsed_answer == 1) {
-            user_metadata.domain_id = 0;
-            user_metadata.matched_domain = 0;
-
+            
             known_domain_list.apply();
 
-            if (user_metadata.matched_domain == 1) {
+            // Increment total DNS queries for this domain name
+            dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
+            dns_total_queried.write(user_metadata.domain_id, user_metadata.temp_total_dns + 1);
 
-                // Increment total DNS queries for this domain name
-                dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
-                dns_total_queried.write(user_metadata.domain_id, user_metadata.temp_total_dns + 1);
+            if (headers.dns_ip.rdata > headers.ipv4.dst) {
+                hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_ip.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
+                hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_ip.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
+                hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_ip.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+            }
+            else {
+                hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.dns_ip.rdata}, HASH_TABLE_MAX);
+                hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.dns_ip.rdata}, HASH_TABLE_MAX);
+                hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.dns_ip.rdata}, HASH_TABLE_MAX);
+            }
+            
+            user_metadata.already_matched = 0;
+            // access table 1
+            dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
+            dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
+            dns_timestamp_table_1.read(user_metadata.temp_timestamp, user_metadata.index_1);
+            if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
+                dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
+                dns_sip_table_1.write(user_metadata.index_1, headers.dns_ip.rdata);
+                dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
+                dns_name_table_1.write(user_metadata.index_1, user_metadata.domain_id);
+                user_metadata.already_matched = 1;
+            }
 
-                if (headers.dns_ip.rdata > headers.ipv4.dst) {
-                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_ip.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_ip.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_ip.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
-                }
-                else {
-                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.dns_ip.rdata}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.dns_ip.rdata}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.dns_ip.rdata}, HASH_TABLE_MAX);
-                }
-
-                user_metadata.already_matched = 0;
-                // access table 1
-                dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
-                dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
-                dns_timestamp_table_1.read(user_metadata.temp_timestamp, user_metadata.index_1);
+            // access table 2
+            if (user_metadata.already_matched == 0) {
+                dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+                dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+                dns_timestamp_table_2.read(user_metadata.temp_timestamp, user_metadata.index_2);
                 if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
-                    dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
-                    dns_sip_table_1.write(user_metadata.index_1, headers.dns_ip.rdata);
-                    dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
-                    dns_name_table_1.write(user_metadata.index_1, user_metadata.domain_id);
+                    dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
+                    dns_sip_table_2.write(user_metadata.index_2, headers.dns_ip.rdata);
+                    dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
+                    dns_name_table_2.write(user_metadata.index_2, user_metadata.domain_id);
                     user_metadata.already_matched = 1;
                 }
+            }
 
-                // access table 2
-                if (user_metadata.already_matched == 0) {
-                    dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
-                    dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
-                    dns_timestamp_table_2.read(user_metadata.temp_timestamp, user_metadata.index_2);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
-                        dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
-                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_ip.rdata);
-                        dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
-                        dns_name_table_2.write(user_metadata.index_2, user_metadata.domain_id);
-                        user_metadata.already_matched = 1;
-                    }
-                }
-
-                // access table 3
-                if (user_metadata.already_matched == 0) {
-                    dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
-                    dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
-                    dns_timestamp_table_3.read(user_metadata.temp_timestamp, user_metadata.index_3);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
-                        dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
-                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_ip.rdata);
-                        dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
-                        dns_name_table_3.write(user_metadata.index_3, user_metadata.domain_id);
-                        user_metadata.already_matched = 1;
-                    }
-                }
-
-                if (user_metadata.already_matched == 0) {
-                    // Increment total DNS queries missed for this domain name
-                    dns_total_missed.read(user_metadata.temp_total_missed, user_metadata.domain_id);
-                    dns_total_missed.write(user_metadata.domain_id, user_metadata.temp_total_missed + 1);
+            // access table 3
+            if (user_metadata.already_matched == 0) {
+                dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+                dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+                dns_timestamp_table_3.read(user_metadata.temp_timestamp, user_metadata.index_3);
+                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
+                    dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
+                    dns_sip_table_3.write(user_metadata.index_3, headers.dns_ip.rdata);
+                    dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
+                    dns_name_table_3.write(user_metadata.index_3, user_metadata.domain_id);
+                    user_metadata.already_matched = 1;
                 }
             }
+
+            if (user_metadata.already_matched == 0) {
+                // Increment total DNS queries missed for this domain name
+                dns_total_missed.read(user_metadata.temp_total_missed, user_metadata.domain_id);
+                dns_total_missed.write(user_metadata.domain_id, user_metadata.temp_total_missed + 1);
+            }
         }
+        
         // HANDLE NORMAL, NON-DNS PACKETS
         else if (user_metadata.is_ip == 1 && user_metadata.is_dns == 0) {
-
+            
             if (headers.ipv4.src > headers.ipv4.dst) {
                 hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.src, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
                 hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.src, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
@@ -936,7 +940,7 @@ control TopIngress(inout Parsed_packet headers,
                 hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.ipv4.src}, HASH_TABLE_MAX);
                 hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.ipv4.src}, HASH_TABLE_MAX);
             }
-
+            
 
             dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
             dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
