@@ -270,7 +270,7 @@ parser TopParser(packet_in pkt,
         user_metadata.last_label = 1;
 
         transition select(p.label1.label) {
-            0: parse_dns_answer;
+            0: parse_query_tc;
             1: parse_dns_q1_len1;
             2: parse_dns_q1_len2;
             3: parse_dns_q1_len3;
@@ -396,7 +396,7 @@ parser TopParser(packet_in pkt,
         user_metadata.last_label = 2;
 
         transition select(p.label2.label) {
-            0: parse_dns_answer;
+            0: parse_query_tc;
             1: parse_dns_q2_len1;
             2: parse_dns_q2_len2;
             3: parse_dns_q2_len3;
@@ -523,7 +523,7 @@ parser TopParser(packet_in pkt,
         user_metadata.last_label = 3;
 
         transition select(p.label3.label) {
-            0: parse_dns_answer;
+            0: parse_query_tc;
             1: parse_dns_q3_len1;
             2: parse_dns_q3_len2;
             3: parse_dns_q3_len3;
@@ -650,7 +650,7 @@ parser TopParser(packet_in pkt,
         user_metadata.last_label = 4;
 
         transition select(p.label4.label) {
-            0: parse_dns_answer;
+            0: parse_query_tc;
             1: parse_dns_q4_len1;
             2: parse_dns_q4_len2;
             3: parse_dns_q4_len3;
@@ -845,7 +845,6 @@ control TopIngress(inout Parsed_packet headers,
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_queried;
     register<bit<32>>(NUM_KNOWN_DOMAINS) dns_total_missed;
 
-    //egister<bit<128>>(17) test;
 
     action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
