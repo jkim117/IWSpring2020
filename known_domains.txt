@@ -8,3 +8,5 @@ view.atdmt.com
 *.smartadserver.com
 *.salesforce.com
 *.*.salesforce.com
+*.*.*.msn.com
+echo.edge.messenger.live.com
