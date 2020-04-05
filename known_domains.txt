@@ -1,12 +1,1 @@
-*.live.com
-messenger.hotmail.com
-*.*.msn.com
-*.msn.com
-cp.intl.match.com
-www.gowindowslive.com
-view.atdmt.com
-*.smartadserver.com
 *.salesforce.com
-*.*.salesforce.com
-*.*.*.msn.com
-echo.edge.messenger.live.com
