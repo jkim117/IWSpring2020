@@ -108,12 +108,18 @@ struct dns_qtype_class {
     bit<16> class;
 }
 
-header dns_a {
+header dns_query_tc{
     dns_qtype_class tc_query;
+}
+
+header dns_a {
     bit<16> qname_pointer;
     dns_qtype_class tc_ans;
     bit<32> ttl;
     bit<16> rd_length;
+}
+
+header dns_a_ip {
     bit<32> rdata; //IPV4 is always 32 bit.
 }
 
@@ -150,7 +156,10 @@ struct Parsed_packet {
 
     dns_q_label label5;
 
+    dns_query_tc query_tc;
+
     dns_a dns_answer;
+    dns_a_ip dns_ip;
 }
 
 // user defined metadata: can be used to share information between
@@ -734,23 +743,37 @@ parser TopParser(packet_in pkt,
         user_metadata.last_label = 5;
 
         transition select(p.label5.label) {
-            0: parse_dns_answer;
+            0: parse_query_tc;
             default: accept;
         }
+    }
+
+    state parse_query_tc {
+        pkt.extract(p.query_tc);
+        user_metadata.parsed_answer = 0;
+        transition parse_dns_answer;
     }
 
     state parse_dns_answer {
         pkt.extract(p.dns_answer);
-        user_metadata.parsed_answer = 0;
 
         transition select(p.dns_answer.tc_ans.type) {
-            1: set_metadata;
+            1: parse_a_ip;
+            5: parse_cname;
             default: accept;
         }
     }
 
-    state set_metadata {
+    state parse_cname {
+        pkt.advance((bit<32>)(8 * p.dns_answer.rd_length));
+
+        transition parse_dns_answer;
+    }
+
+    state parse_a_ip {
+        pkt.extract(p.dns_ip);
         user_metadata.parsed_answer = 1;
+
         transition accept;
     }
 }
@@ -854,15 +877,15 @@ control TopIngress(inout Parsed_packet headers,
                 dns_total_queried.read(user_metadata.temp_total_dns, user_metadata.domain_id);
                 dns_total_queried.write(user_metadata.domain_id, user_metadata.temp_total_dns + 1);
 
-                if (headers.dns_answer.rdata > headers.ipv4.dst) {
-                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_answer.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_answer.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_answer.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
+                if (headers.dns_ip.rdata > headers.ipv4.dst) {
+                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.dns_ip.rdata, 7w11, headers.ipv4.dst}, HASH_TABLE_MAX);
+                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.dns_ip.rdata, 5w3, headers.ipv4.dst}, HASH_TABLE_MAX);
+                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.dns_ip.rdata, 1w1, headers.ipv4.dst}, HASH_TABLE_MAX);
                 }
                 else {
-                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.dns_answer.rdata}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.dns_answer.rdata}, HASH_TABLE_MAX);
-                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.dns_answer.rdata}, HASH_TABLE_MAX);
+                    hash(user_metadata.index_1, HashAlgorithm.crc16, HASH_TABLE_BASE, {headers.ipv4.dst, 7w11, headers.dns_ip.rdata}, HASH_TABLE_MAX);
+                    hash(user_metadata.index_2, HashAlgorithm.crc16, HASH_TABLE_BASE, {3w5, headers.ipv4.dst, 5w3, headers.dns_ip.rdata}, HASH_TABLE_MAX);
+                    hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.dns_ip.rdata}, HASH_TABLE_MAX);
                 }
 
                 user_metadata.already_matched = 0;
@@ -870,9 +893,9 @@ control TopIngress(inout Parsed_packet headers,
                 dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
                 dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
                 dns_timestamp_table_1.read(user_metadata.temp_timestamp, user_metadata.index_1);
-                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                     dns_cip_table_1.write(user_metadata.index_1, headers.ipv4.dst);
-                    dns_sip_table_1.write(user_metadata.index_1, headers.dns_answer.rdata);
+                    dns_sip_table_1.write(user_metadata.index_1, headers.dns_ip.rdata);
                     dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
                     dns_name_table_1.write(user_metadata.index_1, user_metadata.domain_id);
                     user_metadata.already_matched = 1;
@@ -883,9 +906,9 @@ control TopIngress(inout Parsed_packet headers,
                     dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
                     dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
                     dns_timestamp_table_2.read(user_metadata.temp_timestamp, user_metadata.index_2);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                         dns_cip_table_2.write(user_metadata.index_2, headers.ipv4.dst);
-                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_answer.rdata);
+                        dns_sip_table_2.write(user_metadata.index_2, headers.dns_ip.rdata);
                         dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
                         dns_name_table_2.write(user_metadata.index_2, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
@@ -897,9 +920,9 @@ control TopIngress(inout Parsed_packet headers,
                     dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
                     dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
                     dns_timestamp_table_3.read(user_metadata.temp_timestamp, user_metadata.index_3);
-                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_answer.rdata)) {
+                    if (user_metadata.temp_timestamp == 0 || user_metadata.temp_timestamp + TIMEOUT < (bit<32>)standard_metadata.ingress_global_timestamp || (user_metadata.temp_cip == headers.ipv4.dst && user_metadata.temp_sip == headers.dns_ip.rdata)) {
                         dns_cip_table_3.write(user_metadata.index_3, headers.ipv4.dst);
-                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_answer.rdata);
+                        dns_sip_table_3.write(user_metadata.index_3, headers.dns_ip.rdata);
                         dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
                         dns_name_table_3.write(user_metadata.index_3, user_metadata.domain_id);
                         user_metadata.already_matched = 1;
