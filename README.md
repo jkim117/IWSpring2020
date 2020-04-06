@@ -1,9 +1,13 @@
 # IWSpring2020
 
 netassay_bmv2_60.p4 -> uses a single match action table and thus is limited to parsing domain names of up to four labels of up to 15 characters each. Thus, a max width of 60 characters is allowed for a domain
+
 netassay_bmv2_155.p4 -> uses multiple match action tables and thus can parse up to five labels of 31 characters each. Thus a max width of 155 characters is allowed for a domain.
+
 known_domains.txt -> File used to contain list of known domains
+
 knownlist_json_60.py -> uses known_domains.txt to create a JSON file to populate the match action table for netassay_bmv2_60.p4
+
 knownlist_json_155.py -> uses known_domains.txt to create a JSON file to populate the match action tables for netassay_bmv2_155.p4
 
 ################### INSTRUCTIONS TO TEST RUN netassay_bmv2_60.p4 ###################
