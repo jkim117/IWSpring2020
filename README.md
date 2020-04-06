@@ -1,25 +1,30 @@
 # IWSpring2020
 
-proto1.p4 -> uses exact matching. Assumes IP entry is the first entry in the DNS response answer. This does work in BMV2 currently.
-proto2.p4 -> uses ternary matching. Able to parse variable number of CNAME entries that may precede an IP entry in a DNS response. This does not work in BMV2 currently due to ternary matching issues.
+netassay_bmv2_60.p4 -> uses a single match action table and thus is limited to parsing domain names of up to four labels of up to 15 characters each. Thus, a max width of 60 characters is allowed for a domain
+netassay_bmv2_155.p4 -> uses multiple match action tables and thus can parse up to five labels of 31 characters each. Thus a max width of 155 characters is allowed for a domain.
+known_domains.txt -> File used to contain list of known domains
+knownlist_json_60.py -> uses known_domains.txt to create a JSON file to populate the match action table for netassay_bmv2_60.p4
+knownlist_json_155.py -> uses known_domains.txt to create a JSON file to populate the match action tables for netassay_bmv2_155.p4
 
-################### INSTRUCTIONS TO RUN PROTO1.P4 ###################
+################### INSTRUCTIONS TO TEST RUN netassay_bmv2_60.p4 ###################
 
 All tests were run through the P4 Tutorial Virtual Machine using VirtualBox.
 
 First, download the repo from GitHub: https://github.com/jkim117/IWSpring2020
 
-cd into IWSpring2020/tutorial/exercises/calc2
+Run "python IWSpring2020/knownlist_json_60.py". This will take domains from the txt file "known_domains.txt" and convert it into a JSON file to be used to populate the match action table.
 
-Note that calc2.p4 is just a copy of proto1.p4
+Copy IWSpring2020/netassay_bmv2_60.p4 and IWSpring2020/s1-runtime.json into the directory IWSpring2020/tutorial/exercises/calc2
+
+cd into IWSpring2020/tutorial/exercises/calc2 and rename netassay_bmv2_60.p4 to calc2.p4
 
 Next, type: "make run"
 
 Once Mininet is running, type "xterm h1"
 
-In the new terminal, cd to a directory with the pcap file of your choice and execute:
+In the new terminal, cd back to the IWSpring2020 main directory and execute:
 
-"tcpreplay -i eth0 myfile.pcap"
+"tcpreplay -i eth0 smallFlows.pcap"
 
 Now, in the main terminal running Mininet, type "xterm s1"
 
@@ -36,13 +41,9 @@ dns_total_missed (number of dns responses that could not be fully processed beca
 
 When done, use "make stop" and "make clean"
 
-################### INSTRUCTIONS REGARDING KNOWN LIST CREATION ###################
+Note that you can change the known domain list by editing "IWSpring2020/known_domains.txt". You can also use tcpreplay with any pcap file of your choice.
 
-top500Domains.csv taken from https://moz.com/top500
-
-createknownlist.py takes the csv file and outputs known_domains.txt
-
-knownlist_json.py takes known_domains.txt and outputs s1-runtime.json which includes entries for the match action table
+Furthermore, you can also run this exact test with "netassay_bmv2_155.p4". Just use the "netassay_bmv2_155.p4" file instead and use "IWSpring2020/knownlist_json_155.py" instead of "IWSpring2020/knownlist_json_60.py"
 
 ################### INSTRUCTIONS REGARDING PCAP ANALYSIS ###################
 USAGE: pcapanalysis.py mypcapfile.pcap
@@ -50,4 +51,3 @@ where "mypcapfile.pcap" is any pcap file. This script will output statistics on:
 The number of CNAME entries in DNS responses
 Number of domain name requests with parts greater than 15 characters (where a domain part is defined as a part of a domain delineated by a '.')
 Statistics on how many clients/packets make use of the first IP address from a DNS response
-

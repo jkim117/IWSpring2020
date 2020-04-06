@@ -98,7 +98,6 @@ class SwitchConnection(object):
         if dry_run:
             print "P4Runtime Write:", request
         else:
-            print(request)
             self.client_stub.Write(request)
 
     def ReadTableEntries(self, table_id=None, dry_run=False):

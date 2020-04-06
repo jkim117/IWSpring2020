@@ -1,1 +1,10 @@
-*.salesforce.com
+*.live.com
+messenger.hotmail.com
+*.*.msn.com
+*.msn.com
+cp.intl.match.com
+www.gowindowslive.com
+view.atdmt.com
+*.smartadserver.com
+www.salesforce.com
+*.*.salesforce.com
