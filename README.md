@@ -39,11 +39,17 @@ byte_counts_table (number of bytes sent or received to this domain. Index is dom
 dns_total_queried (number of total dns responses that were parsed)
 dns_total_missed (number of dns responses that could not be fully processed because there is not enough room in the dns responses table)
 
+To ensure that the test was successful, if you used "smallFlows.pcap", then you should get these results when reading "dns_total_queried":
+0,4,2,4,2,2,2,2,4,2,2,0,0,...
+and these results when reading packet_counts_table:
+0,272,34,262,104,16,20,40,88,0,26,0,0,...
+
 When done, use "make stop" and "make clean"
 
 Note that you can change the known domain list by editing "IWSpring2020/known_domains.txt". You can also use tcpreplay with any pcap file of your choice.
 
-Furthermore, you can also run this exact test with "netassay_bmv2_155.p4". Just use the "netassay_bmv2_155.p4" file instead and use "IWSpring2020/knownlist_json_155.py" instead of "IWSpring2020/knownlist_json_60.py"
+Furthermore, you can also run this exact test with "netassay_bmv2_155.p4". Just use the "netassay_bmv2_155.p4" file instead and use "IWSpring2020/knownlist_json_155.py" instead of "IWSpring2020/knownlist_json_60.py". You should
+get the exact same results as above.
 
 ################### INSTRUCTIONS REGARDING PCAP ANALYSIS ###################
 USAGE: pcapanalysis.py mypcapfile.pcap
