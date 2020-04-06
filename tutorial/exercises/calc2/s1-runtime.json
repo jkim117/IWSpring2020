@@ -456,12 +456,7 @@
 		},
 		{
 			"table": "TopIngress.known_domain_list_q2",
-			"match": {
-				"user_metadata.q1_id": [
-					1,
-					4294967295
-				]
-			},
+			"match": {},
 			"action_name": "TopIngress.match_q2",
 			"priority": 1,
 			"action_params": {
@@ -651,10 +646,6 @@
 				],
 				"headers.q2_part16_4.part": [
 					0,
-					4294967295
-				],
-				"user_metadata.q1_id": [
-					1,
 					4294967295
 				]
 			},
@@ -1590,10 +1581,6 @@
 				"headers.q2_part16_4.part": [
 					0,
 					4294967295
-				],
-				"user_metadata.q1_id": [
-					1,
-					4294967295
 				]
 			},
 			"action_name": "TopIngress.match_q2",
@@ -1790,10 +1777,6 @@
 				"headers.q2_part16_4.part": [
 					0,
 					4294967295
-				],
-				"user_metadata.q1_id": [
-					1,
-					4294967295
 				]
 			},
 			"action_name": "TopIngress.match_q2",
@@ -1989,10 +1972,6 @@
 				],
 				"headers.q3_part16_4.part": [
 					0,
-					4294967295
-				],
-				"user_metadata.q2_id": [
-					3,
 					4294967295
 				]
 			},
