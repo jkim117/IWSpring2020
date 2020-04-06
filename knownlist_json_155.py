@@ -330,6 +330,8 @@ part1Dict = {}
 # If len(parts)==1
 def oneparts(parts):
     if parts[0] in part1Dict:
+        if (parts[0] == '*'):
+            return -1
         return part1Dict[parts[0]]
     global globalID1
     global priority1
@@ -365,6 +367,8 @@ def twoparts(parts):
     id1 = oneparts(parts)
     
     if parts[1] + str(id1) in part2Dict:
+        if (parts[1] == '*'):
+            return -1
         return part2Dict[parts[1] + str(id1)]
     global globalID2
     global priority2
@@ -399,6 +403,8 @@ def threeparts(parts):
     id2 = twoparts(parts)
     
     if parts[2] + str(id2) in part3Dict:
+        if (parts[2] == '*'):
+            return -1
         return part3Dict[parts[2] + str(id2)]
     global globalID3
     global priority3
@@ -433,6 +439,8 @@ def fourparts(parts):
     id3 = threeparts(parts)
     
     if parts[3] + str(id3) in part4Dict:
+        if (parts[3] == '*'):
+            return -1
         return part4Dict[parts[3] + str(id3)]
     global globalID4
     global priority4
@@ -467,6 +475,8 @@ def fiveparts(parts):
     id4 = fourparts(parts)
     
     if parts[4] + str(id4) in part5Dict:
+        if (parts[4] == '*'):
+            return -1
         return part5Dict[parts[4] + str(id4)]
     global globalID5
     global priority5
