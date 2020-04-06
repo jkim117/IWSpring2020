@@ -6,5 +6,5 @@ cp.intl.match.com
 www.gowindowslive.com
 view.atdmt.com
 *.smartadserver.com
-www.salesforce.com
+*.salesforce.com
 *.*.salesforce.com

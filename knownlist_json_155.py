@@ -42,7 +42,7 @@ def dictSetUp(partNum):
             "headers.q2_part16_2.part": [0, 4294967295],
             "headers.q2_part16_3.part": [0, 4294967295],
             "headers.q2_part16_4.part": [0, 4294967295],
-            "user_metadata.q1_id": 0
+            "user_metadata.q1_id": [0, 4294967295]
         }
         return partsDict
     elif (partNum == 3):
@@ -56,7 +56,7 @@ def dictSetUp(partNum):
             "headers.q3_part16_2.part": [0, 4294967295],
             "headers.q3_part16_3.part": [0, 4294967295],
             "headers.q3_part16_4.part": [0, 4294967295],
-            "user_metadata.q2_id": 0
+            "user_metadata.q2_id": [0, 4294967295],
         }
         return partsDict
     elif (partNum == 4):
@@ -70,7 +70,7 @@ def dictSetUp(partNum):
             "headers.q4_part16_2.part": [0, 4294967295],
             "headers.q4_part16_3.part": [0, 4294967295],
             "headers.q4_part16_4.part": [0, 4294967295],
-            "user_metadata.q3_id": 0
+            "user_metadata.q3_id": [0, 4294967295],
         }
         return partsDict
     elif (partNum == 5):
@@ -84,7 +84,7 @@ def dictSetUp(partNum):
             "headers.q5_part16_2.part": [0, 4294967295],
             "headers.q5_part16_3.part": [0, 4294967295],
             "headers.q5_part16_4.part": [0, 4294967295],
-            "user_metadata.q4_id": 0
+            "user_metadata.q4_id": [0, 4294967295],
         }
         return partsDict
     return -1
@@ -142,7 +142,10 @@ def addPart1ToDict(part, partsDict):
     return partsDict
 
 def addPart2ToDict(id1, part, partsDict):
-    partsDict["user_metadata.q1_id"] = id1
+    if (id1 == -1):
+        partsDict.pop("user_metadata.q1_id")
+    else:
+        partsDict["user_metadata.q1_id"] = [id1, 4294967295]
     if (part == '*'):
         partsDict.pop("headers.q2_part1.part")
         partsDict.pop("headers.q2_part2.part")
@@ -184,7 +187,10 @@ def addPart2ToDict(id1, part, partsDict):
     return partsDict
 
 def addPart3ToDict(id2, part, partsDict):
-    partsDict["user_metadata.q2_id"] = id2
+    if (id2 == -1):
+        partsDict.pop("user_metadata.q2_id")
+    else:
+        partsDict["user_metadata.q2_id"] = [id2, 4294967295]
     if (part == '*'):
         partsDict.pop("headers.q3_part1.part")
         partsDict.pop("headers.q3_part2.part")
@@ -226,7 +232,10 @@ def addPart3ToDict(id2, part, partsDict):
     return partsDict
 
 def addPart4ToDict(id3, part, partsDict):
-    partsDict["user_metadata.q3_id"] = id3
+    if (id3 == -1):
+        partsDict.pop("user_metadata.q3_id")
+    else:
+        partsDict["user_metadata.q3_id"] = [id3, 4294967295]
     if (part == '*'):
         partsDict.pop("headers.q4_part1.part")
         partsDict.pop("headers.q4_part2.part")
@@ -268,7 +277,10 @@ def addPart4ToDict(id3, part, partsDict):
     return partsDict
 
 def addPart5ToDict(id4, part, partsDict):
-    partsDict["user_metadata.q4_id"] = id4
+    if (id4 == -1):
+        partsDict.pop("user_metadata.q4_id")
+    else:
+        partsDict["user_metadata.q4_id"] = [id4, 4294967295]
     if (part == '*'):
         partsDict.pop("headers.q5_part1.part")
         partsDict.pop("headers.q5_part2.part")
@@ -335,7 +347,7 @@ def oneparts(parts):
             "priority": 1,
             "action_params": {"q1id": globalID1}
         })
-        return globalID1
+        return -1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q1",
@@ -370,7 +382,7 @@ def twoparts(parts):
             "priority": 1,
             "action_params": {"q2id": globalID2}
         })
-        return globalID2
+        return -1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q2",
@@ -404,7 +416,7 @@ def threeparts(parts):
             "priority": 1,
             "action_params": {"q3id": globalID3}
         })
-        return globalID3
+        return -1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q3",
@@ -438,7 +450,7 @@ def fourparts(parts):
             "priority": 1,
             "action_params": {"q4id": globalID4}
         })
-        return globalID4
+        return -1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q4",
@@ -472,7 +484,7 @@ def fiveparts(parts):
             "priority": 1,
             "action_params": {"id": globalID5}
         })
-        return globalID5
+        return -1
     
     data["table_entries"].append({
         "table": "TopIngress.known_domain_list_q5",
