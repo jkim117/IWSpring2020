@@ -1,9 +1,9 @@
 #include <core.p4>
 #include <v1model.p4>
 
-#define NUM_KNOWN_DOMAINS 1024
+#define NUM_KNOWN_DOMAINS 2048
 #define NUM_KNOWN_DOMAINS_BITS 10
-#define TABLE_SIZE 1024
+#define TABLE_SIZE 2048
 #define HASH_TABLE_BASE 10w0
 #define HASH_TABLE_MAX 10w1023
 #define TIMEOUT 600000000 // 10 minutes

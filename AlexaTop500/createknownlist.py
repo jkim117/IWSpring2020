@@ -1,6 +1,6 @@
 import csv
 
-fileOut = open('known_domains.txt', 'w')
+fileOut = open('known_domains_no_wildcard.txt', 'w')
 
 with open('top500Domains.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter = ',')
