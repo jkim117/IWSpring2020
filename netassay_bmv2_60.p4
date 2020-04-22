@@ -972,10 +972,12 @@ control TopIngress(inout Parsed_packet headers,
                 hash(user_metadata.index_3, HashAlgorithm.crc16, HASH_TABLE_BASE, {2w0, headers.ipv4.dst, 1w1, headers.ipv4.src}, HASH_TABLE_MAX);
             }
 
+            user_metadata.already_matched = 0;
 
             dns_cip_table_1.read(user_metadata.temp_cip, user_metadata.index_1);
             dns_sip_table_1.read(user_metadata.temp_sip, user_metadata.index_1);
             if ((headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) || (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip)) {
+                user_metadata.already_matched = 1;
                 dns_name_table_1.read(user_metadata.domain_id, user_metadata.index_1);
                 packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
                 byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
@@ -984,26 +986,31 @@ control TopIngress(inout Parsed_packet headers,
                 dns_timestamp_table_1.write(user_metadata.index_1, (bit<32>)standard_metadata.ingress_global_timestamp);
             }
 
-            dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
-            dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
-            if ((headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) || (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip)) {
-                dns_name_table_2.read(user_metadata.domain_id, user_metadata.index_2);
-                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
-                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
-                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
-                dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
+            if (user_metadata.already_matched == 0) {
+                dns_cip_table_2.read(user_metadata.temp_cip, user_metadata.index_2);
+                dns_sip_table_2.read(user_metadata.temp_sip, user_metadata.index_2);
+                if ((headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) || (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip)) {
+                    user_metadata.already_matched = 1;
+                    dns_name_table_2.read(user_metadata.domain_id, user_metadata.index_2);
+                    packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                    byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                    packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                    byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
+                    dns_timestamp_table_2.write(user_metadata.index_2, (bit<32>)standard_metadata.ingress_global_timestamp);
+                }
             }
 
-            dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
-            dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
-            if ((headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) || (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip)) {
-                dns_name_table_3.read(user_metadata.domain_id, user_metadata.index_3);
-                packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
-                byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
-                packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
-                byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
-                dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
+            if (user_metadata.already_matched == 0) {
+                dns_cip_table_3.read(user_metadata.temp_cip, user_metadata.index_3);
+                dns_sip_table_3.read(user_metadata.temp_sip, user_metadata.index_3);
+                if ((headers.ipv4.dst == user_metadata.temp_cip && headers.ipv4.src == user_metadata.temp_sip) || (headers.ipv4.dst == user_metadata.temp_sip && headers.ipv4.src == user_metadata.temp_cip)) {
+                    dns_name_table_3.read(user_metadata.domain_id, user_metadata.index_3);
+                    packet_counts_table.read(user_metadata.temp_packet_counter, user_metadata.domain_id);
+                    byte_counts_table.read(user_metadata.temp_byte_counter, user_metadata.domain_id);
+                    packet_counts_table.write(user_metadata.domain_id, user_metadata.temp_packet_counter + 1);
+                    byte_counts_table.write(user_metadata.domain_id, user_metadata.temp_byte_counter + (bit<32>)headers.ipv4.len);
+                    dns_timestamp_table_3.write(user_metadata.index_3, (bit<32>)standard_metadata.ingress_global_timestamp);
+                }
             }
         }
 	}
