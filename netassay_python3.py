@@ -6,6 +6,8 @@ import socket
 # Data structure and global variables
 TOTAL_DNS_RESPONSE_COUNT = 0
 NUMBER_DOMAINS_LARGE_PART = 0
+NUMBER_DOMAINS_LARGE_PART_31 = 0
+
 cnameCountDict = {}
 serverIpPrecedenceDict = {}
 serverIpUsed = {}
@@ -21,6 +23,7 @@ netassayTableByDomain = {} # Key is domain name
 def parse_dns_response(ip_packet):
     global TOTAL_DNS_RESPONSE_COUNT
     global NUMBER_DOMAINS_LARGE_PART
+    global NUMBER_DOMAINS_LARGE_PART_31
     TOTAL_DNS_RESPONSE_COUNT = TOTAL_DNS_RESPONSE_COUNT + 1
 
     dns = dpkt.dns.DNS(ip_packet.data.data)
@@ -47,6 +50,10 @@ def parse_dns_response(ip_packet):
     for part in domain_name:
         if (len(part) > 15):
             NUMBER_DOMAINS_LARGE_PART = NUMBER_DOMAINS_LARGE_PART + 1
+            break
+    for part in domain_name:
+        if (len(part) > 31):
+            NUMBER_DOMAINS_LARGE_PART_31 = NUMBER_DOMAINS_LARGE_PART_31 + 1
             break
 
     for rr in answers:
@@ -133,7 +140,11 @@ if __name__ == '__main__':
         exit(-1)
 
     with open(argv[1], 'rb') as f:
-        pcap_obj = dpkt.pcap.Reader(f)
+        try:
+            pcap_obj = dpkt.pcap.Reader(f)
+        except:
+            pcap_obj = dkpt.pcapng.Reader(f)
+
         for ts, buf in pcap_obj:
             eth = dpkt.ethernet.Ethernet(buf)
 
@@ -142,10 +153,13 @@ if __name__ == '__main__':
             ip = eth.data
             protocol = ip.p
 
-            if (protocol == 17 and ip.data.sport == 53):
-                parse_dns_response(ip)
-            else:
-                parse_tcp(ip)
+            try:
+                if (protocol == 17 and ip.data.sport == 53):
+                    parse_dns_response(ip)
+                else:
+                    parse_tcp(ip)
+            except:
+                continue
 
     # Final Stats report
     print("Total Number of DNS Response: " + str(TOTAL_DNS_RESPONSE_COUNT))
@@ -153,6 +167,7 @@ if __name__ == '__main__':
         print(str(x[0]) + ' CNAME entries -> ' + str(x[1]) + ' DNS responses')
     print("*********************************************************\n")
     print("Number of domain names with a part larger than 15 characters: " + str(NUMBER_DOMAINS_LARGE_PART))
+    print("Number of domain names with a part larger than 31 characters: " + str(NUMBER_DOMAINS_LARGE_PART_31))
     print("*********************************************************\n")
 
     print("Total number of individual clients: " + str(NUM_CLIENTS))
