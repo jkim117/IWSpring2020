@@ -1,6 +1,8 @@
 #include <core.p4>
 #include <v1model.p4>
 
+#define NUM_BANNED_DST_IP 100
+#define NUM_ALLOWABLE_DST_IP 100
 #define NUM_KNOWN_DOMAINS 2048
 #define NUM_KNOWN_DOMAINS_BITS 10
 #define TABLE_SIZE 16384
@@ -892,12 +894,44 @@ control TopIngress(inout Parsed_packet headers,
         default_action = NoAction();
     }
 
+    action banned_dns_dst() {
+        user_metadata.matched_domain = 0;
+    }
+
+    table allowable_dns_dst {
+        key = {
+            headers.ipv4.dst: lpm;
+        }
+
+        actions = {
+            banned_dns_dst;
+            NoAction;
+        }
+        size = NUM_ALLOWABLE_DST_IP;
+        default_action = banned_dns_dst();
+    }
+
+    table banned_dns_dst {
+        key = {
+            headers.ipv4.dst: lpm;
+        }
+
+        actions = {
+            banned_dns_dst;
+            NoAction;
+        }
+        size = NUM_BANNED_DST_IP;
+        default_action = NoAction();
+    }
+
     apply {
         if(user_metadata.parsed_answer == 1) {
             user_metadata.domain_id = 0;
             user_metadata.matched_domain = 0;
 
             known_domain_list.apply();
+            allowable_dns_dst.apply();
+            banned_dns_dst.apply();
 
             if (user_metadata.matched_domain == 1) {
 

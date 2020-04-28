@@ -536,6 +536,44 @@ def addDomainToTable(domain):
         fiveparts(parts)
     elif numParts == 5:
         fiveparts(parts)
+
+def addBannedIpToTable(ip):
+    ipList = ip.split('/')
+    if (len(ipList) == 2):
+        mask = int(ipList[1])
+    elif (len(ipList) == 1):
+        mask = 32
+    else:
+        exit(-1)
+    ipaddr = ipList[0]
+    ip_dict = {
+        "headers.ipv4.dst": [ipaddr, mask]
+    }
+    ip_dict['headers.ipv4.dst']
+    data["table_entries"].append({
+        "table": "TopIngress.banned_dns_dst",
+        "match": ip_dict,
+        "action_name": "TopIngress.banned_dns_dst"
+    })
+
+def addAllowedIpToTable(ip):
+    ipList = ip.split('/')
+    if (len(ipList) == 2):
+        mask = int(ipList[1])
+    elif (len(ipList) == 1):
+        mask = 32
+    else:
+        exit(-1)
+    ipaddr = ipList[0]
+    ip_dict = {
+        "headers.ipv4.dst": [ipaddr, mask]
+    }
+    ip_dict['headers.ipv4.dst']
+    data["table_entries"].append({
+        "table": "TopIngress.allowable_dns_dst",
+        "match": ip_dict,
+        "action_name": "NoAction"
+    })
     
 knownlist = open('known_domains.txt', 'r')
 domains = knownlist.read().split()
@@ -549,6 +587,20 @@ priority5 = len(domains) + 1
 
 for d in domains:
     addDomainToTable(d)
+
+bannedlist = open('banned_dns_dst.txt', 'r')
+bannedip = bannedlist.read().split()
+bannedlist.close()
+
+for ip in bannedip:
+    addBannedIpToTable(ip)
+
+allowedlist = open('allowed_dns_dst.txt', 'r')
+allowedip = allowedlist.read().split()
+allowedlist.close()
+
+for ip in allowedip:
+    addAllowedIpToTable(ip)
 
 with open('s1-runtime.json', 'w') as outFile:
     json.dump(data, outFile, indent='\t')
