@@ -23,12 +23,16 @@ NUM_PACKETS = 0
 netassayTable = {} # Key is concatentation of serever IP/client IP. Values is a tuple of domain name, num packets, num of bytes
 netassayTableByDomain = {} # Key is domain name
 
+def is_subnet_of(a, b):
+    return (b.network_address <= a.network_address and
+                    b.broadcast_address >= a.broadcast_address)
+
 def parse_dns_response(ip_packet):
     clientIP = socket.inet_ntoa(ip_packet.dst)
     cip_object = ipaddress.ip_network(clientIP)
     allowed = False
     for ip in allowed_ips:
-        if cip_object.subnet_of(ip):
+        if is_subnet_of(cip_object, ip):
             allowed = True
             break
 
@@ -36,7 +40,7 @@ def parse_dns_response(ip_packet):
         return
 
     for ip in banned_ips:
-        if cip_object.subnet_of(ip):
+        if is_subnet_of(cip_object, ip):
             return
 
     global TOTAL_DNS_RESPONSE_COUNT
@@ -172,7 +176,7 @@ if __name__ == '__main__':
         try:
             pcap_obj = dpkt.pcap.Reader(f)
         except:
-            pcap_obj = dkpt.pcapng.Reader(f)
+            pcap_obj = dpkt.pcapng.Reader(f)
 
         for ts, buf in pcap_obj:
             eth = dpkt.ethernet.Ethernet(buf)
