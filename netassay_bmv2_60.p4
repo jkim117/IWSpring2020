@@ -894,7 +894,7 @@ control TopIngress(inout Parsed_packet headers,
         default_action = NoAction();
     }
 
-    action banned_dns_dst() {
+    action match_banned_dns_dst() {
         user_metadata.matched_domain = 0;
     }
 
@@ -904,11 +904,11 @@ control TopIngress(inout Parsed_packet headers,
         }
 
         actions = {
-            banned_dns_dst;
+            match_banned_dns_dst;
             NoAction;
         }
         size = NUM_ALLOWABLE_DST_IP;
-        default_action = banned_dns_dst();
+        default_action = match_banned_dns_dst();
     }
 
     table banned_dns_dst {
@@ -917,7 +917,7 @@ control TopIngress(inout Parsed_packet headers,
         }
 
         actions = {
-            banned_dns_dst;
+            match_banned_dns_dst;
             NoAction;
         }
         size = NUM_BANNED_DST_IP;

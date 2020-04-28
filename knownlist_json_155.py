@@ -553,7 +553,7 @@ def addBannedIpToTable(ip):
     data["table_entries"].append({
         "table": "TopIngress.banned_dns_dst",
         "match": ip_dict,
-        "action_name": "TopIngress.banned_dns_dst"
+        "action_name": "TopIngress.match_banned_dns_dst"
     })
 
 def addAllowedIpToTable(ip):
