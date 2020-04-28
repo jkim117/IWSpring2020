@@ -273,7 +273,8 @@ def addBannedIpToTable(ip):
     data["table_entries"].append({
         "table": "TopIngress.banned_dns_dst",
         "match": ip_dict,
-        "action_name": "TopIngress.match_banned_dns_dst"
+        "action_name": "TopIngress.match_banned_dns_dst",
+        "action_params": {}
     })
 
 def addAllowedIpToTable(ip):
@@ -292,7 +293,8 @@ def addAllowedIpToTable(ip):
     data["table_entries"].append({
         "table": "TopIngress.allowable_dns_dst",
         "match": ip_dict,
-        "action_name": "NoAction"
+        "action_name": "NoAction",
+        "action_params": {}
     })
     
 knownlist = open('known_domains.txt', 'r')
@@ -308,12 +310,26 @@ bannedlist = open('banned_dns_dst.txt', 'r')
 bannedip = bannedlist.read().split()
 bannedlist.close()
 
+data["table_entries"].append({
+        "table": "TopIngress.banned_dns_dst",
+        "default_action": True,
+        "action_name": "NoAction",
+        "action_params": {}
+})
+
 for ip in bannedip:
     addBannedIpToTable(ip)
 
 allowedlist = open('allowed_dns_dst.txt', 'r')
 allowedip = allowedlist.read().split()
 allowedlist.close()
+
+data["table_entries"].append({
+        "table": "TopIngress.allowable_dns_dst",
+        "default_action": True,
+        "action_name": "TopIngress.match_banned_dns_dst",
+        "action_params": {}
+})
 
 for ip in allowedip:
     addAllowedIpToTable(ip)
