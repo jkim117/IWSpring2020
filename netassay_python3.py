@@ -2,6 +2,7 @@ from sys import argv
 import dpkt
 import csv
 import socket
+import ipaddress
 
 # Data structure and global variables
 TOTAL_DNS_RESPONSE_COUNT = 0
@@ -14,6 +15,8 @@ serverIpUsed = {}
 precedenceResultsByPairing = {}
 precedenceResultsByPacket = {}
 numDomainLabels = {}
+allowed_ips = []
+banned_ips = []
 NUM_CLIENTS = 0
 NUM_PACKETS = 0
 
@@ -21,6 +24,21 @@ netassayTable = {} # Key is concatentation of serever IP/client IP. Values is a 
 netassayTableByDomain = {} # Key is domain name
 
 def parse_dns_response(ip_packet):
+    clientIP = socket.inet_ntoa(ip_packet.dst)
+    cip_object = ipaddress.ip_network(clientIP)
+    allowed = False
+    for ip in allowed_ips:
+        if cip_object.subnet_of(ip):
+            allowed = True
+            break
+
+    if (not allowed):
+        return
+
+    for ip in banned_ips:
+        if cip_object.subnet_of(ip):
+            return
+
     global TOTAL_DNS_RESPONSE_COUNT
     global NUMBER_DOMAINS_LARGE_PART
     global NUMBER_DOMAINS_LARGE_PART_31
@@ -60,7 +78,6 @@ def parse_dns_response(ip_packet):
         if (rr.type == 5): #DNS.CNAME
             cname_count = cname_count + 1
         elif (rr.type == 1): #DNS.A
-            clientIP = socket.inet_ntoa(ip_packet.dst)
             serverIP = socket.inet_ntoa(rr.rdata)
 
             key = clientIP + serverIP
@@ -135,9 +152,21 @@ def matchDomain(known, domain):
 
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
-    if len(argv) != 2 and len(argv) != 3:
-        print('usage: python pcapanalysis.py capture.pcap knownlist.txt OR python pcapanalysis.py capture.pcap')
+    if len(argv) != 5:
+        print('usage: python pcapanalysis.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
         exit(-1)
+    
+    allowed_ip_file = open(argv[3], 'r')
+    allowed_ip_list = allowed_ip_file.read().split()
+    allowed_ip_file.close()
+    for ip in allowed_ip_list:
+        allowed_ips.append(ipaddress.ip_network(ip))
+
+    banned_ip_file = open(argv[4], 'r')
+    banned_ip_list = banned_ip_file.read().split()
+    banned_ip_file.close()
+    for ip in banned_ip_list:
+        banned_ips.append(ipaddress.ip_network(ip))
 
     with open(argv[1], 'rb') as f:
         try:
@@ -207,28 +236,27 @@ if __name__ == '__main__':
             w.writerow([i[0], i[1][0], i[1][1], i[1][2]])
 
     # Create knownlist csv if argument provided
-    if (len(argv) == 3):
-        knownlist = open(argv[2], 'r')
-        domains = knownlist.read().split()
-        knownlist.close()
+    knownlist = open(argv[2], 'r')
+    domains = knownlist.read().split()
+    knownlist.close()
 
-        knownlistDict = {} # Key is knowlist domain, values are number of dns, number of packets, number of bytes
+    knownlistDict = {} # Key is knowlist domain, values are number of dns, number of packets, number of bytes
+    for d in domains:
+        knownlistDict[d] = [0, 0, 0]
+
+    for i in netassayTableByDomain.items():
         for d in domains:
-            knownlistDict[d] = [0, 0, 0]
+            if (matchDomain(d, i[0])):
+                entry = knownlistDict[d]
+                knownlistDict[d] = [entry[0] + i[1][0], entry[1] + i[1][1], entry[2] + i[1][2]]
+                break
+    
+    with open('knownlistresults.csv', 'w') as csvfile:
+        w = csv.writer(csvfile)
+        w.writerow(["Domain", "Number of DNS requests", "Number of Packets", "Number of Bytes"])
 
-        for i in netassayTableByDomain.items():
-            for d in domains:
-                if (matchDomain(d, i[0])):
-                    entry = knownlistDict[d]
-                    knownlistDict[d] = [entry[0] + i[1][0], entry[1] + i[1][1], entry[2] + i[1][2]]
-                    break
-        
-        with open('knownlistresults.csv', 'w') as csvfile:
-            w = csv.writer(csvfile)
-            w.writerow(["Domain", "Number of DNS requests", "Number of Packets", "Number of Bytes"])
-
-            for i in knownlistDict.items():
-                w.writerow([i[0], i[1][0], i[1][1], i[1][2]])
+        for i in knownlistDict.items():
+            w.writerow([i[0], i[1][0], i[1][1], i[1][2]])
 
             
 
