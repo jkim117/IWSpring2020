@@ -173,10 +173,10 @@ if __name__ == '__main__':
         banned_ips.append(ipaddress.ip_network(ip))
 
     with open(argv[1], 'rb') as f:
-        try:
-            pcap_obj = dpkt.pcap.Reader(f)
-        except:
-            pcap_obj = dpkt.pcapng.Reader(f)
+        #try:
+        #    pcap_obj = dpkt.pcap.Reader(f)
+        #except:
+        pcap_obj = dpkt.pcapng.Reader(f)
 
         for ts, buf in pcap_obj:
             eth = dpkt.ethernet.Ethernet(buf)
