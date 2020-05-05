@@ -174,7 +174,7 @@ if __name__ == '__main__':
         num_bytes = knownlistDict[i][2]
         num_missed = knownlistDict[i][3]
         num_dns = knownlistDict[i][0]
-        if (num_dns > 0):
+        if (num_dns > 0 and num_missed < num_dns):
             knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
             knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
 
