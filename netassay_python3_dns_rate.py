@@ -137,7 +137,7 @@ if __name__ == '__main__':
                 initialTime = ts
             
 
-            #print(datetime.datetime.utcfromtimestamp(ts))
+            print(datetime.datetime.utcfromtimestamp(ts))
 
             if (eth.type != 2048): # If not IPV4
                 continue
