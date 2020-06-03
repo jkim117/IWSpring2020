@@ -457,7 +457,7 @@ def fiveparts(parts):
         data["table_entries"].append({
             "table": "TopIngress.known_domain_list_q5",
             "match": dict_t,
-            "action_name": "TopIngress.match_domain",
+            "action_name": "TopIngress.match_q5",
             "priority": 1,
             "action_params": {"q5id": globalID5}
         })
