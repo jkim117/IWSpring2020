@@ -88,6 +88,7 @@ def parse_dns_response(ip_packet):
                         netassayTable[key] = [d, 0, 0]
 
                     break
+            break
         
 
 def parse_tcp(ip_packet):

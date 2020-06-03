@@ -204,6 +204,7 @@ struct user_metadata_t {
     bit<32> q2_id;
     bit<32> q3_id;
     bit<32> q4_id;
+    bit<32> q5_id;
     bit<32> domain_id;
 
     bit<32> index_1;
@@ -1974,6 +1975,10 @@ control TopIngress(inout Parsed_packet headers,
         user_metadata.q4_id = q4id;
     }
 
+    action match_q5(known_domain_id q5id) {
+        user_metadata.q5_id = q5id;
+    }
+
     action match_domain(known_domain_id id) {
         user_metadata.domain_id = id;
         user_metadata.matched_domain = 1;
@@ -2011,7 +2016,6 @@ control TopIngress(inout Parsed_packet headers,
             headers.q2_part16_2.part: ternary;
             headers.q2_part16_3.part: ternary;
             headers.q2_part16_4.part: ternary;
-            user_metadata.q1_id: ternary;
         }
 
         actions = {
@@ -2033,7 +2037,6 @@ control TopIngress(inout Parsed_packet headers,
             headers.q3_part16_2.part: ternary;
             headers.q3_part16_3.part: ternary;
             headers.q3_part16_4.part: ternary;
-            user_metadata.q2_id: ternary;
         }
 
         actions = {
@@ -2055,7 +2058,6 @@ control TopIngress(inout Parsed_packet headers,
             headers.q4_part16_2.part: ternary;
             headers.q4_part16_3.part: ternary;
             headers.q4_part16_4.part: ternary;
-            user_metadata.q3_id: ternary;
         }
 
         actions = {
@@ -2077,7 +2079,23 @@ control TopIngress(inout Parsed_packet headers,
             headers.q5_part16_2.part: ternary;
             headers.q5_part16_3.part: ternary;
             headers.q5_part16_4.part: ternary;
-            user_metadata.q4_id: ternary;
+        }
+
+        actions = {
+            match_q5;
+            NoAction;
+        }
+        size = NUM_KNOWN_DOMAINS;
+        default_action = NoAction();
+    }
+
+    table match_known_domain_list {
+        key = {
+            user_metadata.q1_id: exact;
+            user_metadata.q2_id: exact;
+            user_metadata.q3_id: exact;
+            user_metadata.q4_id: exact;
+            user_metadata.q5_id: exact;
         }
 
         actions = {
@@ -2124,6 +2142,7 @@ control TopIngress(inout Parsed_packet headers,
             user_metadata.q2_id = 0;
             user_metadata.q3_id = 0;
             user_metadata.q4_id = 0;
+            user_metadata.q5_id = 0;
             user_metadata.domain_id = 0;
             user_metadata.matched_domain = 0;
 
@@ -2132,6 +2151,7 @@ control TopIngress(inout Parsed_packet headers,
             known_domain_list_q3.apply();
             known_domain_list_q4.apply();
             known_domain_list_q5.apply();
+            match_known_domain_list.apply();
 
             allowable_dns_dst.apply();
             banned_dns_dst.apply();
