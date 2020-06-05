@@ -28,6 +28,7 @@ def is_subnet_of(a, b):
                     b.broadcast_address >= a.broadcast_address)
 
 def parse_dns_response(ip_packet):
+    # Check if it is in the allowed or banned IP lists
     clientIP = socket.inet_ntoa(ip_packet.dst)
     cip_object = ipaddress.ip_network(clientIP)
     allowed = False
@@ -43,6 +44,7 @@ def parse_dns_response(ip_packet):
         if is_subnet_of(cip_object, ip):
             return
 
+    # Set up global variabes
     global TOTAL_DNS_RESPONSE_COUNT
     global NUMBER_DOMAINS_LARGE_PART
     global NUMBER_DOMAINS_LARGE_PART_31
@@ -54,6 +56,7 @@ def parse_dns_response(ip_packet):
     cname_count = 0
     ipPrecedence = 1
 
+    # Extract domain name
     domain = answers[0].name
     domain_name = domain.split('.')
 
@@ -157,9 +160,10 @@ def matchDomain(known, domain):
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
     if len(argv) != 5:
-        print('usage: python pcapanalysis.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
+        print('usage: python netassay_python3.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
         exit(-1)
     
+    # Parse allowed IP and banned IP files
     allowed_ip_file = open(argv[3], 'r')
     allowed_ip_list = allowed_ip_file.read().split()
     allowed_ip_file.close()
@@ -186,6 +190,7 @@ if __name__ == '__main__':
             ip = eth.data
             protocol = ip.p
 
+            # For each packet parse the dns responses
             try:
                 if (protocol == 17 and ip.data.sport == 53):
                     parse_dns_response(ip)

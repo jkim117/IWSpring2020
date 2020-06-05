@@ -10,6 +10,12 @@ knownlist_json_60.py -> uses known_domains.txt to create a JSON file to populate
 
 knownlist_json_155.py -> uses known_domains.txt to create a JSON file to populate the match action tables for netassay_bmv2_155.p4
 
+netassay_python3.py -> outputs useful stats on a pcap file and also outputs netassay results without restrictions of P4
+
+netassay_python3_p4sim60.py -> outputs netassay results simulating the restrictions of netassay_bmv2_60. Most accurate replication of how the P4 program behaves
+
+netassay_python3_p4sim155.py -> outputs netassay results simulating the restrictions of netassay_bmv2_155. Most accurate replication of how the P4 program behaves
+
 ################### INSTRUCTIONS TO TEST RUN netassay_bmv2_60.p4 ###################
 
 All tests were run through the P4 Tutorial Virtual Machine using VirtualBox.
