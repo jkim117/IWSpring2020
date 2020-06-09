@@ -99,7 +99,7 @@ struct Parsed_packet {
     domain_byte q1_7;
     domain_byte q1_8;
     domain_byte q1_9;
-    domain_byte q1_0;
+    domain_byte q1_10;
     domain_byte q1_11;
     domain_byte q1_12;
     domain_byte q1_13;
@@ -116,7 +116,7 @@ struct Parsed_packet {
     domain_byte q2_7;
     domain_byte q2_8;
     domain_byte q2_9;
-    domain_byte q2_0;
+    domain_byte q2_10;
     domain_byte q2_11;
     domain_byte q2_12;
     domain_byte q2_13;
@@ -133,7 +133,7 @@ struct Parsed_packet {
     domain_byte q3_7;
     domain_byte q3_8;
     domain_byte q3_9;
-    domain_byte q3_0;
+    domain_byte q3_10;
     domain_byte q3_11;
     domain_byte q3_12;
     domain_byte q3_13;
@@ -150,7 +150,7 @@ struct Parsed_packet {
     domain_byte q4_7;
     domain_byte q4_8;
     domain_byte q4_9;
-    domain_byte q4_0;
+    domain_byte q4_10;
     domain_byte q4_11;
     domain_byte q4_12;
     domain_byte q4_13;

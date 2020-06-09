@@ -1,0 +1,2115 @@
+{
+	"target": "bmv2",
+	"p4info": "build/calc2.p4.p4info.txt",
+	"bmv2_json": "build/calc2.json",
+	"table_entries": [
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_1.char": [
+					"l",
+					255
+				],
+				"headers.q2_2.char": [
+					"i",
+					255
+				],
+				"headers.q2_3.char": [
+					"v",
+					255
+				],
+				"headers.q2_4.char": [
+					"e",
+					255
+				],
+				"headers.q2_5.char": [
+					".",
+					255
+				],
+				"headers.q2_6.char": [
+					0,
+					255
+				],
+				"headers.q2_7.char": [
+					0,
+					255
+				],
+				"headers.q2_8.char": [
+					0,
+					255
+				],
+				"headers.q2_9.char": [
+					0,
+					255
+				],
+				"headers.q2_10.char": [
+					0,
+					255
+				],
+				"headers.q2_11.char": [
+					0,
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 10,
+			"action_params": {
+				"id": 1
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_1.char": [
+					"m",
+					255
+				],
+				"headers.q1_2.char": [
+					"e",
+					255
+				],
+				"headers.q1_3.char": [
+					"s",
+					255
+				],
+				"headers.q1_4.char": [
+					"s",
+					255
+				],
+				"headers.q1_5.char": [
+					"e",
+					255
+				],
+				"headers.q1_6.char": [
+					"n",
+					255
+				],
+				"headers.q1_7.char": [
+					"g",
+					255
+				],
+				"headers.q1_8.char": [
+					"e",
+					255
+				],
+				"headers.q1_9.char": [
+					"r",
+					255
+				],
+				"headers.q1_10.char": [
+					".",
+					255
+				],
+				"headers.q1_11.char": [
+					0,
+					255
+				],
+				"headers.q1_12.char": [
+					0,
+					255
+				],
+				"headers.q1_13.char": [
+					0,
+					255
+				],
+				"headers.q1_14.char": [
+					0,
+					255
+				],
+				"headers.q1_15.char": [
+					0,
+					255
+				],
+				"headers.q1_16.char": [
+					0,
+					255
+				],
+				"headers.q2_1.char": [
+					"h",
+					255
+				],
+				"headers.q2_2.char": [
+					"o",
+					255
+				],
+				"headers.q2_3.char": [
+					"t",
+					255
+				],
+				"headers.q2_4.char": [
+					"m",
+					255
+				],
+				"headers.q2_5.char": [
+					"a",
+					255
+				],
+				"headers.q2_6.char": [
+					"i",
+					255
+				],
+				"headers.q2_7.char": [
+					"l",
+					255
+				],
+				"headers.q2_8.char": [
+					".",
+					255
+				],
+				"headers.q2_9.char": [
+					0,
+					255
+				],
+				"headers.q2_10.char": [
+					0,
+					255
+				],
+				"headers.q2_11.char": [
+					0,
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 9,
+			"action_params": {
+				"id": 2
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q3_1.char": [
+					"m",
+					255
+				],
+				"headers.q3_2.char": [
+					"s",
+					255
+				],
+				"headers.q3_3.char": [
+					"n",
+					255
+				],
+				"headers.q3_4.char": [
+					".",
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					"c",
+					255
+				],
+				"headers.q4_2.char": [
+					"o",
+					255
+				],
+				"headers.q4_3.char": [
+					"m",
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 8,
+			"action_params": {
+				"id": 3
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_1.char": [
+					"m",
+					255
+				],
+				"headers.q2_2.char": [
+					"s",
+					255
+				],
+				"headers.q2_3.char": [
+					"n",
+					255
+				],
+				"headers.q2_4.char": [
+					".",
+					255
+				],
+				"headers.q2_5.char": [
+					0,
+					255
+				],
+				"headers.q2_6.char": [
+					0,
+					255
+				],
+				"headers.q2_7.char": [
+					0,
+					255
+				],
+				"headers.q2_8.char": [
+					0,
+					255
+				],
+				"headers.q2_9.char": [
+					0,
+					255
+				],
+				"headers.q2_10.char": [
+					0,
+					255
+				],
+				"headers.q2_11.char": [
+					0,
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 7,
+			"action_params": {
+				"id": 4
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_1.char": [
+					"c",
+					255
+				],
+				"headers.q1_2.char": [
+					"p",
+					255
+				],
+				"headers.q1_3.char": [
+					".",
+					255
+				],
+				"headers.q1_4.char": [
+					0,
+					255
+				],
+				"headers.q1_5.char": [
+					0,
+					255
+				],
+				"headers.q1_6.char": [
+					0,
+					255
+				],
+				"headers.q1_7.char": [
+					0,
+					255
+				],
+				"headers.q1_8.char": [
+					0,
+					255
+				],
+				"headers.q1_9.char": [
+					0,
+					255
+				],
+				"headers.q1_10.char": [
+					0,
+					255
+				],
+				"headers.q1_11.char": [
+					0,
+					255
+				],
+				"headers.q1_12.char": [
+					0,
+					255
+				],
+				"headers.q1_13.char": [
+					0,
+					255
+				],
+				"headers.q1_14.char": [
+					0,
+					255
+				],
+				"headers.q1_15.char": [
+					0,
+					255
+				],
+				"headers.q1_16.char": [
+					0,
+					255
+				],
+				"headers.q2_1.char": [
+					"i",
+					255
+				],
+				"headers.q2_2.char": [
+					"n",
+					255
+				],
+				"headers.q2_3.char": [
+					"t",
+					255
+				],
+				"headers.q2_4.char": [
+					"l",
+					255
+				],
+				"headers.q2_5.char": [
+					".",
+					255
+				],
+				"headers.q2_6.char": [
+					0,
+					255
+				],
+				"headers.q2_7.char": [
+					0,
+					255
+				],
+				"headers.q2_8.char": [
+					0,
+					255
+				],
+				"headers.q2_9.char": [
+					0,
+					255
+				],
+				"headers.q2_10.char": [
+					0,
+					255
+				],
+				"headers.q2_11.char": [
+					0,
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"m",
+					255
+				],
+				"headers.q3_2.char": [
+					"a",
+					255
+				],
+				"headers.q3_3.char": [
+					"t",
+					255
+				],
+				"headers.q3_4.char": [
+					"c",
+					255
+				],
+				"headers.q3_5.char": [
+					"h",
+					255
+				],
+				"headers.q3_6.char": [
+					".",
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					"c",
+					255
+				],
+				"headers.q4_2.char": [
+					"o",
+					255
+				],
+				"headers.q4_3.char": [
+					"m",
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 6,
+			"action_params": {
+				"id": 5
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_1.char": [
+					"w",
+					255
+				],
+				"headers.q1_2.char": [
+					"w",
+					255
+				],
+				"headers.q1_3.char": [
+					"w",
+					255
+				],
+				"headers.q1_4.char": [
+					".",
+					255
+				],
+				"headers.q1_5.char": [
+					0,
+					255
+				],
+				"headers.q1_6.char": [
+					0,
+					255
+				],
+				"headers.q1_7.char": [
+					0,
+					255
+				],
+				"headers.q1_8.char": [
+					0,
+					255
+				],
+				"headers.q1_9.char": [
+					0,
+					255
+				],
+				"headers.q1_10.char": [
+					0,
+					255
+				],
+				"headers.q1_11.char": [
+					0,
+					255
+				],
+				"headers.q1_12.char": [
+					0,
+					255
+				],
+				"headers.q1_13.char": [
+					0,
+					255
+				],
+				"headers.q1_14.char": [
+					0,
+					255
+				],
+				"headers.q1_15.char": [
+					0,
+					255
+				],
+				"headers.q1_16.char": [
+					0,
+					255
+				],
+				"headers.q2_1.char": [
+					"g",
+					255
+				],
+				"headers.q2_2.char": [
+					"o",
+					255
+				],
+				"headers.q2_3.char": [
+					"w",
+					255
+				],
+				"headers.q2_4.char": [
+					"i",
+					255
+				],
+				"headers.q2_5.char": [
+					"n",
+					255
+				],
+				"headers.q2_6.char": [
+					"d",
+					255
+				],
+				"headers.q2_7.char": [
+					"o",
+					255
+				],
+				"headers.q2_8.char": [
+					"w",
+					255
+				],
+				"headers.q2_9.char": [
+					"s",
+					255
+				],
+				"headers.q2_10.char": [
+					"l",
+					255
+				],
+				"headers.q2_11.char": [
+					"i",
+					255
+				],
+				"headers.q2_12.char": [
+					"v",
+					255
+				],
+				"headers.q2_13.char": [
+					"e",
+					255
+				],
+				"headers.q2_14.char": [
+					".",
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 5,
+			"action_params": {
+				"id": 6
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_1.char": [
+					"v",
+					255
+				],
+				"headers.q1_2.char": [
+					"i",
+					255
+				],
+				"headers.q1_3.char": [
+					"e",
+					255
+				],
+				"headers.q1_4.char": [
+					"w",
+					255
+				],
+				"headers.q1_5.char": [
+					".",
+					255
+				],
+				"headers.q1_6.char": [
+					0,
+					255
+				],
+				"headers.q1_7.char": [
+					0,
+					255
+				],
+				"headers.q1_8.char": [
+					0,
+					255
+				],
+				"headers.q1_9.char": [
+					0,
+					255
+				],
+				"headers.q1_10.char": [
+					0,
+					255
+				],
+				"headers.q1_11.char": [
+					0,
+					255
+				],
+				"headers.q1_12.char": [
+					0,
+					255
+				],
+				"headers.q1_13.char": [
+					0,
+					255
+				],
+				"headers.q1_14.char": [
+					0,
+					255
+				],
+				"headers.q1_15.char": [
+					0,
+					255
+				],
+				"headers.q1_16.char": [
+					0,
+					255
+				],
+				"headers.q2_1.char": [
+					"a",
+					255
+				],
+				"headers.q2_2.char": [
+					"t",
+					255
+				],
+				"headers.q2_3.char": [
+					"d",
+					255
+				],
+				"headers.q2_4.char": [
+					"m",
+					255
+				],
+				"headers.q2_5.char": [
+					"t",
+					255
+				],
+				"headers.q2_6.char": [
+					".",
+					255
+				],
+				"headers.q2_7.char": [
+					0,
+					255
+				],
+				"headers.q2_8.char": [
+					0,
+					255
+				],
+				"headers.q2_9.char": [
+					0,
+					255
+				],
+				"headers.q2_10.char": [
+					0,
+					255
+				],
+				"headers.q2_11.char": [
+					0,
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 4,
+			"action_params": {
+				"id": 7
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_1.char": [
+					"s",
+					255
+				],
+				"headers.q2_2.char": [
+					"m",
+					255
+				],
+				"headers.q2_3.char": [
+					"a",
+					255
+				],
+				"headers.q2_4.char": [
+					"r",
+					255
+				],
+				"headers.q2_5.char": [
+					"t",
+					255
+				],
+				"headers.q2_6.char": [
+					"a",
+					255
+				],
+				"headers.q2_7.char": [
+					"d",
+					255
+				],
+				"headers.q2_8.char": [
+					"s",
+					255
+				],
+				"headers.q2_9.char": [
+					"e",
+					255
+				],
+				"headers.q2_10.char": [
+					"r",
+					255
+				],
+				"headers.q2_11.char": [
+					"v",
+					255
+				],
+				"headers.q2_12.char": [
+					"e",
+					255
+				],
+				"headers.q2_13.char": [
+					"r",
+					255
+				],
+				"headers.q2_14.char": [
+					".",
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 3,
+			"action_params": {
+				"id": 8
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_1.char": [
+					"s",
+					255
+				],
+				"headers.q2_2.char": [
+					"a",
+					255
+				],
+				"headers.q2_3.char": [
+					"l",
+					255
+				],
+				"headers.q2_4.char": [
+					"e",
+					255
+				],
+				"headers.q2_5.char": [
+					"s",
+					255
+				],
+				"headers.q2_6.char": [
+					"f",
+					255
+				],
+				"headers.q2_7.char": [
+					"o",
+					255
+				],
+				"headers.q2_8.char": [
+					"r",
+					255
+				],
+				"headers.q2_9.char": [
+					"c",
+					255
+				],
+				"headers.q2_10.char": [
+					"e",
+					255
+				],
+				"headers.q2_11.char": [
+					".",
+					255
+				],
+				"headers.q2_12.char": [
+					0,
+					255
+				],
+				"headers.q2_13.char": [
+					0,
+					255
+				],
+				"headers.q2_14.char": [
+					0,
+					255
+				],
+				"headers.q2_15.char": [
+					0,
+					255
+				],
+				"headers.q2_16.char": [
+					0,
+					255
+				],
+				"headers.q3_1.char": [
+					"c",
+					255
+				],
+				"headers.q3_2.char": [
+					"o",
+					255
+				],
+				"headers.q3_3.char": [
+					"m",
+					255
+				],
+				"headers.q3_4.char": [
+					0,
+					255
+				],
+				"headers.q3_5.char": [
+					0,
+					255
+				],
+				"headers.q3_6.char": [
+					0,
+					255
+				],
+				"headers.q3_7.char": [
+					0,
+					255
+				],
+				"headers.q3_8.char": [
+					0,
+					255
+				],
+				"headers.q3_9.char": [
+					0,
+					255
+				],
+				"headers.q3_10.char": [
+					0,
+					255
+				],
+				"headers.q3_11.char": [
+					0,
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					0,
+					255
+				],
+				"headers.q4_2.char": [
+					0,
+					255
+				],
+				"headers.q4_3.char": [
+					0,
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 2,
+			"action_params": {
+				"id": 9
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q3_1.char": [
+					"s",
+					255
+				],
+				"headers.q3_2.char": [
+					"a",
+					255
+				],
+				"headers.q3_3.char": [
+					"l",
+					255
+				],
+				"headers.q3_4.char": [
+					"e",
+					255
+				],
+				"headers.q3_5.char": [
+					"s",
+					255
+				],
+				"headers.q3_6.char": [
+					"f",
+					255
+				],
+				"headers.q3_7.char": [
+					"o",
+					255
+				],
+				"headers.q3_8.char": [
+					"r",
+					255
+				],
+				"headers.q3_9.char": [
+					"c",
+					255
+				],
+				"headers.q3_10.char": [
+					"e",
+					255
+				],
+				"headers.q3_11.char": [
+					".",
+					255
+				],
+				"headers.q3_12.char": [
+					0,
+					255
+				],
+				"headers.q3_13.char": [
+					0,
+					255
+				],
+				"headers.q3_14.char": [
+					0,
+					255
+				],
+				"headers.q3_15.char": [
+					0,
+					255
+				],
+				"headers.q3_16.char": [
+					0,
+					255
+				],
+				"headers.q4_1.char": [
+					"c",
+					255
+				],
+				"headers.q4_2.char": [
+					"o",
+					255
+				],
+				"headers.q4_3.char": [
+					"m",
+					255
+				],
+				"headers.q4_4.char": [
+					0,
+					255
+				],
+				"headers.q4_5.char": [
+					0,
+					255
+				],
+				"headers.q4_6.char": [
+					0,
+					255
+				],
+				"headers.q4_7.char": [
+					0,
+					255
+				],
+				"headers.q4_8.char": [
+					0,
+					255
+				],
+				"headers.q4_9.char": [
+					0,
+					255
+				],
+				"headers.q4_10.char": [
+					0,
+					255
+				],
+				"headers.q4_11.char": [
+					0,
+					255
+				],
+				"headers.q4_12.char": [
+					0,
+					255
+				],
+				"headers.q4_13.char": [
+					0,
+					255
+				],
+				"headers.q4_14.char": [
+					0,
+					255
+				],
+				"headers.q4_15.char": [
+					0,
+					255
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 1,
+			"action_params": {
+				"id": 10
+			}
+		}
+	]
+}
