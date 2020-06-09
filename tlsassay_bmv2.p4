@@ -208,7 +208,7 @@ parser TopParser(packet_in pkt,
 
 		user_metadata.is_ip = 1;
 		transition select(p.ipv4.proto) {
-			6: parse_tcp;
+			6: parse_tls;
 			default: accept;
 		}
 	}
@@ -264,72 +264,72 @@ parser TopParser(packet_in pkt,
         user_metadata.domain_parsed = 1;
         user_metadata.domain_chars_parsed = 0;
 
-        pkt.q1_1.char = 0;
-        pkt.q1_2.char = 0;
-        pkt.q1_3.char = 0;
-        pkt.q1_4.char = 0;
-        pkt.q1_5.char = 0;
-        pkt.q1_6.char = 0;
-        pkt.q1_7.char = 0;
-        pkt.q1_8.char = 0;
-        pkt.q1_9.char = 0;
-        pkt.q1_10.char = 0;
-        pkt.q1_11.char = 0;
-        pkt.q1_12.char = 0;
-        pkt.q1_13.char = 0;
-        pkt.q1_14.char = 0;
-        pkt.q1_15.char = 0;
-        pkt.q1_16.char = 0;
+        p.q1_1.char = 0;
+        p.q1_2.char = 0;
+        p.q1_3.char = 0;
+        p.q1_4.char = 0;
+        p.q1_5.char = 0;
+        p.q1_6.char = 0;
+        p.q1_7.char = 0;
+        p.q1_8.char = 0;
+        p.q1_9.char = 0;
+        p.q1_10.char = 0;
+        p.q1_11.char = 0;
+        p.q1_12.char = 0;
+        p.q1_13.char = 0;
+        p.q1_14.char = 0;
+        p.q1_15.char = 0;
+        p.q1_16.char = 0;
 
-        pkt.q2_1.char = 0;
-        pkt.q2_2.char = 0;
-        pkt.q2_3.char = 0;
-        pkt.q2_4.char = 0;
-        pkt.q2_5.char = 0;
-        pkt.q2_6.char = 0;
-        pkt.q2_7.char = 0;
-        pkt.q2_8.char = 0;
-        pkt.q2_9.char = 0;
-        pkt.q2_10.char = 0;
-        pkt.q2_11.char = 0;
-        pkt.q2_12.char = 0;
-        pkt.q2_13.char = 0;
-        pkt.q2_14.char = 0;
-        pkt.q2_15.char = 0;
-        pkt.q2_16.char = 0;
+        p.q2_1.char = 0;
+        p.q2_2.char = 0;
+        p.q2_3.char = 0;
+        p.q2_4.char = 0;
+        p.q2_5.char = 0;
+        p.q2_6.char = 0;
+        p.q2_7.char = 0;
+        p.q2_8.char = 0;
+        p.q2_9.char = 0;
+        p.q2_10.char = 0;
+        p.q2_11.char = 0;
+        p.q2_12.char = 0;
+        p.q2_13.char = 0;
+        p.q2_14.char = 0;
+        p.q2_15.char = 0;
+        p.q2_16.char = 0;
 
-        pkt.q3_1.char = 0;
-        pkt.q3_2.char = 0;
-        pkt.q3_3.char = 0;
-        pkt.q3_4.char = 0;
-        pkt.q3_5.char = 0;
-        pkt.q3_6.char = 0;
-        pkt.q3_7.char = 0;
-        pkt.q3_8.char = 0;
-        pkt.q3_9.char = 0;
-        pkt.q3_10.char = 0;
-        pkt.q3_11.char = 0;
-        pkt.q3_12.char = 0;
-        pkt.q3_13.char = 0;
-        pkt.q3_14.char = 0;
-        pkt.q3_15.char = 0;
-        pkt.q3_16.char = 0;
+        p.q3_1.char = 0;
+        p.q3_2.char = 0;
+        p.q3_3.char = 0;
+        p.q3_4.char = 0;
+        p.q3_5.char = 0;
+        p.q3_6.char = 0;
+        p.q3_7.char = 0;
+        p.q3_8.char = 0;
+        p.q3_9.char = 0;
+        p.q3_10.char = 0;
+        p.q3_11.char = 0;
+        p.q3_12.char = 0;
+        p.q3_13.char = 0;
+        p.q3_14.char = 0;
+        p.q3_15.char = 0;
+        p.q3_16.char = 0;
 
-        pkt.q4_1.char = 0;
-        pkt.q4_2.char = 0;
-        pkt.q4_3.char = 0;
-        pkt.q4_4.char = 0;
-        pkt.q4_5.char = 0;
-        pkt.q4_6.char = 0;
-        pkt.q4_7.char = 0;
-        pkt.q4_8.char = 0;
-        pkt.q4_9.char = 0;
-        pkt.q4_10.char = 0;
-        pkt.q4_11.char = 0;
-        pkt.q4_12.char = 0;
-        pkt.q4_13.char = 0;
-        pkt.q4_14.char = 0;
-        pkt.q4_15.char = 0;
+        p.q4_1.char = 0;
+        p.q4_2.char = 0;
+        p.q4_3.char = 0;
+        p.q4_4.char = 0;
+        p.q4_5.char = 0;
+        p.q4_6.char = 0;
+        p.q4_7.char = 0;
+        p.q4_8.char = 0;
+        p.q4_9.char = 0;
+        p.q4_10.char = 0;
+        p.q4_11.char = 0;
+        p.q4_12.char = 0;
+        p.q4_13.char = 0;
+        p.q4_14.char = 0;
+        p.q4_15.char = 0;
 
         transition parse_q1_1;
     }
@@ -339,7 +339,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_1.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_1.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_2;
         }
@@ -349,7 +349,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_2.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_2.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_3;
         }
@@ -359,7 +359,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_3.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_3.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_4;
         }
@@ -369,7 +369,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_4.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_4.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_5;
         }
@@ -379,7 +379,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_5.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_5.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_6;
         }
@@ -389,7 +389,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_6.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_6.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_7;
         }
@@ -399,7 +399,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_7.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_7.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_8;
         }
@@ -409,7 +409,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_8.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_8.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_9;
         }
@@ -419,7 +419,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_9.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_9.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_10;
         }
@@ -429,7 +429,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_10.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_10.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_11;
         }
@@ -439,7 +439,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_11.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_11.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_12;
         }
@@ -449,7 +449,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_12.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_12.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_13;
         }
@@ -459,7 +459,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_13.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_13.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_14;
         }
@@ -469,7 +469,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_14.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_14.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_15;
         }
@@ -479,7 +479,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_15.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_15.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_q1_16;
         }
@@ -489,13 +489,13 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q1_16.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q1_16.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q1_end;
             false: parse_failure;
         }
     }
     state parse_q1_end {
-        transition select(user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: accept;
             false: parse_q2_1;
         }
@@ -506,7 +506,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_1.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_1.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_2;
         }
@@ -516,7 +516,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_2.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_2.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_3;
         }
@@ -526,7 +526,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_3.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_3.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_4;
         }
@@ -536,7 +536,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_4.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_4.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_5;
         }
@@ -546,7 +546,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_5.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_5.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_6;
         }
@@ -556,7 +556,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_6.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_6.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_7;
         }
@@ -566,7 +566,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_7.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_7.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_8;
         }
@@ -576,7 +576,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_8.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_8.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_9;
         }
@@ -586,7 +586,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_9.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_9.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_10;
         }
@@ -596,7 +596,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_10.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_10.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_11;
         }
@@ -606,7 +606,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_11.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_11.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_12;
         }
@@ -616,7 +616,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_12.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_12.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_13;
         }
@@ -626,7 +626,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_13.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_13.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_14;
         }
@@ -636,7 +636,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_14.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_14.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_15;
         }
@@ -646,7 +646,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_15.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_15.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_q2_16;
         }
@@ -656,13 +656,13 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q2_16.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q2_16.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q2_end;
             false: parse_failure;
         }
     }
     state parse_q2_end {
-        transition select(user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: accept;
             false: parse_q3_1;
         }
@@ -673,7 +673,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_1.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_1.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_2;
         }
@@ -683,7 +683,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_2.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_2.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_3;
         }
@@ -693,7 +693,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_3.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_3.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_4;
         }
@@ -703,7 +703,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_4.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_4.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_5;
         }
@@ -713,7 +713,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_5.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_5.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_6;
         }
@@ -723,7 +723,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_6.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_6.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_7;
         }
@@ -733,7 +733,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_7.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_7.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_8;
         }
@@ -743,7 +743,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_8.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_8.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_9;
         }
@@ -753,7 +753,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_9.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_9.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_10;
         }
@@ -763,7 +763,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_10.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_10.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_11;
         }
@@ -773,7 +773,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_11.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_11.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_12;
         }
@@ -783,7 +783,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_12.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_12.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_13;
         }
@@ -793,7 +793,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_13.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_13.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_14;
         }
@@ -803,7 +803,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_14.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_14.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_15;
         }
@@ -813,7 +813,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_15.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_15.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_q3_16;
         }
@@ -823,13 +823,13 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q3_16.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q3_16.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q3_end;
             false: parse_failure;
         }
     }
     state parse_q3_end {
-        transition select(user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: accept;
             false: parse_q4_1;
         }
@@ -840,7 +840,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_1.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_1.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_2;
         }
@@ -850,7 +850,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_2.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_2.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_3;
         }
@@ -860,7 +860,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_3.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_3.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_4;
         }
@@ -870,7 +870,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_4.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_4.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_5;
         }
@@ -880,7 +880,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_5.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_5.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_6;
         }
@@ -890,7 +890,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_6.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_6.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_7;
         }
@@ -900,7 +900,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_7.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_7.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_8;
         }
@@ -910,7 +910,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_8.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_8.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_9;
         }
@@ -920,7 +920,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_9.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_9.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_10;
         }
@@ -930,7 +930,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_10.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_10.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_11;
         }
@@ -940,7 +940,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_11.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_11.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_12;
         }
@@ -950,7 +950,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_12.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_12.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_13;
         }
@@ -960,7 +960,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_13.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_13.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_14;
         }
@@ -970,7 +970,7 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_14.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_14.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
             false: parse_q4_15;
         }
@@ -980,13 +980,13 @@ parser TopParser(packet_in pkt,
         
         user_metadata.domain_chars_parsed = user_metadata.domain_chars_parsed + 1;
 
-        transition select(p.q4_15.char == 0x2e || user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(p.q4_15.char == 0x2e || user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: parse_q4_end;
-            false: parse_failure
+            false: parse_failure;
         }
     }
     state parse_q4_end {
-        transition select(user_metadata.domain_chars_parsed >= user_metadata.tlsdomainheader.domainlength) {
+        transition select(user_metadata.domain_chars_parsed >= p.tlsdomainheader.domainlength) {
             true: accept;
             false: parse_failure;
         }
