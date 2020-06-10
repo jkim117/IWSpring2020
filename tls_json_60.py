@@ -78,22 +78,22 @@ def dictSetUp():
 
 def addPart1ToDict(part, partsDict):
     if (part == '*' or part == '*.'):
-        partsDict["headers.q1_1.char"] = [0, 0]
-        partsDict["headers.q1_2.char"] = [0, 0]
-        partsDict["headers.q1_3.char"] = [0, 0]
-        partsDict["headers.q1_4.char"] = [0, 0]
-        partsDict["headers.q1_5.char"] = [0, 0]
-        partsDict["headers.q1_6.char"] = [0, 0]
-        partsDict["headers.q1_7.char"] = [0, 0]
-        partsDict["headers.q1_8.char"] = [0, 0]
-        partsDict["headers.q1_9.char"] = [0, 0]
-        partsDict["headers.q1_10.char"] = [0, 0]
-        partsDict["headers.q1_11.char"] = [0, 0]
-        partsDict["headers.q1_12.char"] = [0, 0]
-        partsDict["headers.q1_13.char"] = [0, 0]
-        partsDict["headers.q1_14.char"] = [0, 0]
-        partsDict["headers.q1_15.char"] = [0, 0]
-        partsDict["headers.q1_16.char"] = [0, 0]
+        partsDict.pop("headers.q1_1.char")
+        partsDict.pop("headers.q1_2.char")
+        partsDict.pop("headers.q1_3.char")
+        partsDict.pop("headers.q1_4.char")
+        partsDict.pop("headers.q1_5.char")
+        partsDict.pop("headers.q1_6.char")
+        partsDict.pop("headers.q1_7.char")
+        partsDict.pop("headers.q1_8.char")
+        partsDict.pop("headers.q1_9.char")
+        partsDict.pop("headers.q1_10.char")
+        partsDict.pop("headers.q1_11.char")
+        partsDict.pop("headers.q1_12.char")
+        partsDict.pop("headers.q1_13.char")
+        partsDict.pop("headers.q1_14.char")
+        partsDict.pop("headers.q1_15.char")
+        partsDict.pop("headers.q1_16.char")
         return partsDict
 
     part_len = len(part)
@@ -139,22 +139,22 @@ def addPart1ToDict(part, partsDict):
 
 def addPart2ToDict(part, partsDict):
     if (part == '*' or part == '*.'):
-        partsDict["headers.q2_1.char"] = [0, 0]
-        partsDict["headers.q2_2.char"] = [0, 0]
-        partsDict["headers.q2_3.char"] = [0, 0]
-        partsDict["headers.q2_4.char"] = [0, 0]
-        partsDict["headers.q2_5.char"] = [0, 0]
-        partsDict["headers.q2_6.char"] = [0, 0]
-        partsDict["headers.q2_7.char"] = [0, 0]
-        partsDict["headers.q2_8.char"] = [0, 0]
-        partsDict["headers.q2_9.char"] = [0, 0]
-        partsDict["headers.q2_10.char"] = [0, 0]
-        partsDict["headers.q2_11.char"] = [0, 0]
-        partsDict["headers.q2_12.char"] = [0, 0]
-        partsDict["headers.q2_13.char"] = [0, 0]
-        partsDict["headers.q2_14.char"] = [0, 0]
-        partsDict["headers.q2_15.char"] = [0, 0]
-        partsDict["headers.q2_16.char"] = [0, 0]
+        partsDict.pop("headers.q2_1.char")
+        partsDict.pop("headers.q2_2.char")
+        partsDict.pop("headers.q2_3.char")
+        partsDict.pop("headers.q2_4.char")
+        partsDict.pop("headers.q2_5.char")
+        partsDict.pop("headers.q2_6.char")
+        partsDict.pop("headers.q2_7.char")
+        partsDict.pop("headers.q2_8.char")
+        partsDict.pop("headers.q2_9.char")
+        partsDict.pop("headers.q2_10.char")
+        partsDict.pop("headers.q2_11.char")
+        partsDict.pop("headers.q2_12.char")
+        partsDict.pop("headers.q2_13.char")
+        partsDict.pop("headers.q2_14.char")
+        partsDict.pop("headers.q2_15.char")
+        partsDict.pop("headers.q2_16.char")
         return partsDict
 
     part_len = len(part)
@@ -199,22 +199,22 @@ def addPart2ToDict(part, partsDict):
 
 def addPart3ToDict(part, partsDict):
     if (part == '*' or part == '*.'):
-        partsDict["headers.q3_1.char"] = [0, 0]
-        partsDict["headers.q3_2.char"] = [0, 0]
-        partsDict["headers.q3_3.char"] = [0, 0]
-        partsDict["headers.q3_4.char"] = [0, 0]
-        partsDict["headers.q3_5.char"] = [0, 0]
-        partsDict["headers.q3_6.char"] = [0, 0]
-        partsDict["headers.q3_7.char"] = [0, 0]
-        partsDict["headers.q3_8.char"] = [0, 0]
-        partsDict["headers.q3_9.char"] = [0, 0]
-        partsDict["headers.q3_10.char"] = [0, 0]
-        partsDict["headers.q3_11.char"] = [0, 0]
-        partsDict["headers.q3_12.char"] = [0, 0]
-        partsDict["headers.q3_13.char"] = [0, 0]
-        partsDict["headers.q3_14.char"] = [0, 0]
-        partsDict["headers.q3_15.char"] = [0, 0]
-        partsDict["headers.q3_16.char"] = [0, 0]
+        partsDict.pop("headers.q3_1.char")
+        partsDict.pop("headers.q3_2.char")
+        partsDict.pop("headers.q3_3.char")
+        partsDict.pop("headers.q3_4.char")
+        partsDict.pop("headers.q3_5.char")
+        partsDict.pop("headers.q3_6.char")
+        partsDict.pop("headers.q3_7.char")
+        partsDict.pop("headers.q3_8.char")
+        partsDict.pop("headers.q3_9.char")
+        partsDict.pop("headers.q3_10.char")
+        partsDict.pop("headers.q3_11.char")
+        partsDict.pop("headers.q3_12.char")
+        partsDict.pop("headers.q3_13.char")
+        partsDict.pop("headers.q3_14.char")
+        partsDict.pop("headers.q3_15.char")
+        partsDict.pop("headers.q3_16.char")
         return partsDict
 
     part_len = len(part)
@@ -259,21 +259,21 @@ def addPart3ToDict(part, partsDict):
 
 def addPart4ToDict(part, partsDict):
     if (part == '*' or part == '*.'):
-        partsDict["headers.q4_1.char"] = [0, 0]
-        partsDict["headers.q4_2.char"] = [0, 0]
-        partsDict["headers.q4_3.char"] = [0, 0]
-        partsDict["headers.q4_4.char"] = [0, 0]
-        partsDict["headers.q4_5.char"] = [0, 0]
-        partsDict["headers.q4_6.char"] = [0, 0]
-        partsDict["headers.q4_7.char"] = [0, 0]
-        partsDict["headers.q4_8.char"] = [0, 0]
-        partsDict["headers.q4_9.char"] = [0, 0]
-        partsDict["headers.q4_10.char"] = [0, 0]
-        partsDict["headers.q4_11.char"] = [0, 0]
-        partsDict["headers.q4_12.char"] = [0, 0]
-        partsDict["headers.q4_13.char"] = [0, 0]
-        partsDict["headers.q4_14.char"] = [0, 0]
-        partsDict["headers.q4_15.char"] = [0, 0]
+        partsDict.pop("headers.q4_1.char")
+        partsDict.pop("headers.q4_2.char")
+        partsDict.pop("headers.q4_3.char")
+        partsDict.pop("headers.q4_4.char")
+        partsDict.pop("headers.q4_5.char")
+        partsDict.pop("headers.q4_6.char")
+        partsDict.pop("headers.q4_7.char")
+        partsDict.pop("headers.q4_8.char")
+        partsDict.pop("headers.q4_9.char")
+        partsDict.pop("headers.q4_10.char")
+        partsDict.pop("headers.q4_11.char")
+        partsDict.pop("headers.q4_12.char")
+        partsDict.pop("headers.q4_13.char")
+        partsDict.pop("headers.q4_14.char")
+        partsDict.pop("headers.q4_15.char")
         return partsDict
 
     part_len = len(part)
