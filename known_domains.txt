@@ -1,8 +1,11 @@
 www.google.com
 calendar.google.com
-channel.skype.com
+pxml10.4publishers.com
+s1.4publishers.com
+ssl.gstatic.com
 na4.salesforce.com
 omtr2.partners.salesforce.com
+*.skype.com
 *.live.com
 messenger.hotmail.com
 *.*.msn.com
@@ -13,3 +16,7 @@ view.atdmt.com
 *.smartadserver.com
 *.salesforce.com
 *.*.salesforce.com
+*
+*.*
+*.*.*
+*.*.*.*
