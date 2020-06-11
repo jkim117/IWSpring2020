@@ -4,11 +4,15 @@ netassay_bmv2_60.p4 -> uses a single match action table and thus is limited to p
 
 netassay_bmv2_155.p4 -> uses multiple match action tables and thus can parse up to five labels of 31 characters each. Thus a max width of 155 characters is allowed for a domain.
 
+tlsassay_bmv2_60.p4 -> parses TLS Client Hello packets to create joins between domain names and IP addresses
+
 known_domains.txt -> File used to contain list of known domains
 
 knownlist_json_60.py -> uses known_domains.txt to create a JSON file to populate the match action table for netassay_bmv2_60.p4
 
 knownlist_json_155.py -> uses known_domains.txt to create a JSON file to populate the match action tables for netassay_bmv2_155.p4
+
+tls_json_60.py -> uses known_domains.txt to create a JSON file to populate the match action tables for tlsassay_bmv2_60.p4
 
 netassay_python3.py -> outputs useful stats on a pcap file and also outputs netassay results without restrictions of P4
 
