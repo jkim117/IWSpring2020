@@ -48,12 +48,14 @@ header tcp_h {
 }
 
 header tls_h {
-    bit<40> rheader;
+    bit<8> contenttype;
+    bit<16> version;
+    bit<16> tlslength;
     bit<8> handshaketype;
     bit<24> handshakelength;
     bit<16> clientversion;
     bit<256> clientrandom;
-    bit<8> sessionid;
+    bit<8> sessionidlength;
 }
 
 header tlsciphersuite_h {
@@ -217,7 +219,7 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.tcp);
         pkt.extract(p.tls);
 
-		transition select(p.tls.handshaketype) { // 1 refers to client hello
+		transition select(p.tls.handshaketype == 1 && p.tls.contenttype == 22) { // 1 refers to client hello
             1: parse_tls_extra;
             default: accept;
 		}
@@ -226,6 +228,7 @@ parser TopParser(packet_in pkt,
     state parse_tls_extra {
         user_metadata.is_clienthello = 1;
 
+        pkt.advance((bit<32>) (8 * p.tls.sessionidlength));
         pkt.extract(p.tlscipher);
         pkt.advance((bit<32>) (8 * p.tlscipher.ciphersuitelength));
         pkt.extract(p.tlscompression);
