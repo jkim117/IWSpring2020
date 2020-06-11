@@ -228,11 +228,11 @@ parser TopParser(packet_in pkt,
     state parse_tls_extra {
         user_metadata.is_clienthello = 1;
 
-        pkt.advance((bit<32>) (8 * p.tls.sessionidlength));
+        pkt.advance( 8 * (bit<32>) (p.tls.sessionidlength));
         pkt.extract(p.tlscipher);
-        pkt.advance((bit<32>) (8 * p.tlscipher.ciphersuitelength));
+        pkt.advance(8 * (bit<32>) (p.tlscipher.ciphersuitelength));
         pkt.extract(p.tlscompression);
-        pkt.advance((bit<32>) (8 * p.tlscompression.compressionmethodslength));
+        pkt.advance(8 * (bit<32>) (p.tlscompression.compressionmethodslength));
 
         pkt.advance(16); // length of extension fields. Value not needed
 
@@ -249,7 +249,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_otherextension {
-        pkt.advance((bit<32>) (8 * p.tlsextension.extensionlength));
+        pkt.advance(8 * (bit<32>) (p.tlsextension.extensionlength));
 
         transition parse_extension;
     }

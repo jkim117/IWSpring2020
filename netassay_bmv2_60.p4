@@ -802,7 +802,7 @@ parser TopParser(packet_in pkt,
     }
 
     state parse_cname {
-        pkt.advance((bit<32>)(8 * p.dns_answer.rd_length));
+        pkt.advance(8 * (bit<32>)(p.dns_answer.rd_length));
 
         transition parse_dns_answer;
     }
