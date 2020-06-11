@@ -220,8 +220,8 @@ parser TopParser(packet_in pkt,
         pkt.extract(p.tls);
 
 		transition select(p.tls.handshaketype == 1 && p.tls.contenttype == 22) { // 1 refers to client hello
-            1: parse_tls_extra;
-            default: accept;
+            true: parse_tls_extra;
+            false: accept;
 		}
 	}
 
