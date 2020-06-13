@@ -580,6 +580,11 @@ part1Dict = {}
 def oneparts(parts):
     if parts[0] in part1Dict:
         return part1Dict[parts[0]]
+    if (parts[0] == '*' and '*.' in part1Dict):
+        return part1Dict['*.']
+    if (parts[0] == '*.' and '*' in part1Dict):
+        return part1Dict['*']
+
     global globalID1
     global priority1
     globalID1 = globalID1 + 1
@@ -614,6 +619,11 @@ def twoparts(parts):
     
     if parts[1] in part2Dict:
         return part2Dict[parts[1]]
+    if (parts[1] == '*' and '*.' in part2Dict):
+        return part2Dict['*.']
+    if (parts[1] == '*.' and '*' in part2Dict):
+        return part2Dict['*']
+
     global globalID2
     global priority2
     globalID2 = globalID2 + 1
@@ -647,6 +657,11 @@ def threeparts(parts):
     
     if parts[2] in part3Dict:
         return part3Dict[parts[2]]
+    if (parts[2] == '*' and '*.' in part3Dict):
+        return part3Dict['*.']
+    if (parts[2] == '*.' and '*' in part3Dict):
+        return part3Dict['*']
+
     global globalID3
     global priority3
     globalID3 = globalID3 + 1
@@ -680,6 +695,11 @@ def fourparts(parts):
     
     if parts[3] in part4Dict:
         return part4Dict[parts[3]]
+    if (parts[3] == '*' and '*.' in part4Dict):
+        return part4Dict['*.']
+    if (parts[3] == '*.' and '*' in part4Dict):
+        return part4Dict['*']
+
     global globalID4
     global priority4
     globalID4 = globalID4 + 1
@@ -713,6 +733,11 @@ def fiveparts(parts):
     
     if parts[4] in part5Dict:
         return part5Dict[parts[4]]
+    if (parts[4] == '*' and '*.' in part5Dict):
+        return part5Dict['*.']
+    if (parts[4] == '*.' and '*' in part5Dict):
+        return part5Dict['*']
+
     global globalID5
     global priority5
     globalID5 = globalID5 + 1
