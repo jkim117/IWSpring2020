@@ -89,7 +89,7 @@ def parse_client_hello(ip_packet, c_hello, ts):
     for d in known_domains:
         if (matchDomain(d, domain)):
             entry = knownlistDict[d]
-            knownlistDict[d][0] = knownlistDict[d][0] + 1
+            knownlistDict[d][4] = knownlistDict[d][4] + 1
 
             hash1 = hash(serverIP + str(11) + clientIP) % TABLE_SIZE
             hash2 = hash(str(5) + serverIP + str(3) + clientIP)% TABLE_SIZE
@@ -125,7 +125,7 @@ def parse_client_hello(ip_packet, c_hello, ts):
                 usedHash4[hash4] = [ts, key, domain]
 
             else:
-                knownlistDict[d][3] = knownlistDict[d][3]+1
+                knownlistDict[d][5] = knownlistDict[d][5]+1
                 return
 
             
@@ -358,17 +358,14 @@ if __name__ == '__main__':
         num_bytes = knownlistDict[i][2]
         num_missed = knownlistDict[i][3]
         num_dns = knownlistDict[i][0]
-        if (num_dns > 0 and num_missed < num_dns):
-            knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
-            knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
 
 
     with open('sim_results.csv', 'w') as csvfile:
         w = csv.writer(csvfile)
-        w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
+        w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of TLS Client Hellos", "Missed TLS Client Hellos", "Number of Packets", "Number of Bytes"])
 
         for i in knownlistDict.items():
-            w.writerow([i[0], i[1][0], i[1][3], i[1][1], i[1][2], i[1][4], i[1][5]])
+            w.writerow([i[0], i[1][0], i[1][3], i[1][4], i[1][5], i[1][1], i[1][2]])
 
             
 
