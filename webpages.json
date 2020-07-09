@@ -1,0 +1,20 @@
+{
+  "webpages": [
+    {
+      "webpage_name": "www.wsj.com",
+      "domains": [
+        ["www.wsj.com", 1954314139],
+        ["s.wsj.net", 3506777499],
+        ["adservice.google.com", 975872287]
+      ]
+    },
+    {
+      "webpage_name": "www.bbc.com",
+      "domains": [
+        ["ichef.bbc.co.uk", 3140323128],
+        ["gel.files.bbci.co.uk", 2966898846],
+        ["mybbc.files.bbci.co.uk", 1837463722]
+      ]
+    }
+  ]
+}

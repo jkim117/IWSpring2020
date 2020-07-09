@@ -4,6 +4,7 @@ import socket
 import ipaddress
 import matplotlib
 import matplotlib.pyplot as plt
+import csv
 
 ID_COUNTER = 0 # ensures that the sessionID is unique
 clientList = {} # list of sessionLists where key is client ID
@@ -36,6 +37,7 @@ def parse_dns_query(ip_packet, ts):
     # Check if it is in the allowed or banned IP lists
     clientIP = socket.inet_ntoa(ip_packet.src)
     '''cip_object = ipaddress.ip_network(clientIP)
+    allowed = False
     for ip in allowed_ips:
         if is_subnet_of(cip_object, ip):
             allowed = True
@@ -66,7 +68,8 @@ def parse_dns_query(ip_packet, ts):
         "ts_dns_query": ts,
         "traffic_data": []
     }
-    sessionList[ID_COUNTER] = sessionDict
+    sessionList[dns.id] = sessionDict
+    #print(dns.id)
     ID_COUNTER = ID_COUNTER + 1
     clientList[clientIP] = sessionList
     
@@ -76,24 +79,16 @@ def parse_dns_response(ip_packet):
     clientIP = socket.inet_ntoa(ip_packet.dst)
 
     dns = dpkt.dns.DNS(ip_packet.data.data)
-    sessionID = -1
 
     if clientIP not in clientList:
         return
     else:
         sessionList = clientList[clientIP]
 
-    response_valid = False
-    for s in sessionList.values():
-        if s['dns_id'] == dns.id:
-            response_valid = True
-            sessionID = s['session_id']
-            break
-    if (not response_valid):
+    if dns.id not in sessionList:
         return
     
     answers = dns.an
-    
     
     for rr in answers:
         if (rr.type == 1): #DNS.A
@@ -102,9 +97,7 @@ def parse_dns_response(ip_packet):
 
             key = clientIP + serverIP
 
-            netassayTable[key] = sessionID
-    
-    clientList[clientIP] = sessionList
+            netassayTable[key] = dns.id
 
 
 def parse_tcp(ip_packet, ts):
@@ -115,7 +108,6 @@ def parse_tcp(ip_packet, ts):
         return
     else:
         sessionList = clientList[dest]
-    
 
     key = dest + source
     
@@ -125,42 +117,59 @@ def parse_tcp(ip_packet, ts):
     seq_num = tcp.seq
     flags = tcp.flags
 
+
     if key in netassayTable:
-        sessionID = netassayTable[key]
+        dnsID = netassayTable[key]
         trafficDict = {
             "sequence_num": seq_num,
             "ts": ts,
             "flags": flags
         }
-        sessionList[sessionID]["traffic_data"].append(trafficDict)
+        sessionList[dnsID]["traffic_data"].append(trafficDict)
     
     clientList[dest] = sessionList
 
+def matchDomain(known, domain):
+    knownparts = known.split('.')
+    domainparts = domain.split('.')
+    if len(knownparts) != len(domainparts):
+        return False
+    
+    for i in range(0, len(knownparts)):
+        if (knownparts[i] == '*'):
+            continue
+        if (knownparts[i] != domainparts[i]):
+            return False
+    return True
 
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
-    if len(argv) != 4:
-        print('usage: python netassay_python3.py capture.pcap allowed_dns_dst.txt banned_dns_dst.txt')
+    if len(argv) != 5:
+        print('usage: python netassay_python3.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
         exit(-1)
     
     # Parse allowed IP and banned IP files
-    allowed_ip_file = open(argv[2], 'r')
+    allowed_ip_file = open(argv[3], 'r')
     allowed_ip_list = allowed_ip_file.read().split()
     allowed_ip_file.close()
     for ip in allowed_ip_list:
         allowed_ips.append(ipaddress.ip_network(ip))
 
-    banned_ip_file = open(argv[3], 'r')
+    banned_ip_file = open(argv[4], 'r')
     banned_ip_list = banned_ip_file.read().split()
     banned_ip_file.close()
     for ip in banned_ip_list:
         banned_ips.append(ipaddress.ip_network(ip))
 
+    FIRST_TIMESTAMP = -1
     with open(argv[1], 'rb') as f:
-        pcap_obj = dpkt.pcap.Reader(f)
-        #pcap_obj = dpkt.pcapng.Reader(f)
+        #pcap_obj = dpkt.pcap.Reader(f)
+        pcap_obj = dpkt.pcapng.Reader(f)
 
         for ts, buf in pcap_obj:
+            if (FIRST_TIMESTAMP == -1):
+                FIRST_TIMESTAMP = ts
+            #print(ts - FIRST_TIMESTAMP)
             eth = dpkt.ethernet.Ethernet(buf)
 
             if (eth.type != 2048): # If not IPV4
@@ -181,12 +190,42 @@ if __name__ == '__main__':
                 continue
 
     # Make graphs, one per client where x axis is ts and y axis is sequence number, with different colored lines per session
-    proceed = input("Number of clients found: " + str(len(clientList))+': Proceed?(y/n)\n')
+    proceed = input("Number of clients found: " + str(len(clientList))+': Proceed with all?(y/n)\n')
+    numClientsToGraph = len(clientList)
     if proceed.lower() != 'y':
-        exit()
+        removeClientList = []
 
+        # Create knownlist csv if argument provided
+        knownlist = open(argv[2], 'r')
+        known_domains = knownlist.read().split()
+        knownlist.close()
 
-    
+        for cip in clientList:
+            sessionList = clientList[cip]
+
+            keepClient = False
+            for s in sessionList.values():
+                for d in known_domains:
+                    if (matchDomain(d, s['domain'])):
+                        keepClient = True
+            
+            if (keepClient == False):
+                removeClientList.append(cip)
+            
+        for cip in removeClientList:
+            clientList.pop(cip)
+
+        proceed2 = input("Number of filtered clients by known domains found: " + str(len(clientList))+': Proceed with all?(y/n)\n')
+
+        if proceed2.lower() != 'y':
+            numClientsToGraph = 10
+
+    generateCSV = False
+    proceedCSV = input("Generate CSV per client? (y/n)\n")
+    if proceedCSV.lower() == 'y':
+        generateCSV = True
+
+    clientCounter = 0
     for cip in clientList:
         #print(cip)
         sessionList = clientList[cip]
@@ -195,10 +234,14 @@ if __name__ == '__main__':
         for s in sessionList.values():
             timestamps = []
             sequence_numbers = []
+            if (len(s['traffic_data']) == 0):
+                continue
             for packet in s['traffic_data']:
-                timestamps.append(float(packet['ts']))
+                timestamps.append(float(packet['ts']) - FIRST_TIMESTAMP)
                 sequence_numbers.append(int(packet['sequence_num']))
-            line, = ax.plot(timestamps, sequence_numbers)
+            
+            line, = ax.plot(timestamps, sequence_numbers, marker='.', linestyle='-')
+            ax.plot([s['ts_dns_query'] - FIRST_TIMESTAMP], [sequence_numbers[0]], marker='^', color=line.get_color())
             line.set_label('Session: ' + str(s['session_id']) + s['domain'])
             #print(s)
 
@@ -207,6 +250,30 @@ if __name__ == '__main__':
         ax.grid()
         fig.set_size_inches(12,10)
         fig.savefig(cip+'.png')
+
+        if (generateCSV):
+            with open(cip+'.csv', 'w') as csvfile:
+                w = csv.writer(csvfile)
+                w.writerow(['Domain', 'Timestamp of Initial DNS query', 'Sequence Number Range'])
+
+                for s in sessionList.values():
+                    if (len(s['traffic_data']) == 0):
+                        continue
+                    minSeq = int(s['traffic_data'][0]['sequence_num'])
+                    maxSeq = int(s['traffic_data'][0]['sequence_num'])
+                    
+                    for packet in s['traffic_data']:
+                        seq = int(packet['sequence_num'])
+                        if seq > maxSeq:
+                            maxSeq = seq
+                        if seq < minSeq:
+                            minSeq = seq
+
+                    w.writerow([s['domain'], s['ts_dns_query'] - FIRST_TIMESTAMP, maxSeq - minSeq])
+
+        clientCounter = clientCounter + 1
+        if (clientCounter == numClientsToGraph):
+            break
 
 
 
