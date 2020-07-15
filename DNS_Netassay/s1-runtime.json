@@ -1,0 +1,1691 @@
+{
+	"target": "bmv2",
+	"p4info": "build/calc2.p4.p4info.txt",
+	"bmv2_json": "build/calc2.json",
+	"table_entries": [
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					"w",
+					255
+				],
+				"headers.q1_part2.part": [
+					"ww",
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					"go",
+					65535
+				],
+				"headers.q2_part4.part": [
+					"ogle",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 20,
+			"action_params": {
+				"id": 1
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					0,
+					255
+				],
+				"headers.q1_part2.part": [
+					0,
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					"cale",
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					"ndar",
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					"go",
+					65535
+				],
+				"headers.q2_part4.part": [
+					"ogle",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 19,
+			"action_params": {
+				"id": 2
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					0,
+					255
+				],
+				"headers.q1_part2.part": [
+					"px",
+					65535
+				],
+				"headers.q1_part4.part": [
+					"ml10",
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"4",
+					255
+				],
+				"headers.q2_part2.part": [
+					"pu",
+					65535
+				],
+				"headers.q2_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					"blis",
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					"hers",
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 18,
+			"action_params": {
+				"id": 3
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					0,
+					255
+				],
+				"headers.q1_part2.part": [
+					"s1",
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"4",
+					255
+				],
+				"headers.q2_part2.part": [
+					"pu",
+					65535
+				],
+				"headers.q2_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					"blis",
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					"hers",
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 17,
+			"action_params": {
+				"id": 4
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					"s",
+					255
+				],
+				"headers.q1_part2.part": [
+					"sl",
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"g",
+					255
+				],
+				"headers.q2_part2.part": [
+					"st",
+					65535
+				],
+				"headers.q2_part4.part": [
+					"atic",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 16,
+			"action_params": {
+				"id": 5
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					"s",
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"kype",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 15,
+			"action_params": {
+				"id": 6
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"live",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 14,
+			"action_params": {
+				"id": 7
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					"m",
+					255
+				],
+				"headers.q1_part2.part": [
+					0,
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					"esse",
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					"nger",
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"h",
+					255
+				],
+				"headers.q2_part2.part": [
+					"ot",
+					65535
+				],
+				"headers.q2_part4.part": [
+					"mail",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 13,
+			"action_params": {
+				"id": 8
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q3_part1.part": [
+					"m",
+					255
+				],
+				"headers.q3_part2.part": [
+					"sn",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					"c",
+					255
+				],
+				"headers.q4_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 12,
+			"action_params": {
+				"id": 9
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					"m",
+					255
+				],
+				"headers.q2_part2.part": [
+					"sn",
+					65535
+				],
+				"headers.q2_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 11,
+			"action_params": {
+				"id": 10
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					0,
+					255
+				],
+				"headers.q1_part2.part": [
+					"cp",
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"intl",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"m",
+					255
+				],
+				"headers.q3_part2.part": [
+					0,
+					65535
+				],
+				"headers.q3_part4.part": [
+					"atch",
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					"c",
+					255
+				],
+				"headers.q4_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 10,
+			"action_params": {
+				"id": 11
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					"w",
+					255
+				],
+				"headers.q1_part2.part": [
+					"ww",
+					65535
+				],
+				"headers.q1_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"g",
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"owin",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					"dows",
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					"live",
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 9,
+			"action_params": {
+				"id": 12
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q1_part1.part": [
+					0,
+					255
+				],
+				"headers.q1_part2.part": [
+					0,
+					65535
+				],
+				"headers.q1_part4.part": [
+					"view",
+					4294967295
+				],
+				"headers.q1_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q1_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part1.part": [
+					"a",
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"tdmt",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 8,
+			"action_params": {
+				"id": 13
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					"s",
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					"mart",
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					"adse",
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					"rver",
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 7,
+			"action_params": {
+				"id": 14
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					"sa",
+					65535
+				],
+				"headers.q2_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					"lesf",
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					"orce",
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					"c",
+					255
+				],
+				"headers.q3_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 6,
+			"action_params": {
+				"id": 15
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q3_part1.part": [
+					0,
+					255
+				],
+				"headers.q3_part2.part": [
+					"sa",
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					"lesf",
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					"orce",
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					"c",
+					255
+				],
+				"headers.q4_part2.part": [
+					"om",
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 5,
+			"action_params": {
+				"id": 16
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q2_part1.part": [
+					0,
+					255
+				],
+				"headers.q2_part2.part": [
+					0,
+					65535
+				],
+				"headers.q2_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q2_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part1.part": [
+					0,
+					255
+				],
+				"headers.q3_part2.part": [
+					0,
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 4,
+			"action_params": {
+				"id": 17
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q3_part1.part": [
+					0,
+					255
+				],
+				"headers.q3_part2.part": [
+					0,
+					65535
+				],
+				"headers.q3_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q3_part8_2.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 3,
+			"action_params": {
+				"id": 18
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {
+				"headers.q4_part1.part": [
+					0,
+					255
+				],
+				"headers.q4_part2.part": [
+					0,
+					65535
+				],
+				"headers.q4_part4.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_1.part": [
+					0,
+					4294967295
+				],
+				"headers.q4_part8_2.part": [
+					0,
+					4294967295
+				]
+			},
+			"action_name": "TopIngress.match_domain",
+			"priority": 2,
+			"action_params": {
+				"id": 19
+			}
+		},
+		{
+			"table": "TopIngress.known_domain_list",
+			"match": {},
+			"action_name": "TopIngress.match_domain",
+			"priority": 1,
+			"action_params": {
+				"id": 20
+			}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"default_action": true,
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.36.65",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.22.215",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.148.84",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.194.222",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.227.181",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.26.52",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.229.203",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"10.8.122.41",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.129.116",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.109.249",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.180.113",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.60.67",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.192.184",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"10.8.43.147",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.banned_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.31.215",
+					32
+				]
+			},
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"default_action": true,
+			"action_name": "TopIngress.match_banned_dns_dst",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"128.112.0.0",
+					16
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"140.180.0.0",
+					16
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"204.153.48.0",
+					23
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"66.180.176.0",
+					24
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"66.180.177.0",
+					24
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"66.180.180.0",
+					22
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"10.24.0.0",
+					15
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		},
+		{
+			"table": "TopIngress.allowable_dns_dst",
+			"match": {
+				"headers.ipv4.dst": [
+					"10.8.0.0",
+					15
+				]
+			},
+			"action_name": "NoAction",
+			"action_params": {}
+		}
+	]
+}

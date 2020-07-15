@@ -3,17 +3,18 @@
     {
       "webpage_name": "www.wsj.com",
       "domains": [
-        ["www.wsj.com", 1954314139],
-        ["s.wsj.net", 3506777499],
-        ["adservice.google.com", 975872287]
+        [1, "www.wsj.com", 454],
+        [1, "s.wsj.net", 6133],
+        [1, "adservice.google.com", 793]
       ]
     },
     {
       "webpage_name": "www.bbc.com",
       "domains": [
-        ["ichef.bbc.co.uk", 3140323128],
-        ["gel.files.bbci.co.uk", 2966898846],
-        ["mybbc.files.bbci.co.uk", 1837463722]
+        [3, "www.bbc.com", "bbc.map.fastly.net", "fig.bbc.co.uk", 3140323128],
+        [1, "ichef.bbc.co.uk", 3140323128],
+        [1, "gel.files.bbci.co.uk", 2966898846],
+        [1, "mybbc.files.bbci.co.uk", 1837463722]
       ]
     }
   ]

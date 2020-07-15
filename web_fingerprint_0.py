@@ -14,6 +14,7 @@ allowed_ips = []
 banned_ips = []
 
 known_domains = []
+requested_domains = {}
 
 
 def is_subnet_of(a, b):
@@ -49,6 +50,12 @@ def parse_dns_response(ip_packet):
     if (match == ''):
         return
 
+    # Mark this domain as visited by this client
+    if clientIP in requested_domains:
+        requested_domains[clientIP].append(match)
+    else:
+        requested_domains[clientIP] = [match]
+    
     answers = dns.an
     
     for rr in answers:
@@ -56,11 +63,13 @@ def parse_dns_response(ip_packet):
             
             serverIP = socket.inet_ntoa(rr.rdata)
 
+            # Create an entry in the netassayTable with domain and a list of sessions (distinguised by port number)
+            # The key is the clientIP and serverIP. If the client makes multiple dns requests to the same domain or
+            # if the client makes a request to a domain with the same IP address, the entry will not change (the domain name will stay with the original domain requested)
             key = clientIP + serverIP
-
-            netassayTable[key] = [match, -1, -1]
+            if key not in netassayTable:
+                netassayTable[key] = {"domain": match, "sessions": {}}
     
-
 
 def parse_tcp(ip_packet, ts):
     source = socket.inet_ntoa(ip_packet.src) #server
@@ -68,6 +77,11 @@ def parse_tcp(ip_packet, ts):
 
     key = dest + source
 
+    '''if not (ip_packet.data.flags & 1 == 0):
+        print('hiiiii')
+        print(source)'''
+
+    # If client and source IP are not in the netassayTable (never was a DNS request), then ignore
     if key not in netassayTable:
         return
     
@@ -75,19 +89,33 @@ def parse_tcp(ip_packet, ts):
     tcp = ip_packet.data
     seq_num = tcp.seq
     flags = tcp.flags
+    client_port = tcp.dport
 
-    if (entry[1] == -1):
-        netassayTable[key][1] = seq_num
+    # Check if the client port is in the netassayTable entry
+    if client_port in entry["sessions"]:
 
-    # First TCP packet from server to client. Initialize starting seq number
-    if (seq_num < entry[1]):
-        netassayTable[key][1] = seq_num
-    if seq_num > entry[2]:
-        netassayTable[key][2] = seq_num
-        if dest in client_webpage_table:
-            client_webpage_table[dest][netassayTable[key][0]] = seq_num - netassayTable[key][1]
-        else:
-            client_webpage_table[dest] = {netassayTable[key][0]:seq_num - netassayTable[key][1]}
+        # If the FIN flag is marked
+        if not (flags & 1 == 0):
+            netassayTable[key]['sessions'][client_port][1] = seq_num # Mark the final sequence number
+
+            # If client is already in the client_webpage_table
+            if dest in client_webpage_table:
+
+                # If this particular domain is already in the client's dict in the client_webpage_table -> Add the new sequence number diff to the existing entry
+                if netassayTable[key]["domain"] in client_webpage_table[dest]:
+                    client_webpage_table[dest][netassayTable[key]["domain"]] = client_webpage_table[dest][netassayTable[key]["domain"]] + seq_num - netassayTable[key]['sessions'][client_port][0]
+                else:
+                    # Create the entry for this domain
+                    client_webpage_table[dest][netassayTable[key]["domain"]] = seq_num - netassayTable[key]['sessions'][client_port][0]
+            
+            # If client is not in the client_webpage_table: create an entry that is a dictionary with the key being the domain and the value being the sequence number diff
+            else:
+                client_webpage_table[dest] = {netassayTable[key]["domain"]:seq_num - netassayTable[key]['sessions'][client_port][0]}
+
+    # If client port is not in the netassayTable entry, this is a new session. Create a new entry, keyed by the port. Add the initial sequence number to the entry
+    else:
+        netassayTable[key]["sessions"][client_port] = [seq_num, -1]
+
 
 def matchDomain(known, domain):
     knownparts = known.split('.')
@@ -129,7 +157,8 @@ if __name__ == '__main__':
         for w in webpage_list:
             #print(w["webpage_name"])
             for d in w['domains']:
-                known_domains.append(d[0])
+                for i in range(1, d[0] + 1):
+                    known_domains.append(d[i])
                 #print(d[0])
                 #print(d[1])
 
@@ -164,10 +193,20 @@ if __name__ == '__main__':
 
             match_webpage = True
             for d in w['domains']:
-                if d[0] in client_webpage_table[c]:
-                    if abs(client_webpage_table[c][d[0]] - d[1]) / d[1] > 0.05:
+
+                accumulated_bytes = 0
+
+                for i in range(1, d[0] + 1):
+                    if d[i] not in requested_domains[c]:
                         match_webpage = False
-                else:
+                        break
+
+                    if d[i] in client_webpage_table[c]:
+                        accumulated_bytes = accumulated_bytes + client_webpage_table[c][d[i]]
+
+                #print(str(d) + ' ' + str(accumulated_bytes))
+                expected_bytes = d[d[0] + 1]
+                if abs((accumulated_bytes - expected_bytes) / expected_bytes) > 1:
                     match_webpage = False
             
             if (match_webpage):
