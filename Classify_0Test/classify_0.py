@@ -51,8 +51,10 @@ def determinePercentMatch(matchDict, pageDict):
                 if (mean != seq_num):
                     continue
             else:
-                x = abs(mean - seq_num)
-                domainMatchPercent = domainMatchPercent * norm.pdf(mean + x, mean, stdev)
+
+                domainMatchPercent = domainMatchPercent * norm.pdf(seq_num, mean, stdev) / norm.pdf(mean, mean, stdev)
+                #x = abs(mean - seq_num)
+                #domainMatchPercent = domainMatchPercent * norm.pdf(mean + x, mean, stdev)
             totalMatchPercent = totalMatchPercent + domainMatchPercent
     return totalMatchPercent
 
