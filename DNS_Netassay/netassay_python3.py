@@ -159,8 +159,8 @@ def matchDomain(known, domain):
 
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
-    if len(argv) != 5:
-        print('usage: python netassay_python3.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
+    if len(argv) != 6:
+        print('usage: python netassay_python3.py capture.pcap knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt number')
         exit(-1)
     
     # Parse allowed IP and banned IP files
@@ -178,9 +178,9 @@ if __name__ == '__main__':
 
     with open(argv[1], 'rb') as f:
         try:
-            pcap_obj = dpkt.pcap.Reader(f)
-        except:
             pcap_obj = dpkt.pcapng.Reader(f)
+        except:
+            pcap_obj = dpkt.pcap.Reader(f)
 
         for ts, buf in pcap_obj:
             eth = dpkt.ethernet.Ethernet(buf)
@@ -237,7 +237,7 @@ if __name__ == '__main__':
         netassayTableByDomain[i[0]][2] = netassayTableByDomain[i[0]][2] + i[2]
 
 
-    with open('allresults.csv', 'w') as csvfile:
+    with open(argv[5] + 'allresults.csv', 'w') as csvfile:
         w = csv.writer(csvfile)
         w.writerow(["Domain", "Number of DNS requests", "Number of Packets", "Number of Bytes"])
 
@@ -260,7 +260,7 @@ if __name__ == '__main__':
                 knownlistDict[d] = [entry[0] + i[1][0], entry[1] + i[1][1], entry[2] + i[1][2]]
                 break
     
-    with open('knownlistresults.csv', 'w') as csvfile:
+    with open(argv[5] + 'knownlistresults.csv', 'w') as csvfile:
         w = csv.writer(csvfile)
         w.writerow(["Domain", "Number of DNS requests", "Number of Packets", "Number of Bytes"])
 
