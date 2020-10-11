@@ -173,8 +173,8 @@ if __name__ == '__main__':
                         skip = False
                 possibledomains = possibledomains + d + '/'
             
-            if (skip):
-                continue
+            #if (skip):
+                #continue
             
             sessions = netassayTable[key]['sessions']
 

@@ -114,15 +114,15 @@ def parse_tcp(ip_packet):
     keyIPUsed = source + dest
 
     
-    key = source + dest
+    '''key = source + dest
     if key in netassayTable:
         entry = netassayTable[key]
         netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + ip_packet.len]
-    else:
-        key = dest + source
-        if key in netassayTable:
-            entry = netassayTable[key]
-            netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + ip_packet.len]
+    else:'''
+    key = dest + source # We just want to count traffic coming from the server
+    if key in netassayTable:
+        entry = netassayTable[key]
+        netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + ip_packet.len]
 
     if (keyIPUsed in serverIpPrecedenceDict):
         global NUM_PACKETS

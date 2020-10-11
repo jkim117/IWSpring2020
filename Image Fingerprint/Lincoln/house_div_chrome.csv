@@ -1,0 +1,6 @@
+Client IP,Server IP,Client Port,Initial Timestamp,Sequence Diff,Possible Domains
+10.9.95.159,172.217.12.131,59199,1599607978.637684,5377,update.googleapis.com/
+10.9.95.159,172.217.11.3,59200,1599607978.716009,83049,ssl.gstatic.com/
+10.9.95.159,144.208.79.222,59201,1599607980.979701,27943,www.abrahamlincolnonline.org/
+10.9.95.159,144.208.79.222,59202,1599607981.156278,11284,www.abrahamlincolnonline.org/
+10.9.95.159,144.208.79.222,59203,1599607981.163345,0,www.abrahamlincolnonline.org/
