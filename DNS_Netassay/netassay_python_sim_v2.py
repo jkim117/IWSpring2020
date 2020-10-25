@@ -115,14 +115,14 @@ def parse_dns_response(ip_packet, ts):
             break
         
 
-def parse_tcp(packet_len, ip_packet, ts):
+def parse_tcp(ip_packet, ts):
     source = socket.inet_ntoa(ip_packet.src) #server
     dest = socket.inet_ntoa(ip_packet.dst) #client
     
     key = dest + source
     if key in netassayTable:
         entry = netassayTable[key]
-        netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + packet_len]
+        netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + ip_packet.len]
 
         hash1 = hash(source + str(11) + dest) % TABLE_SIZE
         hash2 = hash(str(5) + source + str(3) + dest)% TABLE_SIZE
@@ -189,19 +189,15 @@ if __name__ == '__main__':
 
     for p in pcap_obj:
         ts = p[0]
-        eth = p[1]
-
-        if (eth.type != 2048): # If not IPV4
-            continue
-        ip = eth.data
-        protocol = ip.p
+        dns_code = p[1]
+        ip = p[2]
 
         # For each packet parse the dns responses
         try:
-            if (protocol == 17 and ip.data.sport == 53):
+            if (dns_code == 0):
                 parse_dns_response(ip, ts)
             else:
-                parse_tcp(eth.len, ip, ts)
+                parse_tcp(ip, ts)
         except:
             continue
 

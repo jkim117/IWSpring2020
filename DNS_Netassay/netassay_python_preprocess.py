@@ -24,10 +24,14 @@ if __name__ == '__main__':
             ip = eth.data
             protocol = ip.p
 
-            if (protocol == 17 and ip.data.sport == 53):
-                # If DNS, we want the entire IP packet
-                ethPacketList.append([ts, 0, ip]) # 0 is to indicate DNS response
-            else:
+            packet_processed = False
+            try:
+                if (protocol == 17 and ip.data.sport == 53):
+                    # If DNS, we want the entire IP packet
+                    ethPacketList.append([ts, 0, ip]) # 0 is to indicate DNS response
+                    packet_processed = True
+
+            if (not packet_processed):
                 # Else, we just want the IP header
                 ethPacketList.append([ts, 1, ip.__hdr__]) # 1 is to indicate other type of packet
         

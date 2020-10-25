@@ -184,16 +184,12 @@ if __name__ == '__main__':
 
     for p in pcap_obj:
         ts = p[0]
-        eth = p[1]
-
-        if (eth.type != 2048): # If not IPV4
-            continue
-        ip = eth.data
-        protocol = ip.p
+        dns_code = p[1]
+        ip = p[2]
 
         # For each packet parse the dns responses
         try:
-            if (protocol == 17 and ip.data.sport == 53):
+            if (dns_code == 0):
                 parse_dns_response(ip)
             else:
                 parse_tcp(ip)
