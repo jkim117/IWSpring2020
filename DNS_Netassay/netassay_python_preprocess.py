@@ -21,7 +21,15 @@ if __name__ == '__main__':
             eth = dpkt.ethernet.Ethernet(buf)
             if (eth.type != 2048):
                 continue
-            ethPacketList.append([ts, eth])
+            ip = eth.data
+            protocol = ip.p
+
+            if (protocol == 17 and ip.data.sport == 53):
+                # If DNS, we want the entire IP packet
+                ethPacketList.append([ts, 0, ip]) # 0 is to indicate DNS response
+            else:
+                # Else, we just want the IP header
+                ethPacketList.append([ts, 1, ip.__hdr__]) # 1 is to indicate other type of packet
         
     pickle.dump(ethPacketList, outFile)
     outFile.close()
