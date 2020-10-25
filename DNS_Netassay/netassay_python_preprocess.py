@@ -23,7 +23,7 @@ if __name__ == '__main__':
                 continue
             ip = eth.data
             protocol = ip.p
-            packet_len = eth.len
+            packet_len = eth.__len__()
 
             packet_processed = False
             try:
