@@ -23,19 +23,20 @@ if __name__ == '__main__':
                 continue
             ip = eth.data
             protocol = ip.p
+            packet_len = eth.len
 
             packet_processed = False
             try:
                 if (protocol == 17 and ip.data.sport == 53):
                     # If DNS, we want the entire IP packet
-                    ethPacketList.append([ts, 0, ip]) # 0 is to indicate DNS response
+                    ethPacketList.append([ts, -1, ip]) # 0 is to indicate DNS response
                     packet_processed = True
             except:
                 pass
 
             if (packet_processed == False):
                 # Else, we just want the IP header
-                ethPacketList.append([ts, 1, ip.__hdr__]) # 1 is to indicate other type of packet
+                ethPacketList.append([ts, packet_len, ip.__hdr__])
         
     pickle.dump(ethPacketList, outFile)
     outFile.close()

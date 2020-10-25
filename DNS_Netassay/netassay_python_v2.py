@@ -110,7 +110,7 @@ def parse_dns_response(ip_packet):
         cnameCountDict[cname_count] = 1
         
 
-def parse_tcp(ip_packet):
+def parse_tcp(packet_len, ip_packet):
     source = socket.inet_ntoa(ip_packet.src) #client
     dest = socket.inet_ntoa(ip_packet.dst) #server
     keyIPUsed = source + dest
@@ -124,7 +124,7 @@ def parse_tcp(ip_packet):
     key = dest + source # We just want to count traffic coming from the server
     if key in netassayTable:
         entry = netassayTable[key]
-        netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + ip_packet.len]
+        netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + packet_len]
 
     if (keyIPUsed in serverIpPrecedenceDict):
         global NUM_PACKETS
@@ -189,10 +189,10 @@ if __name__ == '__main__':
 
         # For each packet parse the dns responses
         try:
-            if (dns_code == 0):
+            if (dns_code == -1):
                 parse_dns_response(ip)
             else:
-                parse_tcp(ip)
+                parse_tcp(dns_code, ip)
         except:
             continue
 
