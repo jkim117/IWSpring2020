@@ -30,8 +30,10 @@ if __name__ == '__main__':
                     # If DNS, we want the entire IP packet
                     ethPacketList.append([ts, 0, ip]) # 0 is to indicate DNS response
                     packet_processed = True
+            except:
+                pass
 
-            if (not packet_processed):
+            if (packet_processed == False):
                 # Else, we just want the IP header
                 ethPacketList.append([ts, 1, ip.__hdr__]) # 1 is to indicate other type of packet
         
