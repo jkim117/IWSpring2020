@@ -116,8 +116,8 @@ def parse_dns_response(ip_packet, ts):
         
 
 def parse_tcp(packet_len, ip_packet, ts):
-    source = socket.inet_ntoa(ip_packet.src) #server
-    dest = socket.inet_ntoa(ip_packet.dst) #client
+    source = socket.inet_ntoa(ip_packet['src']) #server
+    dest = socket.inet_ntoa(ip_packet['dst']) #client
     
     key = dest + source
     if key in netassayTable:
@@ -193,13 +193,13 @@ if __name__ == '__main__':
         ip = p[2]
 
         # For each packet parse the dns responses
-        try:
-            if (dns_code == -1):
+        if (dns_code == -1):
+            try:
                 parse_dns_response(ip, ts)
-            else:
-                parse_tcp(dns_code, ip, ts)
-        except:
-            continue
+            except:
+                continue
+        else:
+            parse_tcp(dns_code, ip, ts)
 
     for i in netassayTable.values():
         knownlistDict[i[0]][1] = knownlistDict[i[0]][1] + i[1]

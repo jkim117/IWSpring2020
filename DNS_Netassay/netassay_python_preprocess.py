@@ -36,7 +36,19 @@ if __name__ == '__main__':
 
             if (packet_processed == False):
                 # Else, we just want the IP header
-                ethPacketList.append([ts, packet_len, ip.__hdr__])
+                ip_header = {
+                    '_v_hl':ip._v_hl,
+                    'tos':ip.tos,
+                    'len':ip.len,
+                    'id':ip.id,
+                    'off':ip.off,
+                    'ttl':ip.ttl,
+                    'p':ip.p,
+                    'sum':ip.sum,
+                    'src':ip.src,
+                    'dst':ip.dst
+                }
+                ethPacketList.append([ts, packet_len, ip_header])
         
     pickle.dump(ethPacketList, outFile)
     outFile.close()

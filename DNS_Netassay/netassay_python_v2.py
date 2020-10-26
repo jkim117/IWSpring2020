@@ -89,7 +89,6 @@ def parse_dns_response(ip_packet):
             serverIP = socket.inet_ntoa(rr.rdata)
 
             key = clientIP + serverIP
-
             # Entry already exists. Hopefully doesn't occur
             if key in netassayTable:
                 entry = netassayTable[key]
@@ -111,10 +110,9 @@ def parse_dns_response(ip_packet):
         
 
 def parse_tcp(packet_len, ip_packet):
-    source = socket.inet_ntoa(ip_packet.src) #client
-    dest = socket.inet_ntoa(ip_packet.dst) #server
-    keyIPUsed = source + dest
-
+    source = socket.inet_ntoa(ip_packet['src']) #client
+    dest = socket.inet_ntoa(ip_packet['dst']) #server
+    keyIPUsed = dest + source
     
     '''key = source + dest
     if key in netassayTable:
@@ -188,13 +186,16 @@ if __name__ == '__main__':
         ip = p[2]
 
         # For each packet parse the dns responses
-        try:
-            if (dns_code == -1):
+        #try:
+        if (dns_code == -1):
+            try:
                 parse_dns_response(ip)
-            else:
-                parse_tcp(dns_code, ip)
-        except:
-            continue
+            except:
+                continue
+        else:
+            parse_tcp(dns_code, ip)
+        #except:
+           # continue
 
     # Final Stats report
     print("Total Number of DNS Response: " + str(TOTAL_DNS_RESPONSE_COUNT))
