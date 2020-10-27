@@ -13,8 +13,8 @@ knownlistDict = {} # Key is knowlist domain, values are number of dns, number of
 known_domains = []
 
 netassayTable = {} # Key is concatentation of serever IP/client IP. Values is a tuple of domain name, num packets, num of bytes
-TABLE_SIZE = 2048
-TIMEOUT = 300
+TABLE_SIZE = 16384
+TIMEOUT = 300000000
 usedHash1 = {}
 usedHash2 = {}
 usedHash3 = {}
