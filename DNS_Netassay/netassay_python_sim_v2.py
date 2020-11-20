@@ -4,6 +4,8 @@ import csv
 import socket
 import ipaddress
 import pickle
+import crc16
+import numpy as np
 
 # Data structure and global variables
 allowed_ips = []
@@ -17,8 +19,6 @@ TABLE_SIZE = 16384
 TIMEOUT = 300000000
 usedHash1 = {}
 usedHash2 = {}
-usedHash3 = {}
-usedHash4 = {}
 
 def is_subnet_of(a, b):
     return (b.network_address <= a.network_address and b.broadcast_address >= a.broadcast_address)
@@ -56,18 +56,29 @@ def parse_dns_response(ip_packet, ts):
 
     for d in known_domains:
         if (matchDomain(d, domain)):
-            entry = knownlistDict[d]
-            knownlistDict[d][0] = knownlistDict[d][0] + 1
+            
 
+            cname_bytes = 0
             for rr in answers:
+                if (rr.type != 1):
+                    cname_bytes += rr.rlen
+                    if (cname_bytes > 70):
+                        return
                 if (rr.type == 1): #DNS.A
+                    entry = knownlistDict[d]
+                    knownlistDict[d][0] = knownlistDict[d][0] + 1
+
+                    
                     serverIP = socket.inet_ntoa(rr.rdata)
+                    serverIP32 = np.uint32(int.from_bytes(socket.inet_aton(serverIP), byteorder='big'))
+                    clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(clientIP), byteorder='big'))
+                    salt1 = np.uint32(134140211)
+                    salt2 = np.uint32(187182238)
 
                     key = clientIP + serverIP
-                    hash1 = hash(serverIP + str(11) + clientIP) % TABLE_SIZE
-                    hash2 = hash(str(5) + serverIP + str(3) + clientIP)% TABLE_SIZE
-                    hash3 = hash(str(0) + serverIP + str(1) + clientIP)% TABLE_SIZE
-                    hash4 = hash(str(7) + serverIP + str(12) + clientIP)% TABLE_SIZE
+                    
+                    hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % TABLE_SIZE
+                    hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % TABLE_SIZE
                     
                     if(not hash1 in usedHash1):
                         usedHash1[hash1] = [ts, key, domain]
@@ -82,20 +93,6 @@ def parse_dns_response(ip_packet, ts):
                         usedHash2[hash2] = [ts, key, domain]
                     elif(usedHash2[hash2][1] == key and usedHash2[hash2][2] == domain): # update timestamp for existing entry
                         usedHash2[hash2] = [ts, key, domain]
-
-                    elif(not hash3 in usedHash3):
-                        usedHash3[hash3] = [ts, key, domain]
-                    elif (ts - usedHash3[hash3][0] > TIMEOUT): # timestamp expires
-                        usedHash3[hash3] = [ts, key, domain]
-                    elif(usedHash3[hash3][1] == key and usedHash3[hash3][2] == domain): # update timestamp for existing entry
-                        usedHash3[hash3] = [ts, key, domain]
-
-                    elif(not hash4 in usedHash4):
-                        usedHash4[hash4] = [ts, key, domain]
-                    elif (ts - usedHash4[hash4][0] > TIMEOUT): # timestamp expires
-                        usedHash4[hash4] = [ts, key, domain]
-                    elif(usedHash4[hash4][1] == key and usedHash4[hash4][2] == domain): # update timestamp for existing entry
-                        usedHash4[hash4] = [ts, key, domain]
 
                     else:
                         knownlistDict[d][3] = knownlistDict[d][3]+1
@@ -123,20 +120,19 @@ def parse_tcp(packet_len, ip_packet, ts):
     if key in netassayTable:
         entry = netassayTable[key]
         netassayTable[key] = [entry[0], entry[1] + 1, entry[2] + packet_len]
+        
+        serverIP32 = np.uint32(int.from_bytes(socket.inet_aton(source), byteorder='big'))
+        clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
+        salt1 = np.uint32(134140211)
+        salt2 = np.uint32(187182238)
 
-        hash1 = hash(source + str(11) + dest) % TABLE_SIZE
-        hash2 = hash(str(5) + source + str(3) + dest)% TABLE_SIZE
-        hash3 = hash(str(0) + source + str(1) + dest)% TABLE_SIZE
-        hash4 = hash(str(7) + source + str(12) + dest)% TABLE_SIZE
-
+        hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % TABLE_SIZE
+        hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % TABLE_SIZE
+        
         if hash1 in usedHash1 and usedHash1[hash1][1] == key:
             usedHash1[hash1][0] = ts
         elif hash2 in usedHash2 and usedHash2[hash2][1] == key:
             usedHash2[hash2][0] = ts
-        elif hash3 in usedHash3 and usedHash3[hash3][1] == key:
-            usedHash3[hash3][0] = ts
-        elif hash4 in usedHash4 and usedHash4[hash4][1] == key:
-            usedHash4[hash4][0] = ts
         else:
             print("error in hash storage")
             exit(-1)
@@ -196,7 +192,8 @@ if __name__ == '__main__':
         if (dns_code == -1):
             try:
                 parse_dns_response(ip, ts)
-            except:
+            except Exception as e:
+                
                 continue
         else:
             parse_tcp(dns_code, ip, ts)

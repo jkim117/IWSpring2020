@@ -1,0 +1,21 @@
+Domain,Number of DNS requests,Missed DNS requests missed,Number of Packets,Number of Bytes,Estimated Packets,Estimated Bytes
+www.google.com,0,0,0,0,0,0
+calendar.google.com,0,0,0,0,0,0
+pxml10.4publishers.com,0,0,0,0,0,0
+s1.4publishers.com,0,0,0,0,0,0
+ssl.gstatic.com,0,0,0,0,0,0
+*.skype.com,0,0,0,0,0,0
+*.live.com,4,0,170,134390,170.0,134390.0
+messenger.hotmail.com,0,0,0,0,0,0
+*.*.msn.com,4,0,152,102410,152.0,102410.0
+*.msn.com,2,0,60,28678,60.0,28678.0
+cp.intl.match.com,2,0,6,712,6.0,712.0
+www.gowindowslive.com,2,0,8,622,8.0,622.0
+view.atdmt.com,2,0,20,3256,20.0,3256.0
+*.smartadserver.com,4,0,46,23878,46.0,23878.0
+*.salesforce.com,2,0,0,0,0.0,0.0
+*.*.salesforce.com,2,0,10,2004,10.0,2004.0
+*,0,0,0,0,0,0
+*.*,0,0,0,0,0,0
+*.*.*,0,0,0,0,0,0
+*.*.*.*,0,0,0,0,0,0

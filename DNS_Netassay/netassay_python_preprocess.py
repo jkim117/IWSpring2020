@@ -33,22 +33,27 @@ if __name__ == '__main__':
                     packet_processed = True
             except:
                 pass
-
-            if (packet_processed == False):
-                # Else, we just want the IP header
-                ip_header = {
-                    '_v_hl':ip._v_hl,
-                    'tos':ip.tos,
-                    'len':ip.len,
-                    'id':ip.id,
-                    'off':ip.off,
-                    'ttl':ip.ttl,
-                    'p':ip.p,
-                    'sum':ip.sum,
-                    'src':ip.src,
-                    'dst':ip.dst
-                }
-                ethPacketList.append([ts, packet_len, ip_header])
+            
+            try:
+                if (packet_processed == False):
+                    # Else, we just want the IP header
+                    ip_header = {
+                        '_v_hl':ip._v_hl,
+                        'tos':ip.tos,
+                        'len':ip.len,
+                        'id':ip.id,
+                        'off':ip.off,
+                        'ttl':ip.ttl,
+                        'p':ip.p,
+                        'sum':ip.sum,
+                        'src':ip.src,
+                        'dst':ip.dst,
+                        'src_port': ip.data.sport,
+                        'dst_port': ip.data.dport
+                    }
+                    ethPacketList.append([ts, packet_len, ip_header])
+            except Exception as e:
+                pass
         
     pickle.dump(ethPacketList, outFile)
     outFile.close()
