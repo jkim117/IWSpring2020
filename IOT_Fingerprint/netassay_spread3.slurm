@@ -1,12 +1,12 @@
 #!/bin/bash
 ## Double hash sign (##) makes a line a comment.
 
-#SBATCH --job-name=netassay         # create a short name for your job
+#SBATCH --job-name=netassay_spread         # create a short name for your job
 #SBATCH --nodes=2                # node count
 #SBATCH --ntasks-per-node 10
 ##SBATCH --nodelist=node[601,602,603]
 #SBATCH --cpus-per-task=5        # cpu-cores per task (>1 if multi-threaded tasks)
-#SBATCH --mem=400G
+#SBATCH --mem=50G
 #SBATCH --time=24:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --mail-type=fail
 #SBATCH --mail-type=begin        # send email when job begins
@@ -26,7 +26,7 @@
 
 ## Run script
 echo `date`": Start of netassay script"
-python3 netassay_python_preprocess_dedup.py /n/fs/anonflow/dynamids_data/pcaps/08_19_2020_T08-11 /n/fs/anonflow/netassay_iot/08_19_2020_T08-11.p
+python3 netassay_python_preprocess_dedup_spread.py /n/fs/anonflow/dynamids_data/pcaps/08_19_2020_T16-19 /n/fs/anonflow/netassay_iot/08_19_2020_T16-19
 echo `date`": End of netassay script"
 
 ### Copy to project space 
