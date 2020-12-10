@@ -23,7 +23,6 @@ banned_ips = []
 NUM_CLIENTS = 0
 NUM_PACKETS = 0
 
-DETECTION_THRESH = 0.25
 rulesList = {}
 
 netassayTable = {} # Key is concatentation of serever IP/client IP. Values is domain name
@@ -111,13 +110,29 @@ def parse_tcp(packet_len, ip_packet, ts):
                     if (matchDomain(rule_domain, client_domain) and client_port == rule_port):
                         num_matches += 1
                         break
-            if (num_matches >= DETECTION_THRESH * num_domains_in_rule):
+            if (checkDetectionThreshold(num_domains_in_rule, num_matches)):
                 print(dest, k, ts)
                 detection_occur = True
             
         if(detection_occur):
             clientTable.pop(dest)
-                    
+
+def checkDetectionThreshold(num_domains_in_rule, num_matches):
+    threshold = 5
+
+    if num_domains_in_rule >= 15 and num_domains_in_rule < 20:
+        threshold = 4
+    elif num_domains_in_rule >= 10 and num_domains_in_rule < 15:
+        threshold = 3
+    elif num_domains_in_rule >= 5 and num_domains_in_rule < 10:
+        threshold = 2
+    elif num_domains_in_rule <= 4:
+        threshold = 1
+    
+    if num_matches >= threshold:
+        return True
+    return False
+        
 
 
 def matchDomain(known, domain):
