@@ -9,6 +9,8 @@ if __name__ == '__main__':
         exit(-1)
 
     outFile = open(argv[2], 'wb')
+    count_dns_fail = 0
+    count_other_fail = 0
 
     ethPacketList = []
     with open(argv[1], 'rb') as f:
@@ -31,7 +33,9 @@ if __name__ == '__main__':
                     # If DNS, we want the entire IP packet
                     ethPacketList.append([ts, -1, ip]) # 0 is to indicate DNS response
                     packet_processed = True
-            except:
+            except Exception as e:
+                print(e)
+                count_dns_fail += 1
                 pass
             
             try:
@@ -53,7 +57,10 @@ if __name__ == '__main__':
                     }
                     ethPacketList.append([ts, packet_len, ip_header])
             except Exception as e:
+                count_other_fail += 1
                 pass
         
     pickle.dump(ethPacketList, outFile)
     outFile.close()
+    print(count_dns_fail)
+    print(count_other_fail)

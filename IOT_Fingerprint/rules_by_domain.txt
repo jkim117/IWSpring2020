@@ -1,0 +1,626 @@
+a4k.amazon.co.uk:443, 1, firetv/firetv_cat
+
+a4k.amazon.com:443, 1, firetv/firetv_cat
+
+aax-eu.amazon-adsystem.com:443, 1, firetv/firetv_cat
+
+aax-eu.amazon-adsystem.com:80, 1, firetv/firetv_cat
+
+aax-us-east.amazon-adsystem.com:80, 1, firetv/firetv_cat
+
+aca-livecards-service-eu.amazon.com:443, 1, firetv/firetv_cat
+
+ags-ext.amazon.com:443, 1, firetv/firetv_cat
+
+alexa.amazon.co.uk:443, 1, echospot/echo_cat
+
+alexa.amazon.com:443, 1, echospot/echo_cat
+
+andr-22-aftt-0.api.amazonvideo.com:443, 1, firetv/firetv_cat
+
+api.amazon.co.uk:443, 3, echodot/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+api.amazon.com:443, 5, allure-speaker/echo_cat, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+api.amazonalexa.com:443, 5, allure-speaker/echo_cat, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+api.eu.amazonalexa.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+appstore-tv-prod-eu.amazon.com:443, 1, firetv/firetv_cat
+
+appstore-tv-prod-na.amazon.com:443, 1, firetv/firetv_cat
+
+arcus-uswest.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+aviary.amazon.com:443, 1, firetv/firetv_cat
+
+aviary.amazon.de:443, 1, firetv/firetv_cat
+
+avs-alexa-18-eu.amazon.com:443, 1, firetv/firetv_cat
+
+avs-alexa-18-na.amazon.com:443, 1, firetv/firetv_cat
+
+avs-alexa-18-na.amazon.com:80, 1, firetv/firetv_cat
+
+avs-alexa-4-eu.amazon.com:443, 2, echodot/echo_cat, echoplus/echo_cat
+
+avs-alexa-4-na.amazon.com:443, 1, echoplus/echo_cat
+
+avs-alexa-4-na.amazon.com:80, 1, echoplus/echo_cat
+
+avs-alexa-5-eu.amazon.com:443, 1, echospot/echo_cat
+
+avs-alexa-5-na.amazon.com:443, 1, echospot/echo_cat
+
+avs-alexa-5-na.amazon.com:80, 1, echospot/echo_cat
+
+avs-alexa-eu.amazon.com:443, 1, allure-speaker/echo_cat
+
+avs-alexa-na.amazon.com:443, 1, allure-speaker/echo_cat
+
+avs-alexa-na.amazon.com:80, 1, allure-speaker/echo_cat
+
+cdws.eu-west-1.amazonaws.com:443, 1, firetv/firetv_cat
+
+cdws.us-east-1.amazonaws.com:443, 1, firetv/firetv_cat
+
+cognito-identity.eu-west-1.amazonaws.com:443, 1, firetv/firetv_cat
+
+cognito-identity.us-east-1.amazonaws.com:443, 2, echospot/echo_cat, firetv/firetv_cat
+
+cortana-gateway.amazon.com:443, 1, firetv/firetv_cat
+
+dcape-na.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+det-ta-g7g.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+device-messaging-na.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+device-metrics-us.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+dp-discovery-na-ext.amazon.com:443, 1, firetv/firetv_cat
+
+dp-gw-na.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+dp-rsm-prod.amazon.com:443, 3, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+drive.amazonaws.com:443, 1, echospot/echo_cat
+
+dss-na.amazon.com:443, 1, echoplus/echo_cat
+
+fireoscaptiveportal.com:80, 1, echodot/echo_cat
+
+firereleasenotes-eu.amazon.com:443, 1, firetv/firetv_cat
+
+firereleasenotes-na.amazon.com:443, 1, firetv/firetv_cat
+
+firetv-news-content-ingestion.amazon.com:443, 1, firetv/firetv_cat
+
+fls-na.amazon.com:443, 2, echospot/echo_cat, firetv/firetv_cat
+
+ftv-smp.ntp-fireos.com:123, 1, firetv/firetv_cat
+
+ftvr-eu.amazon.com:443, 1, firetv/firetv_cat
+
+ftvr-na.amazon.com:443, 1, firetv/firetv_cat
+
+img.vidible.tv:80, 1, firetv/firetv_cat
+
+kindle-time.amazon.com:80, 3, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+kinesis.us-east-1.amazonaws.com:443, 1, firetv/firetv_cat
+
+kms.us-east-1.amazonaws.com:443, 1, firetv/firetv_cat
+
+ktpx-eu.amazon.com:443, 1, firetv/firetv_cat
+
+ktpx-uk.amazon.com:443, 1, firetv/firetv_cat
+
+mads-eu.amazon.com:443, 1, firetv/firetv_cat
+
+mads.amazon.com:443, 1, firetv/firetv_cat
+
+mas-ext-eu.amazon.com:443, 1, firetv/firetv_cat
+
+mas-ext.amazon.com:443, 1, firetv/firetv_cat
+
+mas-sdk.amazon.com:443, 1, firetv/firetv_cat
+
+msh.amazon.co.uk:443, 2, echospot/echo_cat, firetv/firetv_cat
+
+msh.amazon.com:443, 3, echodot/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+msh.amazon.de:443, 1, firetv/firetv_cat
+
+ntp-g7g.amazon.com:123, 3, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat
+
+prime.amazon.com:443, 1, firetv/firetv_cat
+
+prime.amazon.eu:443, 1, firetv/firetv_cat
+
+prod.amcs-tachyon.com:443, 3, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat
+
+s.amazon-adsystem.com:443, 1, firetv/firetv_cat
+
+s.amazon-adsystem.com:80, 1, firetv/firetv_cat
+
+softwareupdates.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+tinytts.amazon.com:443, 1, echospot/echo_cat
+
+todo-ta-g7g.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+unagi-eu.amazon.com:443, 1, firetv/firetv_cat
+
+unagi-na.amazon.com:443, 4, echodot/echo_cat, echoplus/echo_cat, echospot/echo_cat, firetv/firetv_cat
+
+*.transport.home.nest.com:9543, 1, nest-tstat/nest-tstat
+
+acr-eu-prd.internetat.tv:443, 1, samsungtv-wired/samsungtv-wired
+
+acr0.samsungcloudsolution.com:443, 1, samsungtv-wired/samsungtv-wired
+
+api.cspserver.net:443, 1, dryer/dryer
+
+api.samsungcloud.com:443, 2, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+apu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+bpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+configprd.samsungcloudsolution.net:443, 2, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+conn.samsungcloud.com:5683, 1, dryer/dryer
+
+cpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+dpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+frontdoor.nest.com:443, 1, nest-tstat/nest-tstat
+
+gld.push.samsungosp.com:5223, 1, samsungtv-wired/samsungtv-wired
+
+gpm.samsungqbe.com:443, 1, samsungtv-wired/samsungtv-wired
+
+info.cspserver.net:80, 2, dryer/dryer, fridge/fridge
+
+ipv4.connman.net:80, 1, fridge/fridge
+
+kpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+lcprd1.samsungcloudsolution.net:443, 2, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+log-config.samsungacr.com:443, 1, samsungtv-wired/samsungtv-wired
+
+log-ingestion-eu.samsungacr.com:443, 1, samsungtv-wired/samsungtv-wired
+
+log.samsunghrm.com:443, 1, fridge/fridge
+
+logsink.devices.nest.com:443, 1, nest-tstat/nest-tstat
+
+notice.samsungcloudsolution.com:443, 1, samsungtv-wired/samsungtv-wired
+
+oauth.ring.com:443, 1, fridge/fridge
+
+ocfconnect-shard-na03-useast2.samsungiotcloud.com:443, 1, fridge/fridge
+
+ontprd10.samsungcloudsolution.net:443, 2, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+osb-apps.samsungqbe.com:443, 1, samsungtv-wired/samsungtv-wired
+
+osb-eusvc.samsungqbe.com:443, 1, samsungtv-wired/samsungtv-wired
+
+osb.samsungqbe.com:443, 1, samsungtv-wired/samsungtv-wired
+
+prd-use2-pdss-sync.aibixby.com:443, 1, fridge/fridge
+
+prd-use2-user.aibixby.com:443, 1, fridge/fridge
+
+qoe.samsungcloud.tv:443, 1, samsungtv-wired/samsungtv-wired
+
+sas.samsungcloudsolution.com:443, 1, samsungtv-wired/samsungtv-wired
+
+shome.sca.samsung.com:443, 1, dryer/dryer
+
+time.samsungcloudsolution.com:443, 1, samsungtv-wired/samsungtv-wired
+
+time.samsungcloudsolution.com:80, 1, samsungtv-wired/samsungtv-wired
+
+uimetadata.samsungiotcloud.com:443, 1, fridge/fridge
+
+us-fhapi.cspserver.net:443, 1, fridge/fridge
+
+weather.nest.com:443, 1, nest-tstat/nest-tstat
+
+www.samsungotn.net:443, 3, dryer/dryer, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+www.samsungotn.net:80, 3, dryer/dryer, fridge/fridge, samsungtv-wired/samsungtv-wired
+
+xpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+zpu.samsungelectronics.com:443, 1, samsungtv-wired/samsungtv-wired
+
+11-devaccess.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+12-alertsfile.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+12-devaccess.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+13-devaccess.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+14-devaccess.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+21-alertsfile.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+22-alertsfile.myzmodo.com:443.0, 1, zmodo-doorbell/zmodo-doorbell
+
+a3.tuyaus.com:443.0, 2, smartlife-bulb/smartlife_cat, smartlife-remote/smartlife_cat
+
+ak.myappkettle.com:443.0, 1, appkettle/appkettle
+
+ak.myappkettle.com:80.0, 1, appkettle/appkettle
+
+amarillo.sw.roku.com:443.0, 1, roku-tv/roku-tv
+
+amcrestview.com:12366.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+api.eu.xiaoyi.com:443.0, 1, yi-camera/yi-camera
+
+api.eu.xiaoyi.com:80.0, 1, yi-camera/yi-camera
+
+api.gdxp.com:8100.0, 1, icsee-doorbell/icsee-doorbell
+
+api.roku.com:443.0, 1, roku-tv/roku-tv
+
+api.rokutime.com:443.0, 1, roku-tv/roku-tv
+
+api.smartthings.com:443.0, 2, smartthings-hub/smartthings_cat, t-smartthings-hub/smartthings_cat
+
+api.sr.roku.com:443.0, 1, roku-tv/roku-tv
+
+api.us.xiaoyi.com:443.0, 1, yi-camera/yi-camera
+
+api.us.xiaoyi.com:80.0, 1, yi-camera/yi-camera
+
+a.tuyaeu.com:80.0, 2, smartlife-bulb/smartlife_cat, smartlife-remote/smartlife_cat
+
+a.tuyaus.com:80.0, 1, bulb1/bulb1
+
+command-13.amcrestcloud.com:443.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+config.amcrestcloud.com:443.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+configsvc.cs.roku.com:443.0, 1, roku-tv/roku-tv
+
+cooper.logs.roku.com:443.0, 1, roku-tv/roku-tv
+
+cooper.sb.roku.com:443.0, 1, roku-tv/roku-tv
+
+cooper.sw.roku.com:443.0, 1, roku-tv/roku-tv
+
+cs-prde.immedia-semi.com:443.0, 1, blink-security-hub/blink-security-hub
+
+cs-u002.immedia-semi.com:443.0, 1, blink-security-hub/blink-security-hub
+
+dcp.dc1.philips.com:80.0, 1, t-philips-hub/t-philips-hub
+
+deventry.tplinkcloud.com:443.0, 1, tplink-bulb/tplink_cat
+
+dh.amcrestsecurity.com:80.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+diagnostics.meethue.com:80.0, 1, t-philips-hub/t-philips-hub
+
+display.ravm.tv:443.0, 1, roku-tv/roku-tv
+
+dlg.io.mi.com:80.0, 1, xiaomi-ricecooker/xiaomi_cat
+
+es.ring.com:443.0, 1, ring-doorbell/ring-doorbell
+
+eu.cloud.sengled.com:443.0, 1, sengled-hub/sengled_cat
+
+eu-life2.cloud.sengled.com:443.0, 1, sengled-hub/sengled_cat
+
+euw1-api.tplinkra.com:443.0, 7, tplink-bulb/tplink_cat, tplink-plug2/tplink_cat, tplink-plug/tplink_cat, tplink-plug-pow1/tplink_cat, tplink-plug-pow2/tplink_cat, tplink-plug-pow4/tplink_cat, tplink-plug-pow6/tplink_cat
+
+fw.ring.com:443.0, 1, ring-doorbell/ring-doorbell
+
+fw.ring.com:80.0, 1, ring-doorbell/ring-doorbell
+
+fw-update2.smartthings.com:443.0, 2, smartthings-hub/smartthings_cat, t-smartthings-hub/smartthings_cat
+
+fwuprod.clouddevice.io:443.0, 1, honeywell-thermostat/honeywell-thermostat
+
+hubstatus.insteon.com:443.0, 1, insteon-hub/insteon-hub
+
+iot.meross.com:2001.0, 1, meross-dooropener/meross-dooropener
+
+keysvc.cs.roku.com:443.0, 1, roku-tv/roku-tv
+
+lcc-prodsf-lcc01sf-iothub.azure-devices.net:5671.0, 1, honeywell-thermostat/honeywell-thermostat
+
+log.eu.xiaoyi.com:80.0, 1, yi-camera/yi-camera
+
+ls.cti.roku.com:443.0, 1, roku-tv/roku-tv
+
+m1.ubia.cn:10240.0, 1, ubell-doorbell/ubell-doorbell
+
+m2.tuyaus.com:8886.0, 2, smartlife-bulb/smartlife_cat, smartlife-remote/smartlife_cat
+
+m2.ubia.cn:10240.0, 1, ubell-doorbell/ubell-doorbell
+
+m3.ubia.cn:10240.0, 1, ubell-doorbell/ubell-doorbell
+
+m4.ubia.cn:10240.0, 1, ubell-doorbell/ubell-doorbell
+
+mhc8806us.magichue.net:8806.0, 1, magichome-strip/magichome-strip
+
+motiondetection-eu.oss-eu-central-1.aliyuncs.com:80.0, 1, yi-camera/yi-camera
+
+mq.gw.tuyaeu.com:1883.0, 2, smartlife-bulb/smartlife_cat, smartlife-remote/smartlife_cat
+
+mq.gw.tuyaus.com:1883.0, 1, bulb1/bulb1
+
+n-deventry.tplinkcloud.com:443.0, 6, tplink-bulb/tplink_cat, tplink-plug2/tplink_cat, tplink-plug-pow1/tplink_cat, tplink-plug-pow2/tplink_cat, tplink-plug-pow4/tplink_cat, tplink-plug-pow6/tplink_cat
+
+n-devs.tplinkcloud.com:443.0, 7, tplink-bulb/tplink_cat, tplink-plug2/tplink_cat, tplink-plug-pow1/tplink_cat, tplink-plug-pow2/tplink_cat, tplink-plug-pow4/tplink_cat, tplink-plug-pow5/tplink_cat, tplink-plug-pow6/tplink_cat
+
+netcom.netatmo.net:25050.0, 1, netatmo-weather-station/netatmo-weather-station
+
+ntp1.dlink.com:123.0, 1, dlink-mov/dlink-mov
+
+ot.io.mi.com:8053.0, 5, philips-bulb/xiaomi_cat, xiaomi-hub/xiaomi_cat, xiaomi-plug/xiaomi_cat, xiaomi-ricecooker/xiaomi_cat, xiaomi-strip/xiaomi_cat
+
+ott.io.mi.com:80.0, 3, philips-bulb/xiaomi_cat, xiaomi-hub/xiaomi_cat, xiaomi-strip/xiaomi_cat
+
+p2p3.nwsvr2.com:32100.0, 1, wansview-cam-wired/wansview-cam-wired
+
+p2p4.nwsvr2.com:32100.0, 1, wansview-cam-wired/wansview-cam-wired
+
+p2p.amcrestview.com:8800.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+p2p.amcrestview.com:8802.0, 1, amcrest-cam-wired/amcrest-cam-wired
+
+p2p.reolink.com:51009.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51013.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51029.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51033.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51047.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51057.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51079.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51081.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51089.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51117.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51123.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51129.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51143.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51159.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51165.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51177.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51185.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51199.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51217.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51235.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51253.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51263.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51267.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51269.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51275.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51293.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51295.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51305.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51309.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51329.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51331.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51339.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51343.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51349.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51367.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51373.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51389.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51393.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51399.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51419.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51421.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51455.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51479.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51497.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51501.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51519.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51523.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51547.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51567.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51579.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51587.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51589.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51633.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51657.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51663.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51669.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51671.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51673.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51699.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51707.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51725.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51729.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51735.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51747.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51779.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51795.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51799.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51855.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51867.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51877.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51887.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51895.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51913.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51927.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51931.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51935.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51945.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51949.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51961.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51967.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:51987.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:52013.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:58200.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:9997.0, 1, reolink-cam-wired/reolink-cam-wired
+
+p2p.reolink.com:9999.0, 1, reolink-cam-wired/reolink-cam-wired
+
+pc.anovaculinary.com:8080.0, 1, sousvide/sousvide
+
+pnp.microseven.com:7000.0, 1, microseven-camera/microseven-camera
+
+pnp.microseven.com:7007.0, 1, microseven-camera/microseven-camera
+
+pprtp.iruntop.com:32100.0, 1, luohe-spycam/luohe-spycam
+
+prd17a.boxen.electricimp.com:443.0, 1, ikettle/ikettle
+
+prd19a.boxen.electricimp.com:31314.0, 1, smarter-coffee-mach/smarter-coffee-mach
+
+provprod.clouddevice.io:443.0, 1, honeywell-thermostat/honeywell-thermostat
+
+pub-cfg.secu100.net:6610.0, 1, icsee-doorbell/icsee-doorbell
+
+pub-cfg.secu100.net:6612.0, 1, icsee-doorbell/icsee-doorbell
+
+pub-cfg.secu100.net:6614.0, 1, icsee-doorbell/icsee-doorbell
+
+pub-cfg.secu100.net:80.0, 1, icsee-doorbell/icsee-doorbell
+
+pub-cfg.secu100.net:8086.0, 1, icsee-doorbell/icsee-doorbell
+
+pushx.reolink.com:80.0, 1, reolink-cam-wired/reolink-cam-wired
+
+query.jingxuncloud.com:6000.0, 1, appkettle/appkettle
+
+r0801.dch.dlink.com:443.0, 1, dlink-mov/dlink-mov
+
+r0802.dch.dlink.com:443.0, 1, dlink-mov/dlink-mov
+
+r0803.dch.dlink.com:443.0, 1, dlink-mov/dlink-mov
+
+rest-hw-prde.immedia-semi.com:443.0, 1, blink-security-hub/blink-security-hub
+
+rest-hw-u002.immedia-semi.com:443.0, 1, blink-security-hub/blink-security-hub
+
+retail-prod.web.roku.com:443.0, 1, roku-tv/roku-tv
+
+rss-dpd-service.ring.com:9998.0, 1, ring-doorbell/ring-doorbell
+
+rtp3.runtopcam.com:32100.0, 1, luohe-spycam/luohe-spycam
+
+scribe.logs.roku.com:443.0, 1, roku-tv/roku-tv
+
+secure.brillion.geappliances.com:443.0, 1, microwave/microwave
+
+srmp01lb02.ch.pub.arrayent.com:80.0, 1, lightify-hub/lightify-hub
+
+srmp02lb02.us.pub.arrayent.com:80.0, 1, lightify-hub/lightify-hub
+
+time.meethue.com:443.0, 1, t-philips-hub/t-philips-hub
+
+tis.cti.roku.com:443.0, 1, roku-tv/roku-tv
+
+tzinfo.dch.dlink.com:80.0, 1, dlink-mov/dlink-mov
+
+us.cloud.sengled.com:443.0, 1, sengled-hub-spoofed/sengled_cat
+
+use1-api.tplinkra.com:443.0, 8, tplink-bulb/tplink_cat, tplink-plug2/tplink_cat, tplink-plug-pow1/tplink_cat, tplink-plug-pow2/tplink_cat, tplink-plug-pow4/tplink_cat, tplink-plug-pow5/tplink_cat, tplink-plug-pow6/tplink_cat, tplink-plug/tplink_cat
+
+us-life2.cloud.sengled.com:443.0, 1, sengled-hub-spoofed/sengled_cat
+
+ws.meethue.com:443.0, 1, t-philips-hub/t-philips-hub
+
+wu.ring.com:443.0, 1, ring-doorbell/ring-doorbell
+
+www.ecdinterface.philips.com:80.0, 1, t-philips-hub/t-philips-hub
+
+www-roku.mgo.com:443.0, 1, roku-tv/roku-tv
+
+xmpp14.wca.geappliances.com:5225.0, 1, microwave/microwave
+

@@ -1,0 +1,86 @@
+firetv/firetv_cat, 61, a4k.amazon.co.uk:443, a4k.amazon.com:443, aax-eu.amazon-adsystem.com:443, aax-eu.amazon-adsystem.com:80, aax-us-east.amazon-adsystem.com:80, aca-livecards-service-eu.amazon.com:443, ags-ext.amazon.com:443, andr-22-aftt-0.api.amazonvideo.com:443, api.amazon.co.uk:443, api.amazon.com:443, api.amazonalexa.com:443, api.eu.amazonalexa.com:443, appstore-tv-prod-eu.amazon.com:443, appstore-tv-prod-na.amazon.com:443, arcus-uswest.amazon.com:443, aviary.amazon.com:443, aviary.amazon.de:443, avs-alexa-18-eu.amazon.com:443, avs-alexa-18-na.amazon.com:443, avs-alexa-18-na.amazon.com:80, cdws.eu-west-1.amazonaws.com:443, cdws.us-east-1.amazonaws.com:443, cognito-identity.eu-west-1.amazonaws.com:443, cognito-identity.us-east-1.amazonaws.com:443, cortana-gateway.amazon.com:443, dcape-na.amazon.com:443, det-ta-g7g.amazon.com:443, device-messaging-na.amazon.com:443, device-metrics-us.amazon.com:443, dp-discovery-na-ext.amazon.com:443, dp-gw-na.amazon.com:443, dp-rsm-prod.amazon.com:443, firereleasenotes-eu.amazon.com:443, firereleasenotes-na.amazon.com:443, firetv-news-content-ingestion.amazon.com:443, fls-na.amazon.com:443, ftv-smp.ntp-fireos.com:123, ftvr-eu.amazon.com:443, ftvr-na.amazon.com:443, img.vidible.tv:80, kindle-time.amazon.com:80, kinesis.us-east-1.amazonaws.com:443, kms.us-east-1.amazonaws.com:443, ktpx-eu.amazon.com:443, ktpx-uk.amazon.com:443, mads-eu.amazon.com:443, mads.amazon.com:443, mas-ext-eu.amazon.com:443, mas-ext.amazon.com:443, mas-sdk.amazon.com:443, msh.amazon.co.uk:443, msh.amazon.com:443, msh.amazon.de:443, prime.amazon.com:443, prime.amazon.eu:443, s.amazon-adsystem.com:443, s.amazon-adsystem.com:80, softwareupdates.amazon.com:443, todo-ta-g7g.amazon.com:443, unagi-eu.amazon.com:443, unagi-na.amazon.com:443
+
+echospot/echo_cat, 28, alexa.amazon.co.uk:443, alexa.amazon.com:443, api.amazon.co.uk:443, api.amazon.com:443, api.amazonalexa.com:443, api.eu.amazonalexa.com:443, arcus-uswest.amazon.com:443, avs-alexa-5-eu.amazon.com:443, avs-alexa-5-na.amazon.com:443, avs-alexa-5-na.amazon.com:80, cognito-identity.us-east-1.amazonaws.com:443, dcape-na.amazon.com:443, det-ta-g7g.amazon.com:443, device-messaging-na.amazon.com:443, device-metrics-us.amazon.com:443, dp-gw-na.amazon.com:443, dp-rsm-prod.amazon.com:443, drive.amazonaws.com:443, fls-na.amazon.com:443, kindle-time.amazon.com:80, msh.amazon.co.uk:443, msh.amazon.com:443, ntp-g7g.amazon.com:123, prod.amcs-tachyon.com:443, softwareupdates.amazon.com:443, tinytts.amazon.com:443, todo-ta-g7g.amazon.com:443, unagi-na.amazon.com:443
+
+echodot/echo_cat, 18, api.amazon.co.uk:443, api.amazon.com:443, api.amazonalexa.com:443, api.eu.amazonalexa.com:443, arcus-uswest.amazon.com:443, avs-alexa-4-eu.amazon.com:443, dcape-na.amazon.com:443, det-ta-g7g.amazon.com:443, device-messaging-na.amazon.com:443, device-metrics-us.amazon.com:443, dp-gw-na.amazon.com:443, fireoscaptiveportal.com:80, msh.amazon.com:443, ntp-g7g.amazon.com:123, prod.amcs-tachyon.com:443, softwareupdates.amazon.com:443, todo-ta-g7g.amazon.com:443, unagi-na.amazon.com:443
+
+allure-speaker/echo_cat, 5, api.amazon.com:443, api.amazonalexa.com:443, avs-alexa-eu.amazon.com:443, avs-alexa-na.amazon.com:443, avs-alexa-na.amazon.com:80 (5 rules, 3 indices, threshold 3)
+
+echoplus/echo_cat, 20, api.amazon.com:443, api.amazonalexa.com:443, api.eu.amazonalexa.com:443, arcus-uswest.amazon.com:443, avs-alexa-4-eu.amazon.com:443, avs-alexa-4-na.amazon.com:443, avs-alexa-4-na.amazon.com:80, dcape-na.amazon.com:443, det-ta-g7g.amazon.com:443, device-messaging-na.amazon.com:443, device-metrics-us.amazon.com:443, dp-gw-na.amazon.com:443, dp-rsm-prod.amazon.com:443, dss-na.amazon.com:443, kindle-time.amazon.com:80, ntp-g7g.amazon.com:123, prod.amcs-tachyon.com:443, softwareupdates.amazon.com:443, todo-ta-g7g.amazon.com:443, unagi-na.amazon.com:443
+
+nest-tstat, 4, *.transport.home.nest.com:9543, frontdoor.nest.com:443, logsink.devices.nest.com:443, weather.nest.com:443 (4 rules, 1 index, threshold 1)
+
+samsungtv-wired, 27, acr-eu-prd.internetat.tv:443, acr0.samsungcloudsolution.com:443, api.samsungcloud.com:443, apu.samsungelectronics.com:443, bpu.samsungelectronics.com:443, configprd.samsungcloudsolution.net:443, cpu.samsungelectronics.com:443, dpu.samsungelectronics.com:443, gld.push.samsungosp.com:5223, gpm.samsungqbe.com:443, kpu.samsungelectronics.com:443, lcprd1.samsungcloudsolution.net:443, log-config.samsungacr.com:443, log-ingestion-eu.samsungacr.com:443, notice.samsungcloudsolution.com:443, ontprd10.samsungcloudsolution.net:443, osb-apps.samsungqbe.com:443, osb-eusvc.samsungqbe.com:443, osb.samsungqbe.com:443, qoe.samsungcloud.tv:443, sas.samsungcloudsolution.com:443, time.samsungcloudsolution.com:443, time.samsungcloudsolution.com:80, www.samsungotn.net:443, www.samsungotn.net:80, xpu.samsungelectronics.com:443, zpu.samsungelectronics.com:443 (27 rules, 26 index, threshold 5)
+
+dryer, 6, api.cspserver.net:443, conn.samsungcloud.com:5683, info.cspserver.net:80, shome.sca.samsung.com:443, www.samsungotn.net:443, www.samsungotn.net:80 (6 rules, 5 index, threshold 3)
+
+fridge, 15, api.samsungcloud.com:443, configprd.samsungcloudsolution.net:443, info.cspserver.net:80, ipv4.connman.net:80, lcprd1.samsungcloudsolution.net:443, log.samsunghrm.com:443, oauth.ring.com:443, ocfconnect-shard-na03-useast2.samsungiotcloud.com:443, ontprd10.samsungcloudsolution.net:443, prd-use2-pdss-sync.aibixby.com:443, prd-use2-user.aibixby.com:443, uimetadata.samsungiotcloud.com:443, us-fhapi.cspserver.net:443, www.samsungotn.net:443, www.samsungotn.net:80 (15 rules, 14 index, threshold 4)
+
+zmodo-doorbell, 7, 11-devaccess.myzmodo.com:443.0, 12-alertsfile.myzmodo.com:443.0, 12-devaccess.myzmodo.com:443.0, 13-devaccess.myzmodo.com:443.0, 14-devaccess.myzmodo.com:443.0, 21-alertsfile.myzmodo.com:443.0, 22-alertsfile.myzmodo.com:443.0 (7 rules, 2 index, threshold 1)
+
+smartlife_cat, 4, a3.tuyaus.com:443.0, a.tuyaeu.com:80.0, m2.tuyaus.com:8886.0, mq.gw.tuyaeu.com:1883.0 (4 rules, 1 index, threshold 1)
+
+appkettle, 3, ak.myappkettle.com:443.0, ak.myappkettle.com:80.0, query.jingxuncloud.com:6000.0 (3 rules, 2 index, threshold 1)
+
+roku-tv, 15, amarillo.sw.roku.com:443.0, api.roku.com:443.0, api.rokutime.com:443.0, api.sr.roku.com:443.0, configsvc.cs.roku.com:443.0, cooper.logs.roku.com:443.0, cooper.sb.roku.com:443.0, cooper.sw.roku.com:443.0, display.ravm.tv:443.0, keysvc.cs.roku.com:443.0, ls.cti.roku.com:443.0, retail-prod.web.roku.com:443.0, scribe.logs.roku.com:443.0, tis.cti.roku.com:443.0, www-roku.mgo.com:443.0 (15 rules, 14 index, threshold 4)
+
+amcrest-cam-wired, 6, amcrestview.com:12366.0, command-13.amcrestcloud.com:443.0, config.amcrestcloud.com:443.0, dh.amcrestsecurity.com:80.0, p2p.amcrestview.com:8800.0, p2p.amcrestview.com:8802.0 (6 rules, 5 index, threshold 2)
+
+yi-camera, 6, api.eu.xiaoyi.com:443.0, api.eu.xiaoyi.com:80.0, api.us.xiaoyi.com:443.0, api.us.xiaoyi.com:80.0, log.eu.xiaoyi.com:80.0, motiondetection-eu.oss-eu-central-1.aliyuncs.com:80.0 (6 rules, 3 index, threshold 2)
+
+icsee-doorbell, 6, api.gdxp.com:8100.0, pub-cfg.secu100.net:6610.0, pub-cfg.secu100.net:6612.0, pub-cfg.secu100.net:6614.0, pub-cfg.secu100.net:80.0, pub-cfg.secu100.net:8086.0 (6 rules, 2 index, threshold 2)
+
+smartthings_cat, 2, api.smartthings.com:443.0, fw-update2.smartthings.com:443.0 (2 rules, 1 index, threshold 1)
+
+bulb1, 2, a.tuyaus.com:80.0, mq.gw.tuyaus.com:1883.0 (2 rules, 1 index, threshold 1)
+
+blink-security-hub, 4, cs-prde.immedia-semi.com:443.0, cs-u002.immedia-semi.com:443.0, rest-hw-prde.immedia-semi.com:443.0, rest-hw-u002.immedia-semi.com:443.0 (4 rules, 1 index, threshold 1)
+
+t-philips-hub, 5, dcp.dc1.philips.com:80.0, diagnostics.meethue.com:80.0, time.meethue.com:443.0, ws.meethue.com:443.0, www.ecdinterface.philips.com:80.0 (5 rules, 5 indices, threshold 2)
+
+tplink-bulb/tplink_cat, 5, deventry.tplinkcloud.com:443.0, euw1-api.tplinkra.com:443.0, n-deventry.tplinkcloud.com:443.0, n-devs.tplinkcloud.com:443.0, use1-api.tplinkra.com:443.0 (5 rules, 2 index, threshold 2)
+
+xiaomi-ricecooker/xiaomi_cat, 2, dlg.io.mi.com:80.0, ot.io.mi.com:8053.0 (2 rules, 2 index, threshold 2)
+
+ring-doorbell, 5, es.ring.com:443.0, fw.ring.com:443.0, fw.ring.com:80.0, rss-dpd-service.ring.com:9998.0, wu.ring.com:443.0 (5 rules, 5 indices, threshold 2)
+
+sengled-hub/sengled_cat, 2, eu.cloud.sengled.com:443.0, eu-life2.cloud.sengled.com:443.0 (2 rules, 2 index, threshold 1)
+
+tplink_cat, 4, euw1-api.tplinkra.com:443.0, n-deventry.tplinkcloud.com:443.0, n-devs.tplinkcloud.com:443.0, use1-api.tplinkra.com:443.0 (4 rules, 1 index, threshold 1)
+
+honeywell-thermostat, 3, fwuprod.clouddevice.io:443.0, lcc-prodsf-lcc01sf-iothub.azure-devices.net:5671.0, provprod.clouddevice.io:443.0 (3 rules, 1 index, threshold 1)
+
+insteon-hub, 1, hubstatus.insteon.com:443.0 (1 rule, threshold 1)
+
+meross-dooropener, 1, iot.meross.com:2001.0 (1 rule, threshold 1)
+
+ubell-doorbell, 4, m1.ubia.cn:10240.0, m2.ubia.cn:10240.0, m3.ubia.cn:10240.0, m4.ubia.cn:10240.0 (4 rules, 1 index, threshold 1)
+
+magichome-strip, 1, mhc8806us.magichue.net:8806.0 (1 rule, threshold 1)
+
+netatmo-weather-station, 1, netcom.netatmo.net:25050.0 (1 rule, threshold 1)
+
+dlink-mov, 5, ntp1.dlink.com:123.0, r0801.dch.dlink.com:443.0, r0802.dch.dlink.com:443.0, r0803.dch.dlink.com:443.0, tzinfo.dch.dlink.com:80.0 (5 rules, 5 indices, threshold 2)
+
+xiaomi_cat, 2, ot.io.mi.com:8053.0, ott.io.mi.com:80.0 (2 rule, 1 index, threshold 1)
+
+wansview-cam-wired, 2, p2p3.nwsvr2.com:32100.0, p2p4.nwsvr2.com:32100.0 (2 rule, 1 index, threshold 1)
+
+reolink-cam-wired, 86, p2p.reolink.com:51009.0, p2p.reolink.com:51013.0, p2p.reolink.com:51029.0, p2p.reolink.com:51033.0, p2p.reolink.com:51047.0, p2p.reolink.com:51057.0, p2p.reolink.com:51079.0, p2p.reolink.com:51081.0, p2p.reolink.com:51089.0, p2p.reolink.com:51117.0, p2p.reolink.com:51123.0, p2p.reolink.com:51129.0, p2p.reolink.com:51143.0, p2p.reolink.com:51159.0, p2p.reolink.com:51165.0, p2p.reolink.com:51177.0, p2p.reolink.com:51185.0, p2p.reolink.com:51199.0, p2p.reolink.com:51217.0, p2p.reolink.com:51235.0, p2p.reolink.com:51253.0, p2p.reolink.com:51263.0, p2p.reolink.com:51267.0, p2p.reolink.com:51269.0, p2p.reolink.com:51275.0, p2p.reolink.com:51293.0, p2p.reolink.com:51295.0, p2p.reolink.com:51305.0, p2p.reolink.com:51309.0, p2p.reolink.com:51329.0, p2p.reolink.com:51331.0, p2p.reolink.com:51339.0, p2p.reolink.com:51343.0, p2p.reolink.com:51349.0, p2p.reolink.com:51367.0, p2p.reolink.com:51373.0, p2p.reolink.com:51389.0, p2p.reolink.com:51393.0, p2p.reolink.com:51399.0, p2p.reolink.com:51419.0, p2p.reolink.com:51421.0, p2p.reolink.com:51455.0, p2p.reolink.com:51479.0, p2p.reolink.com:51497.0, p2p.reolink.com:51501.0, p2p.reolink.com:51519.0, p2p.reolink.com:51523.0, p2p.reolink.com:51547.0, p2p.reolink.com:51567.0, p2p.reolink.com:51579.0, p2p.reolink.com:51587.0, p2p.reolink.com:51589.0, p2p.reolink.com:51633.0, p2p.reolink.com:51657.0, p2p.reolink.com:51663.0, p2p.reolink.com:51669.0, p2p.reolink.com:51671.0, p2p.reolink.com:51673.0, p2p.reolink.com:51699.0, p2p.reolink.com:51707.0, p2p.reolink.com:51725.0, p2p.reolink.com:51729.0, p2p.reolink.com:51735.0, p2p.reolink.com:51747.0, p2p.reolink.com:51779.0, p2p.reolink.com:51795.0, p2p.reolink.com:51799.0, p2p.reolink.com:51855.0, p2p.reolink.com:51867.0, p2p.reolink.com:51877.0, p2p.reolink.com:51887.0, p2p.reolink.com:51895.0, p2p.reolink.com:51913.0, p2p.reolink.com:51927.0, p2p.reolink.com:51931.0, p2p.reolink.com:51935.0, p2p.reolink.com:51945.0, p2p.reolink.com:51949.0, p2p.reolink.com:51961.0, p2p.reolink.com:51967.0, p2p.reolink.com:51987.0, p2p.reolink.com:52013.0, p2p.reolink.com:58200.0, p2p.reolink.com:9997.0, p2p.reolink.com:9999.0, pushx.reolink.com:80.0 (86 rules, 2 indicies, threshold 1)
+
+sousvide, 1, pc.anovaculinary.com:8080.0 (1 rule, threshold 1)
+
+microseven-camera, 2, pnp.microseven.com:7000.0, pnp.microseven.com:7007.0 (1 rule, threshold 1)
+
+luohe-spycam, 2, pprtp.iruntop.com:32100.0, rtp3.runtopcam.com:32100.0 (1 rule, threshold 1)
+
+ikettle, 1, prd17a.boxen.electricimp.com:443.0 (1 rule, threshold 1)
+
+smarter-coffee-mach, 1, prd19a.boxen.electricimp.com:31314.0 (1 rule, threshold 1)
+
+microwave, 2, secure.brillion.geappliances.com:443.0, xmpp14.wca.geappliances.com:5225.0 (2 rule, 1 index, threshold 1)
+
+lightify-hub, 2, srmp01lb02.ch.pub.arrayent.com:80.0, srmp02lb02.us.pub.arrayent.com:80.0 (2 rule, 1 index, threshold 1)
+
+sengled-hub-spoofed, 2, us.cloud.sengled.com:443.0, us-life2.cloud.sengled.com:443.0 (2 rule, 1 index, threshold 1)
+
