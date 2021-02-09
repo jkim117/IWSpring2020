@@ -125,7 +125,8 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    for i in range(0, 100):
+    for i in range(0, 40):
+        print(i)
         knownlistDict = {}
         netassayTable = {}
 

@@ -18,24 +18,44 @@ with open('unlimited0000.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-dns_total_60 = 0
-packets_total_60 = 0
-bytes_total_60 = 0
+f = open('parser_limits.txt', 'r')
+rows = f.read().split('\n')
 
-with open('parse60_0000.csv') as csvfile:
-    reader = csv.reader(csvfile)
-    for row in reader:
-        if row[0] == 'Domain':
-            continue
-        dns_total_60 += float(row[1])
-        packets_total_60 += float(row[3])
-        bytes_total_60 += float(row[4])
+dns_arr = []
+packets_arr = []
+bytes_arr = []
+numBytesList = []
 
-print(dns_total_60 / true_dns_total)
-print(packets_total_60 / true_packets_total)
-print(bytes_total_60 / true_bytes_total)
-        
+count = 0
+for r in rows:
+    numBytesList.append(count * 4)
+    values = r.split(',')
+    dns_arr.append(1 - float(values[0]) / true_dns_total)
+    packets_arr.append(1 - float(values[1]) / true_packets_total)
+    bytes_arr.append(1 - float(values[2]) / true_bytes_total)
+    count += 1
 
+
+fig, ax = plt.subplots()
+
+line1, = ax.plot(numBytesList, dns_arr)
+line1.set_label('Traffic by DNS Queries')
+
+line2, = ax.plot(numBytesList, packets_arr)
+line2.set_label('Traffic by Packets')
+
+line3, = ax.plot(numBytesList, bytes_arr)
+line3.set_label('Traffic by Bytes')
+
+ax.legend()
+
+ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Domain Name Parser Limitations')
+ax.grid()
+fig.savefig("dns_parser_limit.png")
+
+plt.show()
+#scatter_compare(python_byt, p4_byt)
+#rank_compare(python_byt, p4_byt)
 
 
 '''fig, ax = plt.subplots()
