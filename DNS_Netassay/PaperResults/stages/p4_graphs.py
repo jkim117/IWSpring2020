@@ -46,38 +46,40 @@ fig, ax = plt.subplots()
 line1, = ax.plot(memoryList, stage_arrs[0])
 line1.set_label('1 Stage')
 
-line2, = ax.plot(memoryList, stage_arrs[1])
+line2, = ax.plot(memoryList, stage_arrs[1], color='red')
 line2.set_label('2 Stages')
 
-line3, = ax.plot(memoryList, stage_arrs[2])
-line3.set_label('3 Stages')
+#line3, = ax.plot(memoryList, stage_arrs[2])
+#line3.set_label('3 Stages')
 
 line4, = ax.plot(memoryList, stage_arrs[3])
 line4.set_label('4 Stages')
 
-line5, = ax.plot(memoryList, stage_arrs[4])
+'''line5, = ax.plot(memoryList, stage_arrs[4])
 line5.set_label('5 Stages')
 
 line6, = ax.plot(memoryList, stage_arrs[5])
 line6.set_label('6 Stages')
 
 line7, = ax.plot(memoryList, stage_arrs[6])
-line7.set_label('7 Stages')
+line7.set_label('7 Stages')'''
 
 line8, = ax.plot(memoryList, stage_arrs[7])
 line8.set_label('8 Stages')
 
-line9, = ax.plot(memoryList, stage_arrs[8])
+'''line9, = ax.plot(memoryList, stage_arrs[8])
 line9.set_label('9 Stages')
 
 line10, = ax.plot(memoryList, stage_arrs[9])
-line10.set_label('10 Stages')
+line10.set_label('10 Stages')'''
+
+plt.axvline(x=65536, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Memory Size Limitations')
+ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
-ax.set_xscale('log')
+ax.set_xscale('log', base=2)
 fig.savefig("dns_parser_limit.png")
 
 plt.show()

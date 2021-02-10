@@ -34,7 +34,7 @@ count = 0
 for r in rows:
     memoryList.append(2**count)
     values = r.split(',')
-    dns_arr.append(1 - float(values[0]) / dns_60_total)
+    dns_arr.append(1 - (float(values[0]) - float(values[3])) / dns_60_total)
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
     count += 1
@@ -43,18 +43,20 @@ for r in rows:
 fig, ax = plt.subplots()
 
 line1, = ax.plot(memoryList, dns_arr)
-line1.set_label('Traffic by DNS Queries')
+line1.set_label('DNS Queries')
 
 line2, = ax.plot(memoryList, packets_arr)
-line2.set_label('Traffic by Packets')
+line2.set_label('Packets')
 
 line3, = ax.plot(memoryList, bytes_arr)
-line3.set_label('Traffic by Bytes')
+line3.set_label('Bytes')
+
+plt.axvline(x=65536, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Memory Size Limitations')
-ax.set_xscale('log')
+ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
+ax.set_xscale('log', base=2)
 ax.grid()
 fig.savefig("dns_parser_limit.png")
 

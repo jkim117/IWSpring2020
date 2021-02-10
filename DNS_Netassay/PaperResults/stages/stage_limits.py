@@ -378,11 +378,17 @@ if __name__ == '__main__':
             total_dns = 0
             total_packets = 0
             total_bytes = 0
+            total_dns_missed = 0
+            total_est_packets = 0
+            total_est_bytes = 0
             for l in knownlistDict.items():
                 total_dns += l[1][0]
                 total_packets += l[1][1]
                 total_bytes += l[1][2]
-            outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
+                total_dns_missed += l[1][3]
+                total_est_packets += l[1][4]
+                total_est_bytes += l[1][5]
+            outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+','+str(total_dns_missed)+','+str(total_est_packets)+','+str(total_est_bytes)+'\n')
         outfile.write('*')
 
     outfile.close()

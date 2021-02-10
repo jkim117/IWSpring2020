@@ -35,20 +35,24 @@ for r in rows:
     values = r.split(',')
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
-    count += 10
+    # count += 10 change for real
+    count += 1
 
 
 fig, ax = plt.subplots()
 
-line2, = ax.plot(timeoutList, packets_arr)
-line2.set_label('Traffic by Packets')
-
 line3, = ax.plot(timeoutList, bytes_arr)
-line3.set_label('Traffic by Bytes')
+line3.set_label('Bytes')
+
+line2, = ax.plot(timeoutList, packets_arr)
+line2.set_label('Packets')
+
+plt.axvline(x=3, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Timeout Limitation')
+
+ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout Limitation')
 ax.grid()
 fig.savefig("timeout_limit.png")
 
