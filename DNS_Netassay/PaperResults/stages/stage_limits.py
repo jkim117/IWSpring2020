@@ -223,7 +223,11 @@ def parse_dns_response(ip_packet, ts, i):
 def parse_tcp(packet_len, ip_packet, ts, i):
     global TIMEOUT
     global TABLE_SIZE
-    modulo = int(TABLE_SIZE / i)
+    try:
+        modulo = int(TABLE_SIZE / i)
+    except:
+        print('table size', TABLE_SIZE)
+        print(i)
 
     source = socket.inet_ntoa(ip_packet['src']) #server
     dest = socket.inet_ntoa(ip_packet['dst']) #client
