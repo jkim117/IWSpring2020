@@ -223,11 +223,8 @@ def parse_dns_response(ip_packet, ts, i):
 def parse_tcp(packet_len, ip_packet, ts, i):
     global TIMEOUT
     global TABLE_SIZE
-    try:
-        modulo = int(TABLE_SIZE / i)
-    except:
-        print('table size', TABLE_SIZE)
-        print(i)
+    modulo = int(TABLE_SIZE / i)
+
 
     source = socket.inet_ntoa(ip_packet['src']) #server
     dest = socket.inet_ntoa(ip_packet['dst']) #client
@@ -368,14 +365,14 @@ if __name__ == '__main__':
                 else:
                     parse_tcp(dns_code, ip, ts, i)
 
-            for i in knownlistDict.keys():
-                num_packets = knownlistDict[i][1]
-                num_bytes = knownlistDict[i][2]
-                num_missed = knownlistDict[i][3]
-                num_dns = knownlistDict[i][0]
+            for k in knownlistDict.keys():
+                num_packets = knownlistDict[k][1]
+                num_bytes = knownlistDict[k][2]
+                num_missed = knownlistDict[k][3]
+                num_dns = knownlistDict[k][0]
                 if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
+                    knownlistDict[k][4] = num_packets / (1 - (num_missed / num_dns))
+                    knownlistDict[k][5] = num_bytes / (1 - (num_missed / num_dns))
 
 
             total_dns = 0
