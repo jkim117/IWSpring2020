@@ -129,7 +129,8 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    for timeout in range(0, 610, 10):
+    #for timeout in range(0, 610, 10):
+    for timeout in range(0, 61):
         
         TIMEOUT = timeout
         print(TIMEOUT)

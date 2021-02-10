@@ -22,7 +22,7 @@ dns_60_total = 26419
 packets_60_total = 122386
 bytes_60_total = 7171016 # key thing is here
 
-f = open('memory_limits.txt', 'r')
+f = open('stage_limits.txt', 'r')
 by_stage = f.read().split('*')
 
 

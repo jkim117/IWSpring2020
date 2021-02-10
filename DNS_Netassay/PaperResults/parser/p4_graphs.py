@@ -34,22 +34,25 @@ for r in rows:
     packets_arr.append(1 - float(values[1]) / true_packets_total)
     bytes_arr.append(1 - float(values[2]) / true_bytes_total)
     count += 1
+    if count == 26:
+        break
 
 
 fig, ax = plt.subplots()
 
-line1, = ax.plot(numBytesList, dns_arr)
-line1.set_label('Traffic by DNS Queries')
-
 line2, = ax.plot(numBytesList, packets_arr)
-line2.set_label('Traffic by Packets')
-
 line3, = ax.plot(numBytesList, bytes_arr)
-line3.set_label('Traffic by Bytes')
+line1, = ax.plot(numBytesList, dns_arr)
+
+line2.set_label('Packets')
+line3.set_label('Bytes')
+line1.set_label('DNS Queries')
+
+plt.axvline(x=60, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Domain Name Parser Limitations')
+ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Domain Name Parser Limitations')
 ax.grid()
 fig.savefig("dns_parser_limit.png")
 
