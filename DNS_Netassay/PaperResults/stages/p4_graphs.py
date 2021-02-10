@@ -18,10 +18,6 @@ with open('unlimited0000.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-dns_60_total = 26419
-packets_60_total = 122386
-bytes_60_total = 7171016
-
 f = open('memory_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -34,9 +30,9 @@ count = 0
 for r in rows:
     memoryList.append(2**count)
     values = r.split(',')
-    dns_arr.append(1 - float(values[0]) / dns_60_total)
-    packets_arr.append(1 - float(values[1]) / packets_60_total)
-    bytes_arr.append(1 - float(values[2]) / bytes_60_total)
+    dns_arr.append(1 - float(values[0]) / true_dns_total)
+    packets_arr.append(1 - float(values[1]) / true_packets_total)
+    bytes_arr.append(1 - float(values[2]) / true_bytes_total)
     count += 1
 
 

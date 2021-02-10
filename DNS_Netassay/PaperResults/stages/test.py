@@ -17,13 +17,24 @@ netassayTable = {} # Key is concatentation of serever IP/client IP. Value is a k
 
 usedHash1 = {}
 usedHash2 = {}
-TABLE_SIZE = 0
+usedHash3 = {}
+usedHash4 = {}
+usedHash5 = {}
+usedHash6 = {}
+usedHash7 = {}
+usedHash8 = {}
+usedHash9 = {}
+usedHash10 = {}
+
+TABLE_SIZE = 131072
 TIMEOUT = 300
 
 def is_subnet_of(a, b):
     return (b.network_address <= a.network_address and b.broadcast_address >= a.broadcast_address)
 
-def parse_dns_response(ip_packet, ts):
+def parse_dns_response(ip_packet, ts, i):
+
+    modulo = int(TABLE_SIZE / i)
     # Check if it is in the allowed or banned IP lists
     clientIP = socket.inet_ntoa(ip_packet.dst)
     cip_object = ipaddress.ip_network(clientIP)
@@ -54,9 +65,6 @@ def parse_dns_response(ip_packet, ts):
         if (len(part) > 15):
             return
 
-    global TIMEOUT
-    global TABLE_SIZE
-
     for d in known_domains:
         if (matchDomain(d, domain)):
             
@@ -73,11 +81,27 @@ def parse_dns_response(ip_packet, ts):
                     clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(clientIP), byteorder='big'))
                     salt1 = np.uint32(134140211)
                     salt2 = np.uint32(187182238)
+                    salt3 = np.uint32(187238)
+                    salt4 = np.uint32(1853238)
+                    salt5 = np.uint32(1828)
+                    salt6 = np.uint32(12238)
+                    salt7 = np.uint32(72134)
+                    salt8 = np.uint32(152428)
+                    salt9 = np.uint32(164314534)
+                    salt10 = np.uint32(223823)
 
                     key = clientIP + serverIP
 
-                    hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % TABLE_SIZE
-                    hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % TABLE_SIZE
+                    hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
+                    hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
+                    hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
+                    hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
+                    hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
+                    hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
+                    hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
+                    hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
+                    hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
+                    hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
 
                     if(not hash1 in usedHash1):
                         usedHash1[hash1] = [ts, key, domain]
@@ -86,6 +110,9 @@ def parse_dns_response(ip_packet, ts):
                         usedHash1[hash1] = [ts, key, domain]
                     elif(usedHash1[hash1][1] == key): # update timestamp for existing entry
                         usedHash1[hash1] = [ts, key, domain]
+                    elif(i < 2):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
 
                     elif(not hash2 in usedHash2):
                         usedHash2[hash2] = [ts, key, domain]
@@ -94,6 +121,20 @@ def parse_dns_response(ip_packet, ts):
                         usedHash2[hash2] = [ts, key, domain]
                     elif(usedHash2[hash2][1] == key): # update timestamp for existing entry
                         usedHash2[hash2] = [ts, key, domain]
+                    elif(i < 3):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+                    
+                    elif(not hash3 in usedHash3):
+                        usedHash3[hash3] = [ts, key, domain]
+                    elif (ts - usedHash3[hash3][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash3[hash3][1])
+                        usedHash3[hash3] = [ts, key, domain]
+                    elif(usedHash3[hash2][1] == key): # update timestamp for existing entry
+                        usedHash3[hash2] = [ts, key, domain]
+                    elif(i < 4):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
 
                     else:
                         knownlistDict[d][3] = knownlistDict[d][3]+1
@@ -104,11 +145,11 @@ def parse_dns_response(ip_packet, ts):
             break
         
 
-def parse_tcp(packet_len, ip_packet, ts):
+def parse_tcp(packet_len, ip_packet, ts, i):
+    modulo = int(TABLE_SIZE / i)
+
     source = socket.inet_ntoa(ip_packet['src']) #server
     dest = socket.inet_ntoa(ip_packet['dst']) #client
-    global TIMEOUT
-    global TABLE_SIZE
     
     key = dest + source
     if key in netassayTable:
@@ -120,9 +161,25 @@ def parse_tcp(packet_len, ip_packet, ts):
         clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
         salt1 = np.uint32(134140211)
         salt2 = np.uint32(187182238)
+        salt3 = np.uint32(187238)
+        salt4 = np.uint32(1853238)
+        salt5 = np.uint32(1828)
+        salt6 = np.uint32(12238)
+        salt7 = np.uint32(72134)
+        salt8 = np.uint32(152428)
+        salt9 = np.uint32(164314534)
+        salt10 = np.uint32(223823)
 
-        hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % TABLE_SIZE
-        hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % TABLE_SIZE
+        hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
+        hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
+        hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
+        hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
+        hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
+        hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
+        hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
+        hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
+        hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
+        hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
         
         if hash1 in usedHash1 and usedHash1[hash1][1] == key:
             usedHash1[hash1][0] = ts
@@ -177,13 +234,20 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    for i in range(0, 33):
-        TABLE_SIZE = 2 ** i
+    for i in range(1, 11):
         print(i)
         knownlistDict = {}
         netassayTable = {}
         usedHash1 = {}
         usedHash2 = {}
+        usedHash3 = {}
+        usedHash4 = {}
+        usedHash5 = {}
+        usedHash6 = {}
+        usedHash7 = {}
+        usedHash8 = {}
+        usedHash9 = {}
+        usedHash10 = {}
 
         for d in known_domains:
             knownlistDict[d] = [0, 0, 0, 0, 0, 0]
@@ -196,12 +260,12 @@ if __name__ == '__main__':
             # For each packet parse the dns responses
             if (dns_code == -1):
                 try:
-                    parse_dns_response(ip, ts)
+                    parse_dns_response(ip, ts, i)
                 except Exception as e:
                     
                     continue
             else:
-                parse_tcp(dns_code, ip, ts)
+                parse_tcp(dns_code, ip, ts, i)
 
         for i in knownlistDict.keys():
             num_packets = knownlistDict[i][1]
