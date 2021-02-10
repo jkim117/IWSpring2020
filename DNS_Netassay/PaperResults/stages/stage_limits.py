@@ -327,13 +327,12 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
+    for i in range(1, 11):
+        print('stages', i)
 
-    for j in range(0, 33):
-        TABLE_SIZE = 2 ** j
-        print('table', j)
-
-        for i in range(1, 11):
-            print(i)
+        for j in range(0, 33):
+            TABLE_SIZE = 2 ** j
+            print(j)
             knownlistDict = {}
             netassayTable = {}
             usedHash1 = {}

@@ -20,10 +20,10 @@ with open('unlimited0000.csv') as csvfile:
 
 dns_60_total = 26419
 packets_60_total = 122386
-bytes_60_total = 7171016
+bytes_60_total = 7171016 # key thing is here
 
 f = open('memory_limits.txt', 'r')
-rows = f.read().split('\n')
+rows = f.read().split('*')
 
 dns_arr = []
 packets_arr = []
@@ -43,18 +43,40 @@ for r in rows:
 fig, ax = plt.subplots()
 
 line1, = ax.plot(memoryList, dns_arr)
-line1.set_label('Traffic by DNS Queries')
+line1.set_label('1 Stage')
 
 line2, = ax.plot(memoryList, packets_arr)
-line2.set_label('Traffic by Packets')
+line2.set_label('2 Stages')
 
 line3, = ax.plot(memoryList, bytes_arr)
-line3.set_label('Traffic by Bytes')
+line3.set_label('3 Stages')
+
+line4, = ax.plot(memoryList, bytes_arr)
+line4.set_label('4 Stages')
+
+line5, = ax.plot(memoryList, bytes_arr)
+line5.set_label('5 Stages')
+
+line6, = ax.plot(memoryList, bytes_arr)
+line6.set_label('6 Stages')
+
+line7, = ax.plot(memoryList, bytes_arr)
+line7.set_label('7 Stages')
+
+line8, = ax.plot(memoryList, bytes_arr)
+line8.set_label('8 Stages')
+
+line9, = ax.plot(memoryList, bytes_arr)
+line9.set_label('9 Stages')
+
+line10, = ax.plot(memoryList, bytes_arr)
+line10.set_label('10 Stages')
 
 ax.legend()
 
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
+ax.set_xscale('log')
 fig.savefig("dns_parser_limit.png")
 
 plt.show()
