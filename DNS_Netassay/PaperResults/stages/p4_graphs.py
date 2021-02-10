@@ -23,53 +23,54 @@ packets_60_total = 122386
 bytes_60_total = 7171016 # key thing is here
 
 f = open('memory_limits.txt', 'r')
-rows = f.read().split('*')
+by_stage = f.read().split('*')
 
-dns_arr = []
-packets_arr = []
-bytes_arr = []
+
+stage_arrs = [[],[],[],[],[],[],[],[],[],[]]
 memoryList = []
 
-count = 0
-for r in rows:
-    memoryList.append(2**count)
-    values = r.split(',')
-    dns_arr.append(1 - float(values[0]) / true_dns_total)
-    packets_arr.append(1 - float(values[1]) / true_packets_total)
-    bytes_arr.append(1 - float(values[2]) / true_bytes_total)
-    count += 1
+for i in range(0, 10):
+    rows = by_stage[i].split()
+
+    count = 0
+    for r in rows:
+        if i == 0:
+            memoryList.append(2**count)
+        values = r.split(',')
+        stage_arrs[i].append(1 - float(values[2]) / true_bytes_total)
+        count += 1
 
 
 fig, ax = plt.subplots()
 
-line1, = ax.plot(memoryList, dns_arr)
+line1, = ax.plot(memoryList, stage_arrs[0])
 line1.set_label('1 Stage')
 
-line2, = ax.plot(memoryList, packets_arr)
+line2, = ax.plot(memoryList, stage_arrs[1])
 line2.set_label('2 Stages')
 
-line3, = ax.plot(memoryList, bytes_arr)
+line3, = ax.plot(memoryList, stage_arrs[2])
 line3.set_label('3 Stages')
 
-line4, = ax.plot(memoryList, bytes_arr)
+line4, = ax.plot(memoryList, stage_arrs[3])
 line4.set_label('4 Stages')
 
-line5, = ax.plot(memoryList, bytes_arr)
+line5, = ax.plot(memoryList, stage_arrs[4])
 line5.set_label('5 Stages')
 
-line6, = ax.plot(memoryList, bytes_arr)
+line6, = ax.plot(memoryList, stage_arrs[5])
 line6.set_label('6 Stages')
 
-line7, = ax.plot(memoryList, bytes_arr)
+line7, = ax.plot(memoryList, stage_arrs[6])
 line7.set_label('7 Stages')
 
-line8, = ax.plot(memoryList, bytes_arr)
+line8, = ax.plot(memoryList, stage_arrs[7])
 line8.set_label('8 Stages')
 
-line9, = ax.plot(memoryList, bytes_arr)
+line9, = ax.plot(memoryList, stage_arrs[8])
 line9.set_label('9 Stages')
 
-line10, = ax.plot(memoryList, bytes_arr)
+line10, = ax.plot(memoryList, stage_arrs[9])
 line10.set_label('10 Stages')
 
 ax.legend()

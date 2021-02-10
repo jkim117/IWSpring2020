@@ -26,7 +26,7 @@ usedHash8 = {}
 usedHash9 = {}
 usedHash10 = {}
 
-TABLE_SIZE = 131072
+TABLE_SIZE = 0
 TIMEOUT = 300
 
 def is_subnet_of(a, b):
