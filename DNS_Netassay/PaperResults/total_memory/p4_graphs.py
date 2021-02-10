@@ -54,6 +54,7 @@ line3.set_label('Traffic by Bytes')
 ax.legend()
 
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Percentage of Traffic Lost Due to Memory Size Limitations')
+ax.set_xscale('log')
 ax.grid()
 fig.savefig("dns_parser_limit.png")
 

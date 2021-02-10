@@ -33,6 +33,8 @@ def is_subnet_of(a, b):
     return (b.network_address <= a.network_address and b.broadcast_address >= a.broadcast_address)
 
 def parse_dns_response(ip_packet, ts, i):
+    global TIMEOUT
+    global TABLE_SIZE
 
     modulo = int(TABLE_SIZE / i)
     # Check if it is in the allowed or banned IP lists
@@ -130,12 +132,85 @@ def parse_dns_response(ip_packet, ts, i):
                     elif (ts - usedHash3[hash3][0] > TIMEOUT): # timestamp expires
                         netassayTable.pop(usedHash3[hash3][1])
                         usedHash3[hash3] = [ts, key, domain]
-                    elif(usedHash3[hash2][1] == key): # update timestamp for existing entry
-                        usedHash3[hash2] = [ts, key, domain]
+                    elif(usedHash3[hash3][1] == key): # update timestamp for existing entry
+                        usedHash3[hash3] = [ts, key, domain]
                     elif(i < 4):
                         knownlistDict[d][3] = knownlistDict[d][3]+1
                         return
 
+                    elif(not hash4 in usedHash4):
+                        usedHash4[hash4] = [ts, key, domain]
+                    elif (ts - usedHash4[hash4][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash4[hash4][1])
+                        usedHash4[hash4] = [ts, key, domain]
+                    elif(usedHash4[hash4][1] == key): # update timestamp for existing entry
+                        usedHash4[hash4] = [ts, key, domain]
+                    elif(i < 5):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash5 in usedHash5):
+                        usedHash5[hash5] = [ts, key, domain]
+                    elif (ts - usedHash5[hash5][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash5[hash5][1])
+                        usedHash5[hash5] = [ts, key, domain]
+                    elif(usedHash5[hash5][1] == key): # update timestamp for existing entry
+                        usedHash5[hash5] = [ts, key, domain]
+                    elif(i < 6):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash6 in usedHash6):
+                        usedHash6[hash6] = [ts, key, domain]
+                    elif (ts - usedHash6[hash6][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash6[hash6][1])
+                        usedHash6[hash6] = [ts, key, domain]
+                    elif(usedHash6[hash6][1] == key): # update timestamp for existing entry
+                        usedHash6[hash6] = [ts, key, domain]
+                    elif(i < 7):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash7 in usedHash7):
+                        usedHash7[hash7] = [ts, key, domain]
+                    elif (ts - usedHash7[hash7][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash7[hash7][1])
+                        usedHash7[hash7] = [ts, key, domain]
+                    elif(usedHash7[hash7][1] == key): # update timestamp for existing entry
+                        usedHash7[hash7] = [ts, key, domain]
+                    elif(i < 8):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash8 in usedHash8):
+                        usedHash8[hash8] = [ts, key, domain]
+                    elif (ts - usedHash8[hash8][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash8[hash8][1])
+                        usedHash8[hash8] = [ts, key, domain]
+                    elif(usedHash8[hash8][1] == key): # update timestamp for existing entry
+                        usedHash8[hash8] = [ts, key, domain]
+                    elif(i < 9):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash9 in usedHash9):
+                        usedHash9[hash9] = [ts, key, domain]
+                    elif (ts - usedHash9[hash9][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash9[hash9][1])
+                        usedHash9[hash9] = [ts, key, domain]
+                    elif(usedHash9[hash9][1] == key): # update timestamp for existing entry
+                        usedHash9[hash9] = [ts, key, domain]
+                    elif(i < 10):
+                        knownlistDict[d][3] = knownlistDict[d][3]+1
+                        return
+
+                    elif(not hash10 in usedHash10):
+                        usedHash10[hash10] = [ts, key, domain]
+                    elif (ts - usedHash10[hash10][0] > TIMEOUT): # timestamp expires
+                        netassayTable.pop(usedHash10[hash10][1])
+                        usedHash10[hash10] = [ts, key, domain]
+                    elif(usedHash10[hash10][1] == key): # update timestamp for existing entry
+                        usedHash10[hash10] = [ts, key, domain]
                     else:
                         knownlistDict[d][3] = knownlistDict[d][3]+1
                         return
@@ -146,6 +221,8 @@ def parse_dns_response(ip_packet, ts, i):
         
 
 def parse_tcp(packet_len, ip_packet, ts, i):
+    global TIMEOUT
+    global TABLE_SIZE
     modulo = int(TABLE_SIZE / i)
 
     source = socket.inet_ntoa(ip_packet['src']) #server
@@ -185,6 +262,22 @@ def parse_tcp(packet_len, ip_packet, ts, i):
             usedHash1[hash1][0] = ts
         elif hash2 in usedHash2 and usedHash2[hash2][1] == key:
             usedHash2[hash2][0] = ts
+        elif hash3 in usedHash3 and usedHash3[hash3][1] == key:
+            usedHash3[hash3][0] = ts
+        elif hash4 in usedHash4 and usedHash4[hash4][1] == key:
+            usedHash4[hash4][0] = ts
+        elif hash5 in usedHash5 and usedHash5[hash5][1] == key:
+            usedHash5[hash5][0] = ts
+        elif hash6 in usedHash6 and usedHash6[hash6][1] == key:
+            usedHash6[hash6][0] = ts
+        elif hash7 in usedHash7 and usedHash7[hash7][1] == key:
+            usedHash7[hash7][0] = ts
+        elif hash8 in usedHash8 and usedHash8[hash8][1] == key:
+            usedHash8[hash8][0] = ts
+        elif hash9 in usedHash9 and usedHash9[hash9][1] == key:
+            usedHash9[hash9][0] = ts
+        elif hash10 in usedHash10 and usedHash10[hash10][1] == key:
+            usedHash10[hash10][0] = ts
         else:
             print("error in hash storage")
             exit(-1)            
@@ -234,57 +327,63 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    for i in range(1, 11):
-        print(i)
-        knownlistDict = {}
-        netassayTable = {}
-        usedHash1 = {}
-        usedHash2 = {}
-        usedHash3 = {}
-        usedHash4 = {}
-        usedHash5 = {}
-        usedHash6 = {}
-        usedHash7 = {}
-        usedHash8 = {}
-        usedHash9 = {}
-        usedHash10 = {}
 
-        for d in known_domains:
-            knownlistDict[d] = [0, 0, 0, 0, 0, 0]
+    for j in range(0, 33):
+        TABLE_SIZE = 2 ** j
+        print('table', j)
 
-        for p in pcap_obj:
-            ts = p[0]
-            dns_code = p[1]
-            ip = p[2]
+        for i in range(1, 11):
+            print(i)
+            knownlistDict = {}
+            netassayTable = {}
+            usedHash1 = {}
+            usedHash2 = {}
+            usedHash3 = {}
+            usedHash4 = {}
+            usedHash5 = {}
+            usedHash6 = {}
+            usedHash7 = {}
+            usedHash8 = {}
+            usedHash9 = {}
+            usedHash10 = {}
 
-            # For each packet parse the dns responses
-            if (dns_code == -1):
-                try:
-                    parse_dns_response(ip, ts, i)
-                except Exception as e:
-                    
-                    continue
-            else:
-                parse_tcp(dns_code, ip, ts, i)
+            for d in known_domains:
+                knownlistDict[d] = [0, 0, 0, 0, 0, 0]
 
-        for i in knownlistDict.keys():
-            num_packets = knownlistDict[i][1]
-            num_bytes = knownlistDict[i][2]
-            num_missed = knownlistDict[i][3]
-            num_dns = knownlistDict[i][0]
-            if (num_dns > 0 and num_missed < num_dns):
-                knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
-                knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
+            for p in pcap_obj:
+                ts = p[0]
+                dns_code = p[1]
+                ip = p[2]
+
+                # For each packet parse the dns responses
+                if (dns_code == -1):
+                    try:
+                        parse_dns_response(ip, ts, i)
+                    except Exception as e:
+                        
+                        continue
+                else:
+                    parse_tcp(dns_code, ip, ts, i)
+
+            for i in knownlistDict.keys():
+                num_packets = knownlistDict[i][1]
+                num_bytes = knownlistDict[i][2]
+                num_missed = knownlistDict[i][3]
+                num_dns = knownlistDict[i][0]
+                if (num_dns > 0 and num_missed < num_dns):
+                    knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
+                    knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
 
 
-        total_dns = 0
-        total_packets = 0
-        total_bytes = 0
-        for i in knownlistDict.items():
-            total_dns += i[1][0]
-            total_packets += i[1][1]
-            total_bytes += i[1][2]
-        outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
+            total_dns = 0
+            total_packets = 0
+            total_bytes = 0
+            for i in knownlistDict.items():
+                total_dns += i[1][0]
+                total_packets += i[1][1]
+                total_bytes += i[1][2]
+            outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
+        outfile.write('*')
 
     outfile.close()
 

@@ -18,6 +18,10 @@ with open('unlimited0000.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
+dns_60_total = 26419
+packets_60_total = 122386
+bytes_60_total = 7171016
+
 f = open('memory_limits.txt', 'r')
 rows = f.read().split('\n')
 
