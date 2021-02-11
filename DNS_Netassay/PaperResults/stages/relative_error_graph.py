@@ -20,40 +20,67 @@ with open('unlimited0000.csv') as csvfile:
 
 dns_60_total = 26419
 packets_60_total = 122386
-bytes_60_total = 7171016
+bytes_60_total = 7171016 # key thing is here
 
-f = open('memory_limits.txt', 'r')
-rows = f.read().split('\n')
+f = open('stage_limits.txt', 'r')
+by_stage = f.read().split('*')
 
-packets_arr = []
-bytes_arr = []
+
+stage_arrs = [[],[],[],[],[],[],[],[],[],[]]
 memoryList = []
 
-count = 0
-for r in rows:
-    memoryList.append(2**count)
-    values = r.split(',')
-    packets_arr.append(float(values[6]))
-    bytes_arr.append(float(values[7]))
-    count += 1
+for i in range(0, 10):
+    rows = by_stage[i].split()
+
+    count = 0
+    for r in rows:
+        if i == 0:
+            memoryList.append(2**count)
+        values = r.split(',')
+        stage_arrs[i].append(float(values[7]))
+        count += 1
 
 
 fig, ax = plt.subplots()
 
-line2, = ax.plot(memoryList, packets_arr)
-line2.set_label('Packets')
+line1, = ax.plot(memoryList, stage_arrs[0])
+line1.set_label('1 Stage')
 
-line3, = ax.plot(memoryList, bytes_arr)
-line3.set_label('Bytes')
+line2, = ax.plot(memoryList, stage_arrs[1], color='red')
+line2.set_label('2 Stages')
+
+#line3, = ax.plot(memoryList, stage_arrs[2])
+#line3.set_label('3 Stages')
+
+line4, = ax.plot(memoryList, stage_arrs[3])
+line4.set_label('4 Stages')
+
+'''line5, = ax.plot(memoryList, stage_arrs[4])
+line5.set_label('5 Stages')
+
+line6, = ax.plot(memoryList, stage_arrs[5])
+line6.set_label('6 Stages')
+
+line7, = ax.plot(memoryList, stage_arrs[6])
+line7.set_label('7 Stages')'''
+
+line8, = ax.plot(memoryList, stage_arrs[7])
+line8.set_label('8 Stages')
+
+'''line9, = ax.plot(memoryList, stage_arrs[8])
+line9.set_label('9 Stages')
+
+line10, = ax.plot(memoryList, stage_arrs[9])
+line10.set_label('10 Stages')'''
 
 plt.axvline(x=65536, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error due to Memory Size Limitations')
-ax.set_xscale('log', base=2)
+ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
-fig.savefig("rel_error_memory.png")
+ax.set_xscale('log', base=2)
+fig.savefig("rel_error_stage.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

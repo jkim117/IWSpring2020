@@ -385,8 +385,10 @@ if __name__ == '__main__':
                 if (num_dns > 0 and num_missed < num_dns):
                     knownlistDict[k][4] = num_packets / (1 - (num_missed / num_dns))
                     knownlistDict[k][5] = num_bytes / (1 - (num_missed / num_dns))
-                    packet_errors.append(abs(true_60[i][0] - knownlistDict[i][4]) / true_60[i][0])
-                    byte_errors.append(abs(true_60[i][1] - knownlistDict[i][5]) / true_60[i][1])
+                    if (true_60[i][0] > 0):
+                        packet_errors.append(abs(true_60[i][0] - knownlistDict[i][4]) / true_60[i][0])
+                    if (true_60[i][1] > 0):
+                        byte_errors.append(abs(true_60[i][1] - knownlistDict[i][5]) / true_60[i][1])
 
 
             packet_error_med = statistics.median(packet_errors)
