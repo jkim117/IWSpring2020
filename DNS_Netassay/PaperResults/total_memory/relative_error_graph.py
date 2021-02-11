@@ -42,15 +42,14 @@ for r in rows:
 
 fig, ax = plt.subplots()
 
+line1, = ax.plot(memoryList, dns_arr)
+line1.set_label('DNS Queries')
 
 line2, = ax.plot(memoryList, packets_arr)
 line2.set_label('Packets')
 
 line3, = ax.plot(memoryList, bytes_arr)
 line3.set_label('Bytes')
-
-line1, = ax.plot(memoryList, dns_arr)
-line1.set_label('DNS Queries')
 
 plt.axvline(x=65536, color='red')
 

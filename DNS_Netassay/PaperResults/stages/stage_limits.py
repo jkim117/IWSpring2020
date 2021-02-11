@@ -6,6 +6,7 @@ import ipaddress
 import pickle
 import crc16
 import numpy as np
+import statistics
 
 # Data structure and global variables
 allowed_ips = []
@@ -303,6 +304,14 @@ if __name__ == '__main__':
     if len(argv) != 6:
         print('usage: python netassay_python3_p4sim.py pickleFile knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt outfilename')
         exit(-1)
+
+    true_60 = {} # key is domain value is [packets, bytes]
+    with open('parse60_0000.csv') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            if row[0] == 'Domain':
+                continue
+            true_60[row[0]] = [float(row[3]), float(row[4])]
     
     # Parse allowed IP and banned IP files
     allowed_ip_file = open(argv[3], 'r')
@@ -365,6 +374,9 @@ if __name__ == '__main__':
                 else:
                     parse_tcp(dns_code, ip, ts, i)
 
+            packet_errors = []
+            byte_errors = []
+
             for k in knownlistDict.keys():
                 num_packets = knownlistDict[k][1]
                 num_bytes = knownlistDict[k][2]
@@ -373,8 +385,12 @@ if __name__ == '__main__':
                 if (num_dns > 0 and num_missed < num_dns):
                     knownlistDict[k][4] = num_packets / (1 - (num_missed / num_dns))
                     knownlistDict[k][5] = num_bytes / (1 - (num_missed / num_dns))
+                    packet_errors.append(abs(true_60[i][0] - knownlistDict[i][4]) / true_60[i][0])
+                    byte_errors.append(abs(true_60[i][1] - knownlistDict[i][5]) / true_60[i][1])
 
 
+            packet_error_med = statistics.median(packet_errors)
+            byte_error_med = statistics.median(byte_errors)
             total_dns = 0
             total_packets = 0
             total_bytes = 0
@@ -388,7 +404,7 @@ if __name__ == '__main__':
                 total_dns_missed += l[1][3]
                 total_est_packets += l[1][4]
                 total_est_bytes += l[1][5]
-            outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+','+str(total_dns_missed)+','+str(total_est_packets)+','+str(total_est_bytes)+'\n')
+            outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+','+str(total_dns_missed)+','+str(total_est_packets)+','+str(total_est_bytes)+','+str(packet_error_med)+','+str(byte_error_med)+'\n')
         outfile.write('*')
 
     outfile.close()
