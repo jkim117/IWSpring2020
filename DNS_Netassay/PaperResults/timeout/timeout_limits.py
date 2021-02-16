@@ -129,8 +129,8 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    #for timeout in range(0, 610, 10):
-    for timeout in range(0, 61):
+    for timeout in range(0, 610, 30):
+    #for timeout in range(0, 61):
         
         TIMEOUT = timeout
         print(TIMEOUT)
@@ -155,14 +155,19 @@ if __name__ == '__main__':
             else:
                 parse_tcp(dns_code, ip, ts)
 
-        for i in knownlistDict.keys():
-            num_packets = knownlistDict[i][1]
-            num_bytes = knownlistDict[i][2]
-            num_missed = knownlistDict[i][3]
-            num_dns = knownlistDict[i][0]
-            if (num_dns > 0 and num_missed < num_dns):
-                knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
-                knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
+        with open('timeout_limit' + str(timeout) + '.csv', 'w') as csvfile:
+            w = csv.writer(csvfile)
+            w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
+
+            for j in knownlistDict.keys():
+                num_packets = knownlistDict[j][1]
+                num_bytes = knownlistDict[j][2]
+                num_missed = knownlistDict[j][3]
+                num_dns = knownlistDict[j][0]
+                if (num_dns > 0 and num_missed < num_dns):
+                    knownlistDict[j][4] = num_packets / (1 - (num_missed / num_dns))
+                    knownlistDict[j][5] = num_bytes / (1 - (num_missed / num_dns))
+                w.writerow([j, num_dns, num_missed, num_packets, num_bytes, knownlistDict[j][4], knownlistDict[j][5]])
 
 
         total_dns = 0

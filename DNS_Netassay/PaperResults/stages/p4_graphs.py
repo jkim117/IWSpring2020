@@ -37,7 +37,7 @@ for i in range(0, 10):
         if i == 0:
             memoryList.append(2**count)
         values = r.split(',')
-        stage_arrs[i].append(1 - float(values[2]) / true_bytes_total)
+        stage_arrs[i].append(1 - float(values[2]) / bytes_60_total)
         count += 1
 
 

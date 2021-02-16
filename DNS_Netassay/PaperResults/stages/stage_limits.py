@@ -337,7 +337,7 @@ if __name__ == '__main__':
 
     outfile = open(argv[5], 'w')
 
-    for i in range(1, 11):
+    for i in [1, 2, 4, 8]:
         print('stages', i)
 
         for j in range(0, 33):
@@ -377,18 +377,27 @@ if __name__ == '__main__':
             packet_errors = []
             byte_errors = []
 
-            for k in knownlistDict.keys():
-                num_packets = knownlistDict[k][1]
-                num_bytes = knownlistDict[k][2]
-                num_missed = knownlistDict[k][3]
-                num_dns = knownlistDict[k][0]
-                if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDict[k][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDict[k][5] = num_bytes / (1 - (num_missed / num_dns))
-                    if (true_60[k][0] > 0):
-                        packet_errors.append(abs(true_60[k][0] - knownlistDict[k][4]) / true_60[k][0])
-                    if (true_60[k][1] > 0):
-                        byte_errors.append(abs(true_60[k][1] - knownlistDict[k][5]) / true_60[k][1])
+            with open('parse_limit' + str(i) + '.csv', 'w') as csvfile:
+                w = csv.writer(csvfile)
+                w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes", "Error_Packets", "Error_Bytes"])
+
+                for k in knownlistDict.keys():
+                    num_packets = knownlistDict[k][1]
+                    num_bytes = knownlistDict[k][2]
+                    num_missed = knownlistDict[k][3]
+                    num_dns = knownlistDict[k][0]
+                    error_packet = -1
+                    error_byte = -1
+                    if (num_dns > 0 and num_missed < num_dns):
+                        knownlistDict[k][4] = num_packets / (1 - (num_missed / num_dns))
+                        knownlistDict[k][5] = num_bytes / (1 - (num_missed / num_dns))
+                        if (true_60[k][0] > 0):
+                            error_packet = abs(true_60[k][0] - knownlistDict[k][4]) / true_60[k][0]
+                            packet_errors.append(error_packet)
+                        if (true_60[k][1] > 0):
+                            error_byte = abs(true_60[k][1] - knownlistDict[k][5]) / true_60[k][1]
+                            byte_errors.append(error_byte)
+                    w.writerow([k, num_dns, num_missed, num_packets, num_bytes, knownlistDict[k][4], knownlistDict[k][5], error_packet, error_byte])
 
 
             packet_error_med = statistics.median(packet_errors)
