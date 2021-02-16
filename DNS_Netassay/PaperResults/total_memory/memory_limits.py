@@ -155,7 +155,7 @@ if __name__ == '__main__':
         exit(-1)
 
     true_60 = {} # key is domain value is [packets, bytes]
-    with open('parse60_0000.csv') as csvfile:
+    with open('parse60_15min.csv') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             if row[0] == 'Domain':
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         packet_errors = []
         byte_errors = []
 
-        with open('parse_limit' + str(i) + '.csv', 'w') as csvfile:
+        with open('memory_limit' + str(i) + '.csv', 'w') as csvfile:
             w = csv.writer(csvfile)
             w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes", "Error_Packets", "Error_Bytes"])
 
