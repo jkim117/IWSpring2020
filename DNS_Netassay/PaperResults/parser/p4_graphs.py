@@ -9,8 +9,8 @@ true_dns_total = 0
 true_packets_total = 0
 true_bytes_total = 0
 
-#with open('unlimited_15min.csv') as csvfile:
-with open('unlimited0000.csv') as csvfile:
+with open('unlimited_15min.csv') as csvfile:
+#with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
@@ -19,8 +19,8 @@ with open('unlimited0000.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-#f = open('parse_limits_test.txt', 'r')
-f = open('parser_limits.txt', 'r')
+f = open('parse_limits_test.txt', 'r')
+#f = open('parser_limits.txt', 'r')
 rows = f.read().split('\n')
 
 dns_arr = []
