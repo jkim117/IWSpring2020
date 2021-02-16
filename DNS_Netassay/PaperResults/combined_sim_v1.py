@@ -69,11 +69,16 @@ def parse_dns_response(ip_packet, ts):
 
     for t in range(0, 610, 30):
         # Parser limitations
+        parser_test = True
         if (len(domain_name) > 4):
-            return
+            parser_test = False
+            continue
         for part in domain_name:
             if (len(part) > 15):
-                return
+                parser_test = False
+                break
+        if (parser_test == False):
+            continue
         
         for d in known_domains:
             if (matchDomain(d, domain)):
