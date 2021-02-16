@@ -274,8 +274,8 @@ if __name__ == '__main__':
                 num_missed = knownlistDicts_parser[i][j][3]
                 num_dns = knownlistDicts_parser[i][j][0]
                 if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDict[j][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDict[j][5] = num_bytes / (1 - (num_missed / num_dns))
+                    knownlistDicts_parser[i][4] = num_packets / (1 - (num_missed / num_dns))
+                    knownlistDicts_parser[i][5] = num_bytes / (1 - (num_missed / num_dns))
                 w.writerow([j, num_dns, num_missed, num_packets, num_bytes, knownlistDicts_parser[i][j][4], knownlistDicts_parser[i][j][5]])
 
         total_dns = 0
