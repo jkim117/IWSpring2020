@@ -7,7 +7,6 @@ import pickle
 import zlib
 import numpy as np
 import statistics
-import time
 
 # Data structure and global variables
 allowed_ips = []
@@ -103,22 +102,21 @@ def parse_dns_response(ip_packet, ts):
 
                             salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
                             key = clientIP + serverIP
-                            hashes = []
 
                             for z in range(0, 8):
+
                                 if modulo > 0:
-                                    hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
+                                    hashz = (zlib.adler32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo
                                 else:
-                                    hashes.append(0)
+                                    hashz = 0
 
-                            for z in range(0, 8):
-                                if(not hashes[z] in usedHashes[g][q][z]):
-                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
-                                elif (ts - usedHashes[g][q][z][hashes[z]][0] > TIMEOUT): # timestamp expires
-                                    netassayTables_stages[g][q][z].pop(usedHashes[g][q][z][hashes[z]][1])
-                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
-                                elif(usedHashes[g][q][z][hashes[z]][1] == key): # update timestamp for existing entry
-                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
+                                if(not hashz in usedHashes[g][q][z]):
+                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
+                                elif (ts - usedHashes[g][q][z][hashz][0] > TIMEOUT): # timestamp expires
+                                    netassayTables_stages[g][q][z].pop(usedHashes[g][q][z][hashz][1])
+                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
+                                elif(usedHashes[g][q][z][hashz][1] == key): # update timestamp for existing entry
+                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
                                 elif(g < z + 2):
                                     knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
                                     return
@@ -162,7 +160,7 @@ def parse_tcp(packet_len, ip_packet, ts):
                     knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
                     
                     if modulo > 0:
-                        hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo
+                        hashz = (zlib.adler32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo
                     else:
                         hashz = 0
 
@@ -247,9 +245,6 @@ if __name__ == '__main__':
     num_packets = len(pcap_obj)
     packet_count = 0.0
 
-    tcp_time = 0
-    dns_time = 0
-    start_time = time.time()
     for p in pcap_obj:
         ts = p[0]
         dns_code = p[1]
@@ -258,22 +253,16 @@ if __name__ == '__main__':
         # For each packet parse the dns responses
         if (dns_code == -1):
             #try:
-            dns_start_time = time.time()
             parse_dns_response(ip, ts)
-            dns_time += time.time() - dns_start_time
             '''except Exception as e:
                 print(e)
                 continue'''
         else:
-            tcp_start_time = time.time()
             parse_tcp(dns_code, ip, ts)
-            tcp_time += time.time() - tcp_start_time
 
         packet_count += 1
         if (packet_count % 1000 == 0):
             print(packet_count / num_packets)
-            print('total time', time.time() - start_time, dns_time, tcp_time)
-
 
     outfile_stage = open('stage_limits.txt', 'w')
     for v in [1, 2, 4, 8]:
