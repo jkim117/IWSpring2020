@@ -238,7 +238,7 @@ def parse_dns_response(ip_packet, ts):
                                 knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
                                 break
 
-                            netassayTable[key] = d
+                            netassayTables_stages[g][q][key] = d
                             break
                     break
 
@@ -484,7 +484,7 @@ if __name__ == '__main__':
             try:
                 parse_dns_response(ip, ts)
             except Exception as e:
-                
+                print(e)
                 continue
         else:
             parse_tcp(dns_code, ip, ts)
