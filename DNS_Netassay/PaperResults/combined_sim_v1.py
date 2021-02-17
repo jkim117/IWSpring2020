@@ -323,9 +323,9 @@ if __name__ == '__main__':
         netassayTables_timeout[t] = {}
 
     for i in [1, 2, 4, 8]:
-        knownlistDict_mem = []
-        netassayTable_mem = []
-        usedHash_mem = []
+        knownlistDict_mem = {}
+        netassayTable_mem = {}
+        usedHash_mem = {}
         for q in range(0, 34, 2):
             knownlistDict_q = {}
 
@@ -338,9 +338,9 @@ if __name__ == '__main__':
                 usedHash_individual_run.append({})
                 netTable_individual.append({})
             
-            knownlistDict_mem.append(knownlistDict_q)
-            netassayTable_mem.append(netTable_individual)
-            usedHash_mem.append(usedHash_individual_run)
+            knownlistDict_mem[q] = (knownlistDict_q)
+            netassayTable_mem[q] = (netTable_individual)
+            usedHash_mem[q] = (usedHash_individual_run)
         
         knownlistDicts_stages[i] = knownlistDict_mem
         netassayTables_stages[i] = netassayTable_mem
