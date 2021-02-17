@@ -402,7 +402,7 @@ def parse_tcp(packet_len, ip_packet, ts):
                     print("error in hash storage")
                     exit(-1)            
 
-    for t in range(0, 610, 30):
+    for t in range(0, 61, 3):
         if key in netassayTables_timeout[t]:
             if netassayTables_timeout[t][key][1] + t >= ts:
                 netassayTables_timeout[t][key][1] = ts
@@ -467,7 +467,7 @@ if __name__ == '__main__':
         knownlistDicts_parser.append(knownlistDict_i)
         netassayTables_parser.append({})
 
-    for t in range(0, 610, 30):
+    for t in range(0, 61, 3):
         knownlistDict_t = {}
         for d in known_domains:
             knownlistDict_t[d] = [0, 0, 0, 0, 0, 0]
@@ -569,7 +569,7 @@ if __name__ == '__main__':
 
     outfile_t = open('timeout_limits.txt', 'w')
 
-    for t in range(0, 610, 30):
+    for t in range(0, 61, 3):
         
         with open('timeout_limit' + str(t) + '.csv', 'w') as csvfile:
             w = csv.writer(csvfile)
