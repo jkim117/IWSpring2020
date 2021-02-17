@@ -17,12 +17,6 @@ known_domains = []
 unlimitedNetTable = {}
 unlimitedKnownDict = {}
 
-netassayTables_parser = [] # Key is concatentation of server IP/client IP. Value is a knownlist domain name
-knownlistDicts_parser = [] # Key is knowlist domain, values are number of dns, number of packets, number of bytes, number missed dns, estimated packets, estimated bytes
-
-netassayTables_timeout = {}
-knownlistDicts_timeout = {}
-
 netassayTables_stages = {}
 knownlistDicts_stages = {}
 
@@ -62,6 +56,13 @@ def parse_dns_response(ip_packet, ts):
     domain = answers[0].name
     domain_name = domain.split('.')
 
+    # Parser limitations
+    if (len(domain_name) > 4):
+        return
+    for part in domain_name:
+        if (len(part) > 15):
+            return
+
     for d in known_domains:
         if (matchDomain(d, domain)):
             
@@ -82,17 +83,6 @@ def parse_dns_response(ip_packet, ts):
 
     for g in [1, 2, 4, 8]:
         for q in range(0, 34, 2):
-            # Parser limitations
-            parser_test = True
-            if (len(domain_name) > 4):
-                parser_test = False
-                continue
-            for part in domain_name:
-                if (len(part) > 15):
-                    parser_test = False
-                    break
-            if (parser_test == False):
-                continue
 
             modulo = int((2 ** q) / g)
 
@@ -130,7 +120,7 @@ def parse_dns_response(ip_packet, ts):
                                     usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
                                 elif(g < z + 2):
                                     knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                    break
+                                    return
                                 else:
                                     continue
 
@@ -138,71 +128,6 @@ def parse_dns_response(ip_packet, ts):
                                 break
                             break
                     break
-
-    for t in range(0, 630, 30):
-        # Parser limitations
-        parser_test = True
-        if (len(domain_name) > 4):
-            parser_test = False
-            continue
-        for part in domain_name:
-            if (len(part) > 15):
-                parser_test = False
-                break
-        if (parser_test == False):
-            continue
-        
-        for d in known_domains:
-            if (matchDomain(d, domain)):
-                
-
-                for rr in answers:
-                    if (rr.type != 1):
-                        continue
-                    if (rr.type == 1): #DNS.A
-                        entry = knownlistDicts_timeout[t][d]
-                        knownlistDicts_timeout[t][d][0] = knownlistDicts_timeout[t][d][0] + 1
-                        
-                        serverIP = socket.inet_ntoa(rr.rdata)
-
-                        key = clientIP + serverIP
-
-                        netassayTables_timeout[t][key] = [d, ts]
-                        break
-                break
-
-    for i in range(0, 31):
-    # Parser limitations
-
-        parser_test = True
-        if (len(domain_name) > 4):
-            parser_test = False
-            continue
-        for part in domain_name:
-            if (len(part) > i):
-                parser_test = False
-                break
-        if (parser_test == False):
-            continue
-
-        for d in known_domains:
-            if (matchDomain(d, domain)):
-                
-
-                for rr in answers:
-                    if (rr.type != 1):
-                        continue
-                    if (rr.type == 1): #DNS.A
-                        entry = knownlistDicts_parser[i][d]
-                        knownlistDicts_parser[i][d][0] = knownlistDicts_parser[i][d][0] + 1
-                        
-                        serverIP = socket.inet_ntoa(rr.rdata)
-
-                        key = clientIP + serverIP
-
-                        netassayTables_parser[i][key] = d
-                        break
-                break
         
 
 def parse_tcp(packet_len, ip_packet, ts):
@@ -250,22 +175,6 @@ def parse_tcp(packet_len, ip_packet, ts):
                         exit(-1)           
                     break 
 
-    for t in range(0, 630, 30):
-        if key in netassayTables_timeout[t]:
-            if netassayTables_timeout[t][key][1] + t >= ts:
-                netassayTables_timeout[t][key][1] = ts
-                d = netassayTables_timeout[t][key][0]
-                knownlistDicts_timeout[t][d][1] = knownlistDicts_timeout[t][d][1] + 1
-                knownlistDicts_timeout[t][d][2] = knownlistDicts_timeout[t][d][2] + packet_len
-
-
-    for i in range(0, 31):
-        if key in netassayTables_parser[i]:
-            d = netassayTables_parser[i][key]
-            knownlistDicts_parser[i][d][1] = knownlistDicts_parser[i][d][1] + 1
-            knownlistDicts_parser[i][d][2] = knownlistDicts_parser[i][d][2] + packet_len
-        
-
 
 def matchDomain(known, domain):
     knownparts = known.split('.')
@@ -308,19 +217,6 @@ if __name__ == '__main__':
     for d in known_domains:
             unlimitedKnownDict[d] = [0, 0, 0, 0, 0, 0]
 
-    for i in range(0, 31):
-        knownlistDict_i = {}
-        for d in known_domains:
-            knownlistDict_i[d] = [0, 0, 0, 0, 0, 0]
-        knownlistDicts_parser.append(knownlistDict_i)
-        netassayTables_parser.append({})
-
-    for t in range(0, 630, 30):
-        knownlistDict_t = {}
-        for d in known_domains:
-            knownlistDict_t[d] = [0, 0, 0, 0, 0, 0]
-        knownlistDicts_timeout[t] = knownlistDict_t
-        netassayTables_timeout[t] = {}
 
     for i in [1, 2, 4, 8]:
         knownlistDict_mem = {}
@@ -395,11 +291,11 @@ if __name__ == '__main__':
                         knownlistDicts_stages[v][c][k][4] = num_packets / (1 - (num_missed / num_dns))
                         knownlistDicts_stages[v][c][k][5] = num_bytes / (1 - (num_missed / num_dns))
 
-                        if (knownlistDicts_parser[15][k][1] > 0):
-                            error_packet = abs(knownlistDicts_parser[15][k][1] - knownlistDicts_stages[v][c][k][4]) / knownlistDicts_parser[15][k][1]
+                        if (unlimitedKnownDict[k][1] > 0):
+                            error_packet = abs(unlimitedKnownDict[k][1] - knownlistDicts_stages[v][c][k][4]) / unlimitedKnownDict[k][1]
                             packet_errors.append(error_packet)
-                        if (knownlistDicts_parser[15][k][2] > 0):
-                            error_byte = abs(knownlistDicts_parser[15][k][2] - knownlistDicts_stages[v][c][k][5]) / knownlistDicts_parser[15][k][2]
+                        if (unlimitedKnownDict[k][2] > 0):
+                            error_byte = abs(unlimitedKnownDict[k][2] - knownlistDicts_stages[v][c][k][5]) / unlimitedKnownDict[k][2]
                             byte_errors.append(error_byte)
                     w.writerow([k, num_dns, num_missed, num_packets, num_bytes, knownlistDicts_stages[v][c][k][4], knownlistDicts_stages[v][c][k][5], error_packet, error_byte])
 
@@ -422,84 +318,5 @@ if __name__ == '__main__':
         outfile_stage.write('*')
 
     outfile_stage.close()
-
-
-    outfile_t = open('timeout_limits.txt', 'w')
-
-    for t in range(0, 630, 30):
-        
-        with open('timeout_limit' + str(t) + '.csv', 'w') as csvfile:
-            w = csv.writer(csvfile)
-            w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
-
-            for j in knownlistDicts_timeout[t].keys():
-                num_packets = knownlistDicts_timeout[t][j][1]
-                num_bytes = knownlistDicts_timeout[t][j][2]
-                num_missed = knownlistDicts_timeout[t][j][3]
-                num_dns = knownlistDicts_timeout[t][j][0]
-                if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDicts_timeout[t][j][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDicts_timeout[t][j][5] = num_bytes / (1 - (num_missed / num_dns))
-                w.writerow([j, num_dns, num_missed, num_packets, num_bytes, knownlistDicts_timeout[t][j][4], knownlistDicts_timeout[t][j][5]])
-
-        total_dns = 0
-        total_packets = 0
-        total_bytes = 0
-        for m in knownlistDicts_timeout[t].items():
-            total_dns += m[1][0]
-            total_packets += m[1][1]
-            total_bytes += m[1][2]
-        outfile_t.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
-
-    outfile_t.close()
-
-    outfile = open('parse_limits.txt', 'w')
-
-    for i in range(0, 31):
-        
-        with open('parse_limit' + str(i * 4) + '.csv', 'w') as csvfile:
-            w = csv.writer(csvfile)
-            w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
-
-            for j in knownlistDicts_parser[i].keys():
-                num_packets = knownlistDicts_parser[i][j][1]
-                num_bytes = knownlistDicts_parser[i][j][2]
-                num_missed = knownlistDicts_parser[i][j][3]
-                num_dns = knownlistDicts_parser[i][j][0]
-                if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDicts_parser[i][j][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDicts_parser[i][j][5] = num_bytes / (1 - (num_missed / num_dns))
-                w.writerow([j, num_dns, num_missed, num_packets, num_bytes, knownlistDicts_parser[i][j][4], knownlistDicts_parser[i][j][5]])
-
-        total_dns = 0
-        total_packets = 0
-        total_bytes = 0
-        for m in knownlistDicts_parser[i].items():
-            total_dns += m[1][0]
-            total_packets += m[1][1]
-            total_bytes += m[1][2]
-        outfile.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
-
-    outfile.close()
-
-
-    for i in unlimitedKnownDict.keys():
-        num_packets = unlimitedKnownDict[i][1]
-        num_bytes = unlimitedKnownDict[i][2]
-        num_missed = unlimitedKnownDict[i][3]
-        num_dns = unlimitedKnownDict[i][0]
-        if (num_dns > 0 and num_missed < num_dns):
-            unlimitedKnownDict[i][4] = num_packets / (1 - (num_missed / num_dns))
-            unlimitedKnownDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
-
-
-    with open('unlimited_15min.csv', 'w') as csvfile:
-        w = csv.writer(csvfile)
-        w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
-
-        for i in unlimitedKnownDict.items():
-            w.writerow([i[0], i[1][0], i[1][3], i[1][1], i[1][2], i[1][4], i[1][5]])
-
-            
 
 
