@@ -4,7 +4,7 @@ import csv
 import socket
 import ipaddress
 import pickle
-import crc16
+import zlib
 import numpy as np
 import statistics
 
@@ -123,16 +123,16 @@ def parse_dns_response(ip_packet, ts):
                             key = clientIP + serverIP
 
                             if modulo > 0:
-                                hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
-                                hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
-                                hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
-                                hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
-                                hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
-                                hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
-                                hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
-                                hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
-                                hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
-                                hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
+                                hash1 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt1)) & 0xffffffff) % modulo
+                                hash2 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt2)) & 0xffffffff) % modulo
+                                hash3 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt3)) & 0xffffffff) % modulo
+                                hash4 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt4)) & 0xffffffff) % modulo
+                                hash5 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt5)) & 0xffffffff) % modulo
+                                hash6 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt6)) & 0xffffffff) % modulo
+                                hash7 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt7)) & 0xffffffff) % modulo
+                                hash8 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt8)) & 0xffffffff) % modulo
+                                hash9 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt9)) & 0xffffffff)% modulo
+                                hash10 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt10)) & 0xffffffff) % modulo
                             else:
                                 hash1 = 0
                                 hash2 = 0
@@ -359,16 +359,16 @@ def parse_tcp(packet_len, ip_packet, ts):
                 salt10 = np.uint32(223823)
 
                 if modulo > 0:
-                    hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
-                    hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
-                    hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
-                    hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
-                    hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
-                    hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
-                    hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
-                    hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
-                    hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
-                    hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
+                    hash1 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt1)) & 0xffffffff) % modulo
+                    hash2 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt2)) & 0xffffffff) % modulo
+                    hash3 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt3)) & 0xffffffff) % modulo
+                    hash4 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt4)) & 0xffffffff) % modulo
+                    hash5 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt5)) & 0xffffffff) % modulo
+                    hash6 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt6)) & 0xffffffff) % modulo
+                    hash7 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt7)) & 0xffffffff) % modulo
+                    hash8 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt8)) & 0xffffffff) % modulo
+                    hash9 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt9)) & 0xffffffff)% modulo
+                    hash10 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt10)) & 0xffffffff) % modulo
                 else:
                     hash1 = 0
                     hash2 = 0
