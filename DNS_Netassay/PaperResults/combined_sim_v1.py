@@ -343,16 +343,28 @@ def parse_tcp(packet_len, ip_packet, ts):
                 salt9 = np.uint32(164314534)
                 salt10 = np.uint32(223823)
 
-                hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
-                hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
-                hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
-                hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
-                hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
-                hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
-                hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
-                hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
-                hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
-                hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
+                if modulo > 0:
+                    hash1 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt1)) % modulo
+                    hash2 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt2)) % modulo
+                    hash3 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt3)) % modulo
+                    hash4 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt4)) % modulo
+                    hash5 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt5)) % modulo
+                    hash6 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt6)) % modulo
+                    hash7 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt7)) % modulo
+                    hash8 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt8)) % modulo
+                    hash9 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt9)) % modulo
+                    hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
+                else:
+                    hash1 = 0
+                    hash2 = 0
+                    hash3 = 0
+                    hash4 = 0
+                    hash5 = 0
+                    hash6 = 0
+                    hash7 = 0
+                    hash8 = 0
+                    hash9 = 0
+                    hash10 = 0
                 
                 if hash1 in usedHashes[g][q][0] and usedHashes[g][q][0][hash1][1] == key:
                     usedHashes[g][q][0][hash1][0] = ts
