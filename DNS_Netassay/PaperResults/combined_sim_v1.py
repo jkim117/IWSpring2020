@@ -235,6 +235,8 @@ def parse_tcp(packet_len, ip_packet, ts):
                     hashes.append(0)
 
             for z in range(0, 10):
+                if (z + 1 > g):
+                    break
                 if key in netassayTables_stages[g][q][z]:
                     d = netassayTables_stages[g][q][z][key]
 
@@ -348,6 +350,9 @@ if __name__ == '__main__':
     pcap_obj = pickle.load(f)
     f.close()
 
+    num_packets = len(pcap_obj)
+    packet_count = 0.0
+
     for p in pcap_obj:
         ts = p[0]
         dns_code = p[1]
@@ -362,6 +367,10 @@ if __name__ == '__main__':
                 continue'''
         else:
             parse_tcp(dns_code, ip, ts)
+
+        packet_count += 1
+        if (packet_count % 100 == 0):
+            print(packet_count / num_packets)
 
 
     outfile_stage = open('stage_limits.txt', 'w')
