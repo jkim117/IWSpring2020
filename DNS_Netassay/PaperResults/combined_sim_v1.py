@@ -129,7 +129,7 @@ def parse_dns_response(ip_packet, ts):
                             hash10 = crc16.crc16xmodem(np.uint32(serverIP32 + clientIP32 + salt10)) % modulo
 
                             if(not hash1 in usedHashes[g][q][0]):
-                                usedHash1[hash1] = [ts, key, domain]
+                                usedHashes[g][q][0][hash1] = [ts, key, domain]
                             elif (ts - usedHashes[g][q][0][hash1][0] > TIMEOUT): # timestamp expires
                                 netassayTables_stages[g][q].pop(usedHashes[g][q][0][hash1][1])
                                 usedHashes[g][q][0][hash1] = [ts, key, domain]
@@ -481,11 +481,11 @@ if __name__ == '__main__':
 
         # For each packet parse the dns responses
         if (dns_code == -1):
-            try:
-                parse_dns_response(ip, ts)
-            except Exception as e:
+            #try:
+            parse_dns_response(ip, ts)
+            '''except Exception as e:
                 print(e)
-                continue
+                continue'''
         else:
             parse_tcp(dns_code, ip, ts)
 
