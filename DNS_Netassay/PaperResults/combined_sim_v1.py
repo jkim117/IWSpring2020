@@ -107,7 +107,7 @@ def parse_dns_response(ip_packet, ts):
                             for z in range(0, 8):
 
                                 if modulo > 0:
-                                    hashz = (zlib.adler32(np.uint64(serverIP32 + clientIP32 + salts[z]))) % modulo
+                                    hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
                                 else:
                                     hashz = 0
 
@@ -161,7 +161,7 @@ def parse_tcp(packet_len, ip_packet, ts):
                     knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
                     
                     if modulo > 0:
-                        hashz = (zlib.adler32(np.uint64(serverIP32 + clientIP32 + salts[z]))) % modulo
+                        hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
                     else:
                         hashz = 0
 
