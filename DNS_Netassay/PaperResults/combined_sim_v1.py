@@ -81,7 +81,7 @@ def parse_dns_response(ip_packet, ts):
             break
 
     for g in [1, 2, 4, 8]:
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
             # Parser limitations
             parser_test = True
             if (len(domain_name) > 4):
@@ -114,13 +114,13 @@ def parse_dns_response(ip_packet, ts):
                             key = clientIP + serverIP
                             hashes = []
 
-                            for z in range(0, 10):
+                            for z in range(0, 8):
                                 if modulo > 0:
                                     hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
                                 else:
                                     hashes.append(0)
 
-                            for z in range(0, 10):
+                            for z in range(0, 8):
                                 if(not hashes[z] in usedHashes[g][q][z]):
                                     usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
                                 elif (ts - usedHashes[g][q][z][hashes[z]][0] > TIMEOUT): # timestamp expires
@@ -222,19 +222,19 @@ def parse_tcp(packet_len, ip_packet, ts):
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
     for g in [1, 2, 4, 8]:
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
             
             modulo = int((2 ** q) / g)
 
             hashes = []
             if modulo > 0:
-                for z in range(0, 10):
+                for z in range(0, 8):
                     hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
             else:
-                for z in range(0, 10):
+                for z in range(0, 8):
                     hashes.append(0)
 
-            for z in range(0, 10):
+            for z in range(0, 8):
                 if (z + 1 > g):
                     break
                 if key in netassayTables_stages[g][q][z]:
@@ -326,7 +326,7 @@ if __name__ == '__main__':
         knownlistDict_mem = []
         netassayTable_mem = []
         usedHash_mem = []
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
             knownlistDict_q = {}
 
             for d in known_domains:
@@ -334,7 +334,7 @@ if __name__ == '__main__':
 
             usedHash_individual_run = []
             netTable_individual = []
-            for l in range(0, 10):
+            for l in range(0, 8):
                 usedHash_individual_run.append({})
                 netTable_individual.append({})
             
@@ -375,7 +375,7 @@ if __name__ == '__main__':
 
     outfile_stage = open('stage_limits.txt', 'w')
     for v in [1, 2, 4, 8]:
-        for c in range(0, 33):
+        for c in range(0, 34, 2):
 
             packet_errors = []
             byte_errors = []
