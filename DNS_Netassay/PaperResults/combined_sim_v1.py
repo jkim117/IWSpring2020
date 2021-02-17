@@ -54,7 +54,7 @@ def parse_dns_response(ip_packet, ts):
     dns = dpkt.dns.DNS(ip_packet.data.data)
     answers = dns.an
 
-    if len(answers <= 0):
+    if len(answers) <= 0:
         return
     domain = answers[0].name
     domain_name = domain.split('.')
