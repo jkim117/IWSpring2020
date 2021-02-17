@@ -7,6 +7,7 @@ import pickle
 import zlib
 import numpy as np
 import statistics
+import time
 
 # Data structure and global variables
 allowed_ips = []
@@ -249,6 +250,9 @@ if __name__ == '__main__':
     num_packets = len(pcap_obj)
     packet_count = 0.0
 
+    tcp_time = 0
+    dns_time = 0
+    start_time = time.time()
     for p in pcap_obj:
         ts = p[0]
         dns_code = p[1]
@@ -257,16 +261,21 @@ if __name__ == '__main__':
         # For each packet parse the dns responses
         if (dns_code == -1):
             #try:
+            dns_start_time = time.time()
             parse_dns_response(ip, ts)
+            dns_time += time.time() - dns_start_time
             '''except Exception as e:
                 print(e)
                 continue'''
         else:
+            tcp_start_time = time.time()
             parse_tcp(dns_code, ip, ts)
+            tcp_time += time.time() - tcp_start_time
 
         packet_count += 1
         if (packet_count % 1000 == 0):
             print(packet_count / num_packets)
+            print('total time', time.time() - start_time, dns_time, tcp_time)
 
 
     outfile_stage = open('stage_limits.txt', 'w')
