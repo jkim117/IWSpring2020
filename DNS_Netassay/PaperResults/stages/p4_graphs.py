@@ -22,14 +22,14 @@ dns_60_total = 26419
 packets_60_total = 122386
 bytes_60_total = 7171016 # key thing is here
 
-f = open('stage_limits.txt', 'r')
+f = open('stage_limits_test.txt', 'r')
 by_stage = f.read().split('*')
 
 
 stage_arrs = [[],[],[],[],[],[],[],[],[],[]]
 memoryList = []
 
-for i in range(0, 10):
+for i in range(len(by_stage)):
     rows = by_stage[i].split()
 
     count = 0
@@ -52,7 +52,7 @@ line2.set_label('2 Stages')
 #line3, = ax.plot(memoryList, stage_arrs[2])
 #line3.set_label('3 Stages')
 
-line4, = ax.plot(memoryList, stage_arrs[3])
+line4, = ax.plot(memoryList, stage_arrs[2])
 line4.set_label('4 Stages')
 
 '''line5, = ax.plot(memoryList, stage_arrs[4])
@@ -64,7 +64,7 @@ line6.set_label('6 Stages')
 line7, = ax.plot(memoryList, stage_arrs[6])
 line7.set_label('7 Stages')'''
 
-line8, = ax.plot(memoryList, stage_arrs[7])
+line8, = ax.plot(memoryList, stage_arrs[3])
 line8.set_label('8 Stages')
 
 '''line9, = ax.plot(memoryList, stage_arrs[8])
@@ -80,7 +80,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
 ax.set_xscale('log', base=2)
-fig.savefig("dns_parser_limit.png")
+fig.savefig("dns_parser_limit_test.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

@@ -19,7 +19,7 @@ with open('unlimited_15min.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-f = open('parse_limits_test.txt', 'r')
+f = open('parse_limits.txt', 'r')
 #f = open('parser_limits.txt', 'r')
 rows = f.read().split('\n')
 
