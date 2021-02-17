@@ -152,14 +152,6 @@ def parse_tcp(packet_len, ip_packet, ts):
             
             modulo = int((2 ** q) / g)
 
-            hashes = []
-            if modulo > 0:
-                for z in range(0, 8):
-                    hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
-            else:
-                for z in range(0, 8):
-                    hashes.append(0)
-
             for z in range(0, 8):
                 if (z + 1 > g):
                     break
@@ -168,9 +160,14 @@ def parse_tcp(packet_len, ip_packet, ts):
 
                     knownlistDicts_stages[g][q][d][1] = knownlistDicts_stages[g][q][d][1] + 1
                     knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
+                    
+                    if modulo > 0:
+                        hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo
+                    else:
+                        hashz = 0
 
-                    if hashes[z] in usedHashes[g][q][z] and usedHashes[g][q][z][hashes[z]][1] == key:
-                        usedHashes[g][q][z][hashes[z]][0] = ts
+                    if hashz in usedHashes[g][q][z] and usedHashes[g][q][z][hashz][1] == key:
+                        usedHashes[g][q][z][hashz][0] = ts
                     else:
                         print("error in hash storage")
                         exit(-1)           
