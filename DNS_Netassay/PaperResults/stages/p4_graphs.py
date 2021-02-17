@@ -38,7 +38,7 @@ for i in range(len(by_stage)):
             memoryList.append(2**count)
         values = r.split(',')
         stage_arrs[i].append(1 - float(values[2]) / bytes_60_total)
-        count += 1
+        count += 2
 
 
 fig, ax = plt.subplots()
