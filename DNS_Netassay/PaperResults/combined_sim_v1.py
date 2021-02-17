@@ -83,7 +83,7 @@ def parse_dns_response(ip_packet, ts):
             break
 
     for g in [1, 2, 4, 8]:
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
 
             modulo = int((2 ** q) / g)
 
@@ -147,7 +147,7 @@ def parse_tcp(packet_len, ip_packet, ts):
     salts = [np.uint32(134140211), np.uint32(187182238), np.uint32(187238), np.uint32(1853238), np.uint32(1828), np.uint32(12238), np.uint32(72134), np.uint32(152428), np.uint32(164314534), np.uint32(223823)]
 
     for g in [1, 2, 4, 8]:
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
             
             modulo = int((2 ** q) / g)
 
@@ -219,7 +219,7 @@ if __name__ == '__main__':
         knownlistDict_mem = {}
         netassayTable_mem = {}
         usedHash_mem = {}
-        for q in range(0, 33):
+        for q in range(0, 34, 2):
             knownlistDict_q = {}
 
             for d in known_domains:
@@ -267,7 +267,7 @@ if __name__ == '__main__':
 
     outfile_stage = open('stage_limits.txt', 'w')
     for v in [1, 2, 4, 8]:
-        for c in range(0, 33):
+        for c in range(0, 34, 2):
 
             packet_errors = []
             byte_errors = []
