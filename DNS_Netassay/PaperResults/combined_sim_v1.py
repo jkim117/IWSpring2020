@@ -107,155 +107,35 @@ def parse_dns_response(ip_packet, ts):
                             knownlistDicts_stages[g][q][d][0] = knownlistDicts_stages[g][q][d][0] + 1
                             
                             serverIP = socket.inet_ntoa(rr.rdata)
-                            serverIP32 = np.uint32(int.from_bytes(socket.inet_aton(serverIP), byteorder='big'))
-                            clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(clientIP), byteorder='big'))
-                            salt1 = np.uint32(134140211)
-                            salt2 = np.uint32(187182238)
-                            salt3 = np.uint32(187238)
-                            salt4 = np.uint32(1853238)
-                            salt5 = np.uint32(1828)
-                            salt6 = np.uint32(12238)
-                            salt7 = np.uint32(72134)
-                            salt8 = np.uint32(152428)
-                            salt9 = np.uint32(164314534)
-                            salt10 = np.uint32(223823)
+                            serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(serverIP), byteorder='big'))
+                            clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(clientIP), byteorder='big'))
 
+                            salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
                             key = clientIP + serverIP
+                            hashes = []
 
-                            if modulo > 0:
-                                hash1 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt1)) & 0xffffffff) % modulo
-                                hash2 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt2)) & 0xffffffff) % modulo
-                                hash3 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt3)) & 0xffffffff) % modulo
-                                hash4 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt4)) & 0xffffffff) % modulo
-                                hash5 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt5)) & 0xffffffff) % modulo
-                                hash6 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt6)) & 0xffffffff) % modulo
-                                hash7 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt7)) & 0xffffffff) % modulo
-                                hash8 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt8)) & 0xffffffff) % modulo
-                                hash9 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt9)) & 0xffffffff)% modulo
-                                hash10 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt10)) & 0xffffffff) % modulo
-                            else:
-                                hash1 = 0
-                                hash2 = 0
-                                hash3 = 0
-                                hash4 = 0
-                                hash5 = 0
-                                hash6 = 0
-                                hash7 = 0
-                                hash8 = 0
-                                hash9 = 0
-                                hash10 = 0
+                            for z in range(0, 10):
+                                if modulo > 0:
+                                    hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
+                                else:
+                                    hashes.append(0)
 
-                            if(not hash1 in usedHashes[g][q][0]):
-                                usedHashes[g][q][0][hash1] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][0][hash1][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][0][hash1][1])
-                                usedHashes[g][q][0][hash1] = [ts, key, domain]
-                            elif(usedHashes[g][q][0][hash1][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][0][hash1] = [ts, key, domain]
-                            elif(g < 2):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
+                            for z in range(0, 10):
+                                if(not hashes[z] in usedHashes[g][q][z]):
+                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
+                                elif (ts - usedHashes[g][q][z][hashes[z]][0] > TIMEOUT): # timestamp expires
+                                    netassayTables_stages[g][q][z].pop(usedHashes[g][q][z][hashes[z]][1])
+                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
+                                elif(usedHashes[g][q][z][hashes[z]][1] == key): # update timestamp for existing entry
+                                    usedHashes[g][q][z][hashes[z]] = [ts, key, domain]
+                                elif(g < z + 2):
+                                    knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
+                                    break
+                                else:
+                                    continue
+
+                                netassayTables_stages[g][q][z][key] = d
                                 break
-
-                            elif(not hash2 in usedHashes[g][q][1]):
-                                usedHashes[g][q][1][hash2] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][1][hash2][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][1][hash2][1])
-                                usedHashes[g][q][1][hash2] = [ts, key, domain]
-                            elif(usedHashes[g][q][1][hash2][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][1][hash2] = [ts, key, domain]
-                            elif(g < 3):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-                            
-                            elif(not hash3 in usedHashes[g][q][2]):
-                                usedHashes[g][q][2][hash3] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][2][hash3][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][2][hash3][1])
-                                usedHashes[g][q][2][hash3] = [ts, key, domain]
-                            elif(usedHashes[g][q][2][hash3][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][2][hash3] = [ts, key, domain]
-                            elif(g < 4):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash4 in usedHashes[g][q][3]):
-                                usedHashes[g][q][3][hash4] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][3][hash4][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][3][hash4][1])
-                                usedHashes[g][q][3][hash4] = [ts, key, domain]
-                            elif(usedHashes[g][q][3][hash4][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][3][hash4] = [ts, key, domain]
-                            elif(g < 5):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash5 in usedHashes[g][q][4]):
-                                usedHashes[g][q][4][hash5] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][4][hash5][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][4][hash5][1])
-                                usedHashes[g][q][4][hash5] = [ts, key, domain]
-                            elif(usedHashes[g][q][4][hash5][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][4][hash5] = [ts, key, domain]
-                            elif(g < 6):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash6 in usedHashes[g][q][5]):
-                                usedHashes[g][q][5][hash6] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][5][hash6][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][5][hash6][1])
-                                usedHashes[g][q][5][hash6] = [ts, key, domain]
-                            elif(usedHashes[g][q][5][hash6][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][5][hash6] = [ts, key, domain]
-                            elif(g < 7):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash7 in usedHashes[g][q][6]):
-                                usedHashes[g][q][6][hash7] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][6][hash7][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][6][hash7][1])
-                                usedHashes[g][q][6][hash7] = [ts, key, domain]
-                            elif(usedHashes[g][q][6][hash7][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][6][hash7] = [ts, key, domain]
-                            elif(g < 8):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash8 in usedHashes[g][q][7]):
-                                usedHashes[g][q][7][hash8] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][7][hash8][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][7][hash8][1])
-                                usedHashes[g][q][7][hash8] = [ts, key, domain]
-                            elif(usedHashes[g][q][7][hash8][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][7][hash8] = [ts, key, domain]
-                            elif(g < 9):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash9 in usedHashes[g][q][8]):
-                                usedHashes[g][q][8][hash9] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][8][hash9][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][8][hash9][1])
-                                usedHashes[g][q][8][hash9] = [ts, key, domain]
-                            elif(usedHashes[g][q][8][hash9][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][8][hash9] = [ts, key, domain]
-                            elif(g < 10):
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            elif(not hash10 in usedHashes[g][q][9]):
-                                usedHashes[g][q][9][hash10] = [ts, key, domain]
-                            elif (ts - usedHashes[g][q][9][hash10][0] > TIMEOUT): # timestamp expires
-                                netassayTables_stages[g][q].pop(usedHashes[g][q][9][hash10][1])
-                                usedHashes[g][q][9][hash10] = [ts, key, domain]
-                            elif(usedHashes[g][q][9][hash10][1] == key): # update timestamp for existing entry
-                                usedHashes[g][q][9][hash10] = [ts, key, domain]
-                            else:
-                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                break
-
-                            netassayTables_stages[g][q][key] = d
                             break
                     break
 
@@ -336,74 +216,37 @@ def parse_tcp(packet_len, ip_packet, ts):
             unlimitedKnownDict[d][1] = unlimitedKnownDict[d][1] + 1
             unlimitedKnownDict[d][2] = unlimitedKnownDict[d][2] + packet_len
 
+
+    serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(source), byteorder='big'))
+    clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
+    salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
+
     for g in [1, 2, 4, 8]:
         for q in range(0, 33):
             
             modulo = int((2 ** q) / g)
-            if key in netassayTables_stages[g][q]:
-                d = netassayTables_stages[g][q][key]
-                knownlistDicts_stages[g][q][d][1] = knownlistDicts_stages[g][q][d][1] + 1
-                knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
 
-                serverIP32 = np.uint32(int.from_bytes(socket.inet_aton(source), byteorder='big'))
-                clientIP32 = np.uint32(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
-                salt1 = np.uint32(134140211)
-                salt2 = np.uint32(187182238)
-                salt3 = np.uint32(187238)
-                salt4 = np.uint32(1853238)
-                salt5 = np.uint32(1828)
-                salt6 = np.uint32(12238)
-                salt7 = np.uint32(72134)
-                salt8 = np.uint32(152428)
-                salt9 = np.uint32(164314534)
-                salt10 = np.uint32(223823)
+            hashes = []
+            if modulo > 0:
+                for z in range(0, 10):
+                    hashes.append((zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z])) & 0xffffffff) % modulo)
+            else:
+                for z in range(0, 10):
+                    hashes.append(0)
 
-                if modulo > 0:
-                    hash1 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt1)) & 0xffffffff) % modulo
-                    hash2 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt2)) & 0xffffffff) % modulo
-                    hash3 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt3)) & 0xffffffff) % modulo
-                    hash4 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt4)) & 0xffffffff) % modulo
-                    hash5 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt5)) & 0xffffffff) % modulo
-                    hash6 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt6)) & 0xffffffff) % modulo
-                    hash7 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt7)) & 0xffffffff) % modulo
-                    hash8 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt8)) & 0xffffffff) % modulo
-                    hash9 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt9)) & 0xffffffff)% modulo
-                    hash10 = (zlib.crc32(np.uint32(serverIP32 + clientIP32 + salt10)) & 0xffffffff) % modulo
-                else:
-                    hash1 = 0
-                    hash2 = 0
-                    hash3 = 0
-                    hash4 = 0
-                    hash5 = 0
-                    hash6 = 0
-                    hash7 = 0
-                    hash8 = 0
-                    hash9 = 0
-                    hash10 = 0
-                
-                if hash1 in usedHashes[g][q][0] and usedHashes[g][q][0][hash1][1] == key:
-                    usedHashes[g][q][0][hash1][0] = ts
-                elif hash2 in usedHashes[g][q][1] and usedHashes[g][q][1][hash2][1] == key:
-                    usedHashes[g][q][1][hash2][0] = ts
-                elif hash3 in usedHashes[g][q][2] and usedHashes[g][q][2][hash3][1] == key:
-                    usedHashes[g][q][2][hash3][0] = ts
-                elif hash4 in usedHashes[g][q][3] and usedHashes[g][q][3][hash4][1] == key:
-                    usedHashes[g][q][3][hash4][0] = ts
-                elif hash5 in usedHashes[g][q][4] and usedHashes[g][q][4][hash5][1] == key:
-                    usedHashes[g][q][4][hash5][0] = ts
-                elif hash6 in usedHashes[g][q][5] and usedHashes[g][q][5][hash6][1] == key:
-                    usedHashes[g][q][5][hash6][0] = ts
-                elif hash7 in usedHashes[g][q][6] and usedHashes[g][q][6][hash7][1] == key:
-                    usedHashes[g][q][6][hash7][0] = ts
-                elif hash8 in usedHashes[g][q][7] and usedHashes[g][q][7][hash8][1] == key:
-                    usedHashes[g][q][7][hash8][0] = ts
-                elif hash9 in usedHashes[g][q][8] and usedHashes[g][q][8][hash9][1] == key:
-                    usedHashes[g][q][8][hash9][0] = ts
-                elif hash10 in usedHashes[g][q][9] and usedHashes[g][q][9][hash10][1] == key:
-                    usedHashes[g][q][9][hash10][0] = ts
-                else:
-                    print("error in hash storage")
-                    exit(-1)            
+            for z in range(0, 10):
+                if key in netassayTables_stages[g][q][z]:
+                    d = netassayTables_stages[g][q][z][key]
+
+                    knownlistDicts_stages[g][q][d][1] = knownlistDicts_stages[g][q][d][1] + 1
+                    knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
+
+                    if hashes[z] in usedHashes[g][q][z] and usedHashes[g][q][z][hashes[z]][1] == key:
+                        usedHashes[g][q][z][hashes[z]][0] = ts
+                    else:
+                        print("error in hash storage")
+                        exit(-1)           
+                    break 
 
     for t in range(0, 630, 30):
         if key in netassayTables_timeout[t]:
@@ -488,11 +331,13 @@ if __name__ == '__main__':
                 knownlistDict_q[d] = [0, 0, 0, 0, 0, 0]
 
             usedHash_individual_run = []
+            netTable_individual = []
             for l in range(0, 10):
                 usedHash_individual_run.append({})
+                netTable_individual.append({})
             
             knownlistDict_mem.append(knownlistDict_q)
-            netassayTable_mem.append({})
+            netassayTable_mem.append(netTable_individual)
             usedHash_mem.append(usedHash_individual_run)
         
         knownlistDicts_stages[i] = knownlistDict_mem
