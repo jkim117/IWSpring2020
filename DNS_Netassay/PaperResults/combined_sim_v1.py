@@ -51,7 +51,10 @@ def parse_dns_response(ip_packet, ts):
             return
 
 
-    dns = dpkt.dns.DNS(ip_packet.data.data)
+    try:
+        dns = dpkt.dns.DNS(ip_packet.data.data)
+    except:
+        return
     answers = dns.an
 
     if len(answers) <= 0:
