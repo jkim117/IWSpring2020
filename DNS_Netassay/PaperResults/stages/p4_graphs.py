@@ -80,7 +80,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
 ax.set_xscale('log', base=2)
-fig.savefig("dns_parser_limit_test.png")
+fig.savefig("dns_parser_limit_test2.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

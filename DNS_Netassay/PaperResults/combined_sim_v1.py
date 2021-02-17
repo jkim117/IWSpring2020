@@ -119,7 +119,7 @@ def parse_dns_response(ip_packet, ts):
                                     usedHashes[g][q][z][hashz] = [ts, key, domain]
                                 elif(g < z + 2):
                                     knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
-                                    return
+                                    break
                                 else:
                                     continue
 
