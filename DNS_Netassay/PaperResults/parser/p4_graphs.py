@@ -19,7 +19,7 @@ with open('unlimited_15min.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-f = open('parse_limits.txt', 'r')
+f = open('parse_limits_15min.txt', 'r')
 #f = open('parser_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -35,6 +35,10 @@ for r in rows:
     dns_arr.append(1 - float(values[0]) / true_dns_total)
     packets_arr.append(1 - float(values[1]) / true_packets_total)
     bytes_arr.append(1 - float(values[2]) / true_bytes_total)
+    if (count==15):
+        print(dns_arr[-1])
+        print(packets_arr[-1])
+        print(bytes_arr[-1])
     count += 1
     if count == 26:
         break
@@ -42,21 +46,22 @@ for r in rows:
 
 fig, ax = plt.subplots()
 
-line2, = ax.plot(numBytesList, packets_arr)
-line3, = ax.plot(numBytesList, bytes_arr)
-line1, = ax.plot(numBytesList, dns_arr)
+line2, = ax.plot(numBytesList, packets_arr, 'b')
+line3, = ax.plot(numBytesList, bytes_arr, 'b--')
+line1, = ax.plot(numBytesList, dns_arr, 'b:')
 
 line2.set_label('Packets')
 line3.set_label('Bytes')
 line1.set_label('DNS Queries')
 
 plt.axvline(x=60, color='red')
+plt.xlim([0, 100])
 
 ax.legend()
 
 ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Domain Name Parser Limitations')
 ax.grid()
-fig.savefig("dns_parser_limit.png")
+fig.savefig("dns_parser_limit_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

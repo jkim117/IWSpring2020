@@ -5,51 +5,42 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 
-dns_60_total = 0
-packets_60_total = 0
-bytes_60_total = 0 # key thing is here
+errors = []
+loss = []
+domains = []
 
-with open('parse_limit60_15min.csv') as csvfile:
+with open('stage_limit2_16.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
             continue
-        dns_60_total += float(row[1])
-        packets_60_total += float(row[3])
-        bytes_60_total += float(row[4])
-
-f = open('stage_limits_15min.txt', 'r')
-rows = f.read().split('\n')
-
-packets_arr = []
-bytes_arr = []
-memoryList = []
-
-count = 0
-for r in rows:
-    memoryList.append(2**count)
-    values = r.split(',')
-    packets_arr.append(float(values[6]))
-    bytes_arr.append(float(values[7]))
-    count += 2
-
+        if float(row[8]) > -1:
+            errors.append(float(row[8]))
+            loss.append(float(row[2])/float(row[1]))
+            domains.append(row[0])
 
 fig, ax = plt.subplots()
 
-line2, = ax.plot(memoryList, packets_arr, 'b:')
-line2.set_label('Packets')
+ax.scatter(loss, errors, marker='.')
 
-line3, = ax.plot(memoryList, bytes_arr, 'b--')
-line3.set_label('Bytes')
+for i, txt in enumerate(domains):
+    ax.annotate(txt, (loss[i], errors[i]))
 
-plt.axvline(x=65536, color='red')
+'''line9, = ax.plot(memoryList, error_arrs[8])
+line9.set_label('9 Stages')
+
+line10, = ax.plot(memoryList, error_arrs[9])
+line10.set_label('10 Stages')'''
+
+#plt.axvline(x=65536, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error due to Memory Size Limitations')
-ax.set_xscale('log', base=2)
+ax.set(xlabel='Traffic Ratio Lost', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
-fig.savefig("rel_error_memory_15min.png")
+#ax.set_xscale('log', base=10)
+#ax.set_yscale('log', base=10)
+fig.savefig("loss_v_error_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

@@ -5,27 +5,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 
-true_dns_total = 0
-true_packets_total = 0
-true_bytes_total = 0
+dns_60_total = 0
+packets_60_total = 0
+bytes_60_total = 0
 
-with open('unlimited_15min.csv') as csvfile:
+with open('parse_limit60_15min.csv') as csvfile:
 #with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
             continue
-        true_dns_total += float(row[1])
-        true_packets_total += float(row[3])
-        true_bytes_total += float(row[4])
+        dns_60_total += float(row[1])
+        packets_60_total += float(row[3])
+        bytes_60_total += float(row[4])
 
-f = open('timeout_limits_test.txt', 'r')
+f = open('timeout_limits_15min.txt', 'r')
 #f = open('timeout_limits.txt', 'r')
 rows = f.read().split('\n')
-
-dns_60_total = 26419
-packets_60_total = 122386
-bytes_60_total = 7171016
 
 packets_arr = []
 bytes_arr = []
@@ -38,25 +34,27 @@ for r in rows:
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
     # count += 10 change for real
-    count += 1
+    count += 30
 
 
 fig, ax = plt.subplots()
 
-line3, = ax.plot(timeoutList, bytes_arr)
+line3, = ax.plot(timeoutList, bytes_arr, 'b--')
 line3.set_label('Bytes')
 
-line2, = ax.plot(timeoutList, packets_arr)
+line2, = ax.plot(timeoutList, packets_arr, 'b:')
 line2.set_label('Packets')
 
-plt.axvline(x=3, color='red')
+plt.axvline(x=300, color='red')
+plt.xlim([0, 600])
 
 ax.legend()
 
 
-ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout Limitation')
+ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
+#ax.set_yscale('log', base=10)
 ax.grid()
-fig.savefig("timeout_limit.png")
+fig.savefig("timeout_limit_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

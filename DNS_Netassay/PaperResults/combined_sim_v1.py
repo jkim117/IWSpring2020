@@ -25,6 +25,9 @@ usedHashes = {}
 
 TIMEOUT = 300 # standard timeout
 
+def hash_function(ip1, ip2, salt):
+    return np.uint32(((0x0000ffff & ip1) << 32) + (0x0000ffff & ip2) + salt)
+
 def is_subnet_of(a, b):
     return (b.network_address <= a.network_address and b.broadcast_address >= a.broadcast_address)
 
@@ -107,7 +110,8 @@ def parse_dns_response(ip_packet, ts):
                             for z in range(0, 8):
 
                                 if modulo > 0:
-                                    hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
+                                    #hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
+                                    hashz = hash_function(serverIP32, clientIP32, salts[z]) % modulo
                                 else:
                                     hashz = 0
 
@@ -161,7 +165,8 @@ def parse_tcp(packet_len, ip_packet, ts):
                     knownlistDicts_stages[g][q][d][2] = knownlistDicts_stages[g][q][d][2] + packet_len
                     
                     if modulo > 0:
-                        hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
+                        #hashz = (zlib.crc32(np.uint64(serverIP32 + clientIP32 + salts[z]))& 0xffffffff) % modulo
+                        hashz = hash_function(serverIP32, clientIP32, salts[z]) % modulo
                     else:
                         hashz = 0
 

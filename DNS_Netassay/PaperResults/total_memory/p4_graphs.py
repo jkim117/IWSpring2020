@@ -5,24 +5,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 
-true_dns_total = 0
-true_packets_total = 0
-true_bytes_total = 0
+dns_60_total = 0
+packets_60_total = 0
+bytes_60_total = 0 # key thing is here
 
-with open('unlimited0000.csv') as csvfile:
+with open('parse_limit60_15min.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
             continue
-        true_dns_total += float(row[1])
-        true_packets_total += float(row[3])
-        true_bytes_total += float(row[4])
+        dns_60_total += float(row[1])
+        packets_60_total += float(row[3])
+        bytes_60_total += float(row[4])
 
-dns_60_total = 26419
-packets_60_total = 122386
-bytes_60_total = 7171016
-
-f = open('memory_limits.txt', 'r')
+f = open('stage_limits_15min.txt', 'r')
 rows = f.read().split('\n')
 
 dns_arr = []
@@ -37,19 +33,19 @@ for r in rows:
     dns_arr.append(1 - (float(values[0]) - float(values[3])) / dns_60_total)
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
-    count += 1
+    count += 2
 
 
 fig, ax = plt.subplots()
 
 
-line2, = ax.plot(memoryList, packets_arr)
+line2, = ax.plot(memoryList, packets_arr, 'b')
 line2.set_label('Packets')
 
-line3, = ax.plot(memoryList, bytes_arr)
+line3, = ax.plot(memoryList, bytes_arr, 'b--')
 line3.set_label('Bytes')
 
-line1, = ax.plot(memoryList, dns_arr)
+line1, = ax.plot(memoryList, dns_arr, 'b:')
 line1.set_label('DNS Queries')
 
 plt.axvline(x=65536, color='red')
@@ -59,7 +55,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.set_xscale('log', base=2)
 ax.grid()
-fig.savefig("dns_parser_limit.png")
+fig.savefig("mem_limit_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

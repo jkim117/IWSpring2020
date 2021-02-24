@@ -5,24 +5,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 
-true_dns_total = 0
-true_packets_total = 0
-true_bytes_total = 0
+dns_60_total = 0
+packets_60_total = 0
+bytes_60_total = 0 # key thing is here
 
-with open('unlimited_15min.csv') as csvfile:
+with open('parse_limit60_15min.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
             continue
-        true_dns_total += float(row[1])
-        true_packets_total += float(row[3])
-        true_bytes_total += float(row[4])
+        dns_60_total += float(row[1])
+        packets_60_total += float(row[3])
+        bytes_60_total += float(row[4])
 
-dns_60_total = 26419
-packets_60_total = 122386
-bytes_60_total = 7171016 # key thing is here
-
-f = open('stage_limits_test.txt', 'r')
+f = open('stage_limits_15min.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -43,7 +39,7 @@ for i in range(len(by_stage)):
 
 fig, ax = plt.subplots()
 
-line1, = ax.plot(memoryList, stage_arrs[0])
+line1, = ax.plot(memoryList, stage_arrs[0], 'b')
 line1.set_label('1 Stage')
 
 line2, = ax.plot(memoryList, stage_arrs[1], color='red')
@@ -52,7 +48,7 @@ line2.set_label('2 Stages')
 #line3, = ax.plot(memoryList, stage_arrs[2])
 #line3.set_label('3 Stages')
 
-line4, = ax.plot(memoryList, stage_arrs[2])
+line4, = ax.plot(memoryList, stage_arrs[2], 'b--')
 line4.set_label('4 Stages')
 
 '''line5, = ax.plot(memoryList, stage_arrs[4])
@@ -64,7 +60,7 @@ line6.set_label('6 Stages')
 line7, = ax.plot(memoryList, stage_arrs[6])
 line7.set_label('7 Stages')'''
 
-line8, = ax.plot(memoryList, stage_arrs[3])
+line8, = ax.plot(memoryList, stage_arrs[3], 'b:')
 line8.set_label('8 Stages')
 
 '''line9, = ax.plot(memoryList, stage_arrs[8])
@@ -80,7 +76,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
 ax.set_xscale('log', base=2)
-fig.savefig("rel_error_stage_test.png")
+fig.savefig("rel_error_stage_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

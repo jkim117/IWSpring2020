@@ -19,37 +19,66 @@ with open('parse_limit60_15min.csv') as csvfile:
         bytes_60_total += float(row[4])
 
 f = open('stage_limits_15min.txt', 'r')
-rows = f.read().split('\n')
+by_stage = f.read().split('*')
 
-packets_arr = []
-bytes_arr = []
+
+error_arrs = [[],[],[],[],[],[],[],[],[],[]]
+loss_arrs = [[],[],[],[],[],[],[],[],[],[]]
 memoryList = []
 
-count = 0
-for r in rows:
-    memoryList.append(2**count)
-    values = r.split(',')
-    packets_arr.append(float(values[6]))
-    bytes_arr.append(float(values[7]))
-    count += 2
+for i in range(len(by_stage)):
+    rows = by_stage[i].split()
+
+    count = 0
+    for r in rows:
+        if i == 0:
+            memoryList.append(2**count)
+        values = r.split(',')
+        error_arrs[i].append(float(values[7]))
+        loss_arrs[i].append(float(values[3]) / float(values[0]))
+        count += 2
 
 
 fig, ax = plt.subplots()
 
-line2, = ax.plot(memoryList, packets_arr, 'b:')
-line2.set_label('Packets')
+line1, = ax.plot(loss_arrs[0], error_arrs[0], 'b.')
+line1.set_label('1 Stage')
 
-line3, = ax.plot(memoryList, bytes_arr, 'b--')
-line3.set_label('Bytes')
+line2, = ax.plot(loss_arrs[1], error_arrs[1], 'r.')
+line2.set_label('2 Stages')
 
-plt.axvline(x=65536, color='red')
+#line3, = ax.plot(memoryList, error_arrs[2])
+#line3.set_label('3 Stages')
+
+line4, = ax.plot(loss_arrs[2], error_arrs[2], 'g.')
+line4.set_label('4 Stages')
+
+'''line5, = ax.plot(memoryList, error_arrs[4])
+line5.set_label('5 Stages')
+
+line6, = ax.plot(memoryList, error_arrs[5])
+line6.set_label('6 Stages')
+
+line7, = ax.plot(memoryList, error_arrs[6])
+line7.set_label('7 Stages')'''
+
+line8, = ax.plot(loss_arrs[3], error_arrs[3], '.')
+line8.set_label('8 Stages')
+
+'''line9, = ax.plot(memoryList, error_arrs[8])
+line9.set_label('9 Stages')
+
+line10, = ax.plot(memoryList, error_arrs[9])
+line10.set_label('10 Stages')'''
+
+#plt.axvline(x=65536, color='red')
 
 ax.legend()
 
-ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error due to Memory Size Limitations')
-ax.set_xscale('log', base=2)
+ax.set(xlabel='Traffic Ratio Lost', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
-fig.savefig("rel_error_memory_15min.png")
+#ax.set_xscale('log', base=2)
+fig.savefig("loss_v_error_15min.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
