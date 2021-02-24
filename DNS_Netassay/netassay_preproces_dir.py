@@ -15,8 +15,10 @@ if __name__ == '__main__':
         print(in_dir + file)
 
     count = 0
-    for file in os.listdir(in_dir):
-        in_file = in_dir + file
+    for i in range(0, 155):
+        in_file = in_dir + 'capture.pcap'
+        if i != 0:
+            in_file = in_file + str(i)
         print(in_file)
         
         outFile = open(argv[2] + 'pcap' + str(count), 'wb')
