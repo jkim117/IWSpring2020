@@ -103,8 +103,8 @@ def parse_dns_response(ip_packet, ts):
                             serverIP = socket.inet_ntoa(rr.rdata)
                             #serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(serverIP), byteorder='big'))
                             #clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(clientIP), byteorder='big'))
-                            serverIP32 = socket.inet_aton(serverIP)
-                            clientIP32 = socket.inet_aton(clientIP)
+                            serverIP32 = int.from_bytes(socket.inet_aton(serverIP))
+                            clientIP32 = int.from_bytes(socket.inet_aton(clientIP))
 
                             salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
                             key = clientIP + serverIP
@@ -150,8 +150,8 @@ def parse_tcp(packet_len, ip_packet, ts):
 
     #serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(source), byteorder='big'))
     #clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
-    serverIP32 = socket.inet_aton(source)
-    clientIP32 = socket.inet_aton(dest)
+    serverIP32 = int.from_bytes(socket.inet_aton(source), byteorder='big')
+    clientIP32 = int.from_bytes(socket.inet_aton(dest), byteorder='big')
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
     for g in [1, 2, 4, 8]:
