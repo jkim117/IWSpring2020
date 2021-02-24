@@ -23,7 +23,7 @@ knownlistDicts_stages = {}
 
 usedHashes = {}
 
-TIMEOUT = 100 # standard timeout
+TIMEOUT = 475 # standard timeout
 
 def hash_function(ip1, ip2, salt):
     return np.uint32(((0x0000ffff & ip1) << 32) + (0x0000ffff & ip2) + salt)
