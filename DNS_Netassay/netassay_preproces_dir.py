@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
         ethPacketList = []
         with open(in_file, 'rb') as f:
-            pcap_obj = dpkt.pcapng.Reader(f)
+            pcap_obj = dpkt.pcap.Reader(f)
 
             for ts, buf in pcap_obj:
                 eth = dpkt.ethernet.Ethernet(buf)
