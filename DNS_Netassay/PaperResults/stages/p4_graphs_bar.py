@@ -18,10 +18,6 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-#dns_60_total = 26419
-#packet_60_total = 122386
-#bytes_60_total = 7171016
-
 f = open('stage_limits_15min.txt', 'r')
 by_stage = f.read().split('*')
 
@@ -35,37 +31,21 @@ for i in range(len(by_stage)):
     count = 0
     for r in rows:
         if i == 0:
-            memoryList.append(2**count)
+            memoryList.append(count)
         values = r.split(',')
         stage_arrs[i].append(1 - float(values[2]) / bytes_60_total)
         count += 2
 
+memoryList = np.array(memoryList)
 
 fig, ax = plt.subplots()
 
-line1, = ax.plot(memoryList, stage_arrs[0], 'b')
-line1.set_label('1 Stage')
+width = 0.25
 
-line2, = ax.plot(memoryList, stage_arrs[1], color='red')
-line2.set_label('2 Stages')
-
-#line3, = ax.plot(memoryList, stage_arrs[2])
-#line3.set_label('3 Stages')
-
-line4, = ax.plot(memoryList, stage_arrs[2], 'b--')
-line4.set_label('4 Stages')
-
-'''line5, = ax.plot(memoryList, stage_arrs[4])
-line5.set_label('5 Stages')
-
-line6, = ax.plot(memoryList, stage_arrs[5])
-line6.set_label('6 Stages')
-
-line7, = ax.plot(memoryList, stage_arrs[6])
-line7.set_label('7 Stages')'''
-
-line8, = ax.plot(memoryList, stage_arrs[3], 'b:')
-line8.set_label('8 Stages')
+plt.bar(memoryList, stage_arrs[0], label='1 Stage', width=0.25)
+plt.bar(memoryList+width, stage_arrs[1], label='2 Stage', width=0.25)
+plt.bar(memoryList+2*width, stage_arrs[2], label='4 Stage', width=0.25)
+plt.bar(memoryList+3*width, stage_arrs[3], label='8 Stage', width=0.25)
 
 '''line9, = ax.plot(memoryList, stage_arrs[8])
 line9.set_label('9 Stages')
@@ -73,14 +53,16 @@ line9.set_label('9 Stages')
 line10, = ax.plot(memoryList, stage_arrs[9])
 line10.set_label('10 Stages')'''
 
-plt.axvline(x=65536, color='red')
+#plt.axvline(x=65536, color='red')
 
 ax.legend()
 
+plt.xticks(memoryList+1.5*width, memoryList)
+
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
-ax.set_xscale('log', base=2)
-fig.savefig("stage_limit_15min.png")
+#ax.set_xscale('log', base=2)
+fig.savefig("stage_limit_15min_bar.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
