@@ -252,9 +252,9 @@ if __name__ == '__main__':
         print('PCAP_COUNT', pcap_count)
 
         if pcap_count < 69:
-            f = open('n/fs/p4netassay/08_19_2020_T08-11_processed/pcap'+str(pcap_count), 'rb')
+            f = open('/n/fs/p4netassay/08_19_2020_T08-11_processed/pcap'+str(pcap_count), 'rb')
         else:
-            f = open('n/fs/anonflow/netassay_output/pcap'+str(pcap_count), 'rb')
+            f = open('/n/fs/anonflow/netassay_output/pcap'+str(pcap_count), 'rb')
         pcap_obj = pickle.load(f)
         f.close()
 
