@@ -256,7 +256,7 @@ if __name__ == '__main__':
                 parse_tcp(dns_code, ip, ts)
 
             packet_count += 1
-            if (packet_count % 1000 == 0):
+            if (packet_count % 100000 == 0):
                 print(packet_count / num_packets)
 
 
