@@ -268,17 +268,27 @@ if __name__ == '__main__':
 
             # For each packet parse the dns responses
             if (dns_code == -1):
-                #try:
-                parse_dns_response(ip, ts)
-                '''except Exception as e:
+                try:
+                    parse_dns_response(ip, ts)
+                except Exception as e:
                     print(e)
-                    continue'''
+                    continue
             else:
-                parse_tcp(dns_code, ip, ts)
+                try:
+                    parse_tcp(dns_code, ip, ts)
+                except Exception as e:
+                    print(e)
+                    continue
 
             packet_count += 1
-            if (packet_count % 100000 == 0):
-                print(packet_count / num_packets)
+            #if (packet_count % 100000 == 0):
+            #    print(packet_count / num_packets)
+
+    try:
+        np.save('unlimitedKnownDict.npy', unlimitedKnownDict)
+        np.save('knownlistDicts_stages.npy', knownlistDicts_stages)
+    except Exception as e:
+        print(e)
 
     outfile_stage = open('stage_limits.txt', 'w')
     for v in [1, 2, 4, 8]:
