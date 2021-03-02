@@ -45,16 +45,16 @@ line3.set_label('Bytes')
 line2, = ax.plot(timeoutList, packets_arr, 'b:')
 line2.set_label('Packets')
 
-plt.axvline(x=300, color='red')
+plt.axvline(x=100, color='red')
 plt.xlim([0, 600])
 
 ax.legend()
 
 
 ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
-#ax.set_yscale('log', base=10)
+ax.set_yscale('log', base=10)
 ax.grid()
-fig.savefig("timeout_limit_15min.png")
+fig.savefig("timeout_limit_15min2.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

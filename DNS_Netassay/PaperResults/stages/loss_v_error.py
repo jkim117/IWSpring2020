@@ -18,7 +18,7 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('stage_limits_15min.txt', 'r')
+f = open('stage_limits_15min_timeout100.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -41,8 +41,8 @@ for i in range(len(by_stage)):
 
 fig, ax = plt.subplots()
 
-line1, = ax.plot(loss_arrs[0], error_arrs[0], 'b.')
-line1.set_label('1 Stage')
+#line1, = ax.plot(loss_arrs[0], error_arrs[0], 'b.')
+#line1.set_label('1 Stage')
 
 line2, = ax.plot(loss_arrs[1], error_arrs[1], 'r.')
 line2.set_label('2 Stages')
@@ -50,8 +50,8 @@ line2.set_label('2 Stages')
 #line3, = ax.plot(memoryList, error_arrs[2])
 #line3.set_label('3 Stages')
 
-line4, = ax.plot(loss_arrs[2], error_arrs[2], 'g.')
-line4.set_label('4 Stages')
+#line4, = ax.plot(loss_arrs[2], error_arrs[2], 'g.')
+#line4.set_label('4 Stages')
 
 '''line5, = ax.plot(memoryList, error_arrs[4])
 line5.set_label('5 Stages')
@@ -62,8 +62,8 @@ line6.set_label('6 Stages')
 line7, = ax.plot(memoryList, error_arrs[6])
 line7.set_label('7 Stages')'''
 
-line8, = ax.plot(loss_arrs[3], error_arrs[3], '.')
-line8.set_label('8 Stages')
+#line8, = ax.plot(loss_arrs[3], error_arrs[3], '.')
+#line8.set_label('8 Stages')
 
 '''line9, = ax.plot(memoryList, error_arrs[8])
 line9.set_label('9 Stages')

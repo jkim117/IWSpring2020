@@ -18,7 +18,7 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('stage_limits_15min.txt', 'r')
+f = open('stage_limits_15min_timeout100.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -36,15 +36,23 @@ for i in range(len(by_stage)):
         stage_arrs[i].append(float(values[7]))
         count += 2
 
-memoryList = np.array(memoryList)
+
 fig, ax = plt.subplots()
 
 width = 0.25
 
-plt.bar(memoryList, stage_arrs[0], label='1 Stage', width=0.25)
-plt.bar(memoryList+width, stage_arrs[1], label='2 Stage', width=0.25)
-plt.bar(memoryList+2*width, stage_arrs[2], label='4 Stage', width=0.25)
-plt.bar(memoryList+3*width, stage_arrs[3], label='8 Stage', width=0.25)
+selectedIndicies = [6,7,8,9,10]
+stage_1 = [stage_arrs[0][i] for i in selectedIndicies]
+stage_2 = [stage_arrs[1][i] for i in selectedIndicies]
+stage_4 = [stage_arrs[2][i] for i in selectedIndicies]
+stage_8 = [stage_arrs[3][i] for i in selectedIndicies]
+memoryList = [memoryList[i] for i in selectedIndicies]
+memoryList = np.array(memoryList)
+
+plt.bar(memoryList, stage_1, label='1 Stage', width=0.25, color='lightsteelblue')
+plt.bar(memoryList+width, stage_2, label='2 Stage', width=0.25, color='cornflowerblue')
+plt.bar(memoryList+2*width, stage_4, label='4 Stage', width=0.25, color='royalblue')
+plt.bar(memoryList+3*width, stage_8, label='8 Stage', width=0.25, color='navy')
 
 
 '''line9, = ax.plot(memoryList, stage_arrs[8])
@@ -61,7 +69,7 @@ plt.xticks(memoryList+1.5*width, memoryList)
 
 ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
-fig.savefig("rel_error_stage_15min_bar.png")
+fig.savefig("rel_error_stage_15min_bar_timeout100.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
