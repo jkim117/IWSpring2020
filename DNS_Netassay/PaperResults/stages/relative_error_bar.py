@@ -9,7 +9,7 @@ dns_60_total = 0
 packets_60_total = 0
 bytes_60_total = 0 # key thing is here
 
-with open('parse_limit60_15min.csv') as csvfile:
+with open('parse_limit60_3hr.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
@@ -18,7 +18,7 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('stage_limits_15min_timeout100.txt', 'r')
+f = open('stage_limits_3hr.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -69,7 +69,7 @@ plt.xticks(memoryList+1.5*width, memoryList)
 
 ax.set(xlabel='Memory Length', ylabel='Median Relative Error', title='Median Relative Error Due to Memory Size Limitations')
 ax.grid()
-fig.savefig("rel_error_stage_15min_bar_timeout100.png")
+fig.savefig("rel_error_stage_3hr_bar.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

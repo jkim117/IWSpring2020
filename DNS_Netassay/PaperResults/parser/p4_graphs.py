@@ -9,7 +9,7 @@ true_dns_total = 0
 true_packets_total = 0
 true_bytes_total = 0
 
-with open('unlimited_15min.csv') as csvfile:
+with open('unlimited_3hr.csv') as csvfile:
 #with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
@@ -19,7 +19,7 @@ with open('unlimited_15min.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
-f = open('parse_limits_15min.txt', 'r')
+f = open('parse_limits_3hr.txt', 'r')
 #f = open('parser_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -56,12 +56,13 @@ line1.set_label('DNS Queries')
 
 plt.axvline(x=60, color='red')
 plt.xlim([0, 100])
+plt.ylim(bottom=0)
 
 ax.legend()
 
 ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Domain Name Parser Limitations')
 ax.grid()
-fig.savefig("dns_parser_limit_15min.png")
+fig.savefig("dns_parser_limit_3hr.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

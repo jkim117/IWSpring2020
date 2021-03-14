@@ -17,10 +17,12 @@ domain_names = []
 bytes_true = {}
 dns_true = {}
 
-with open('parse_limit60_15min.csv') as csvfile:
+banned_domains = ['*.*.*.net', '*.*.*', '*.*.com', '*.*.*.com', '*.*.net']
+
+with open('parse_limit60_3hr.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        if row[0] == 'Domain':
+        if row[0] == 'Domain' or row[0] in banned_domains:
         #if row[0] == 'Domain':
             continue
         byte_c = float(row[4])
@@ -32,11 +34,11 @@ with open('parse_limit60_15min.csv') as csvfile:
 domains_final = []
 bytes_true_final = []
 dns_true_final = []
-with open('./15min_timeout100/stage_limit2_16.csv') as csvfile:
+with open('./08_19_2020_T08-11/stage_limit2_16.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         #if row[0] == 'Domain':
-        if row[0] == 'Domain':
+        if row[0] == 'Domain' or row[0] in banned_domains:
             continue
 
         if row[0] in domain_names:
@@ -55,16 +57,22 @@ bytes_true = np.array(bytes_true_final)
 error_before = np.array(error_before)
 error_after = np.array(error_after)
 
-idx = np.argsort(bytes_true)
+idx = np.argsort(dns_true)
 domain_names = domain_names[idx]
 bytes_true = bytes_true[idx]
 error_before = error_before[idx]
 error_after = error_after[idx]
 
-domain_names = domain_names[-20:]
-bytes_true = bytes_true[-20:]
-error_before = error_before[-20:]
-error_after = error_after[-20:]
+domain_names = domain_names[-15:]
+bytes_true = bytes_true[-15:]
+error_before = error_before[-15:]
+error_after = error_after[-15:]
+
+idx = np.argsort(-error_before)
+domain_names = domain_names[idx]
+bytes_true = bytes_true[idx]
+error_before = error_before[idx]
+error_after = error_after[idx]
 
 
 xAxis = 2 * np.arange(0, len(domain_names))
@@ -95,12 +103,14 @@ line10.set_label('10 Stages')'''
 
 ax.legend()
 
-plt.xticks(xAxis-0.5*width, domain_names, rotation=80, fontsize=5)
+plt.xticks(xAxis-0.5*width, domain_names, rotation=70, fontsize=8)
 
 ax.set(xlabel='Domain Names', ylabel='Relative Error', title='Relative Error of Domain Names with Correction Applied')
 #ax.grid()
 #ax.set_xscale('log', base=2)
-fig.savefig("comp_bar_15min_timeout100.png")
+
+plt.tight_layout()
+fig.savefig("comp_bar_3hr_2_16.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

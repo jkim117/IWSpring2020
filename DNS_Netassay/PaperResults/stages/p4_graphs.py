@@ -9,7 +9,7 @@ dns_60_total = 0
 packets_60_total = 0
 bytes_60_total = 0 # key thing is here
 
-with open('parse_limit60_15min.csv') as csvfile:
+with open('parse_limit60_3hr.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
@@ -22,7 +22,7 @@ with open('parse_limit60_15min.csv') as csvfile:
 #packet_60_total = 122386
 #bytes_60_total = 7171016
 
-f = open('stage_limits_15min.txt', 'r')
+f = open('stage_limits_3hr.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -80,7 +80,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
 ax.set_xscale('log', base=2)
-fig.savefig("stage_limit_15min.png")
+fig.savefig("stage_limit_3hr.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

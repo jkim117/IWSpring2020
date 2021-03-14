@@ -9,7 +9,7 @@ dns_60_total = 0
 packets_60_total = 0
 bytes_60_total = 0
 
-with open('parse_limit60_15min.csv') as csvfile:
+with open('parse_limit60_3hr.csv') as csvfile:
 #with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
@@ -19,7 +19,7 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('timeout_limits_15min.txt', 'r')
+f = open('timeout_limits_3hr.txt', 'r')
 #f = open('timeout_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -52,9 +52,9 @@ ax.legend()
 
 
 ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
-ax.set_yscale('log', base=10)
+#ax.set_yscale('log', base=10)
 ax.grid()
-fig.savefig("timeout_limit_15min2.png")
+fig.savefig("timeout_limit_3hr2.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

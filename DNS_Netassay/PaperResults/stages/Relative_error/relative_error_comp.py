@@ -8,7 +8,7 @@ import statistics
 
 byte_true_values = {} # key is domain, value is true bytes
 
-with open('parse_limit60_15min.csv') as csvfile:
+with open('parse_limit60_3hr.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
@@ -25,7 +25,7 @@ for i in range(0, 34, 2):
     error_before_correction = []
     error_post_correction = []
 
-    with open('./15min_timeout100/stage_limit2_' + str(i)+'.csv') as csvfile:
+    with open('./08_19_2020_T08-11/stage_limit2_' + str(i)+'.csv') as csvfile:
         reader = csv.reader(csvfile)
 
         for row in reader:
@@ -67,7 +67,7 @@ ax.legend()
 ax.set(xlabel='Memory Length', ylabel='Mean Relative Error', title='Mean Relative Error Due to Memory Size Limitations')
 ax.grid()
 ax.set_xscale('log', base=2)
-fig.savefig("rel_error_comp_15min_timeout100_2.png")
+fig.savefig("rel_error_comp_3hr.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
