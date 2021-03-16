@@ -7,9 +7,10 @@ import csv
 
 dns_60_total = 0
 packets_60_total = 0
-bytes_60_total = 0 # key thing is here
+bytes_60_total = 0
 
 with open('parse_limit60_3hr.csv') as csvfile:
+#with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain':
@@ -18,58 +19,43 @@ with open('parse_limit60_3hr.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('stage_limits_3hr.txt', 'r')
-by_stage = f.read().split('*')
+f = open('timeout_limits_withmem.txt', 'r')
+#f = open('timeout_limits.txt', 'r')
+rows = f.read().split('\n')
 
+packets_arr = []
+bytes_arr = []
+timeoutList = []
 
-stage_arrs = [[],[],[],[],[],[],[],[],[],[]]
-memoryList = []
+count = 0
+for r in rows:
+    timeoutList.append(count)
+    values = r.split(',')
+    packets_arr.append(1 - float(values[1]) / packets_60_total)
+    bytes_arr.append(1 - float(values[2]) / bytes_60_total)
+    # count += 10 change for real
+    count += 50
 
-for i in range(len(by_stage)):
-    rows = by_stage[i].split()
-
-    count = 0
-    for r in rows:
-        if i == 0:
-            memoryList.append(count)
-        values = r.split(',')
-        stage_arrs[i].append(1 - float(values[2]) / bytes_60_total)
-        count += 2
-
+f.close()
 
 fig, ax = plt.subplots()
 
-width = 0.25
+line3, = ax.plot(timeoutList, bytes_arr, 'b--')
+line3.set_label('Bytes')
 
-selectedIndicies = [4,5,6,7,8,9]
-stage_1 = [stage_arrs[0][i] for i in selectedIndicies]
-stage_2 = [stage_arrs[1][i] for i in selectedIndicies]
-stage_4 = [stage_arrs[2][i] for i in selectedIndicies]
-stage_8 = [stage_arrs[3][i] for i in selectedIndicies]
-memoryList = [memoryList[i] for i in selectedIndicies]
-memoryList = np.array(memoryList)
+line2, = ax.plot(timeoutList, packets_arr, 'b:')
+line2.set_label('Packets')
 
-plt.bar(memoryList, stage_1, label='1 Stage', width=0.25, color='lightsteelblue')
-plt.bar(memoryList+width, stage_2, label='2 Stage', width=0.25, color='cornflowerblue')
-plt.bar(memoryList+2*width, stage_4, label='4 Stage', width=0.25, color='royalblue')
-plt.bar(memoryList+3*width, stage_8, label='8 Stage', width=0.25, color='navy')
-
-'''line9, = ax.plot(memoryList, stage_arrs[8])
-line9.set_label('9 Stages')
-
-line10, = ax.plot(memoryList, stage_arrs[9])
-line10.set_label('10 Stages')'''
-
-#plt.axvline(x=65536, color='red')
+plt.axvline(x=100, color='red')
+plt.xlim([0, 600])
 
 ax.legend()
 
-plt.xticks(memoryList+1.5*width, memoryList)
 
-ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
+ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
+#ax.set_yscale('log', base=10)
 ax.grid()
-#ax.set_xscale('log', base=2)
-fig.savefig("stage_limit_3hr_bar.png")
+fig.savefig("timeout_limit_withmem.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

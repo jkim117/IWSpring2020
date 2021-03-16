@@ -236,25 +236,25 @@ def matchDomain(known, domain):
 
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
-    if len(argv) != 4:
+    if len(argv) != 5:
         print('usage: python netassay_python3_p4sim.py knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt')
         exit(-1)
     
     # Parse allowed IP and banned IP files
-    allowed_ip_file = open(argv[2], 'r')
+    allowed_ip_file = open(argv[3], 'r')
     allowed_ip_list = allowed_ip_file.read().split()
     allowed_ip_file.close()
     for ip in allowed_ip_list:
         allowed_ips.append(ipaddress.ip_network(ip))
 
-    banned_ip_file = open(argv[3], 'r')
+    banned_ip_file = open(argv[4], 'r')
     banned_ip_list = banned_ip_file.read().split()
     banned_ip_file.close()
     for ip in banned_ip_list:
         banned_ips.append(ipaddress.ip_network(ip))
 
     # Create knownlist
-    knownlist = open(argv[1], 'r')
+    knownlist = open(argv[2], 'r')
     known_domains = knownlist.read().split()
     knownlist.close()
 
@@ -284,45 +284,38 @@ if __name__ == '__main__':
         netassayTables_stages[i] = usedHash_individual_run
         usedHashes[i] = netTable_individual
 
+    f = open(argv[1], 'rb')
+    pcap_obj = pickle.load(f)
+    f.close()
 
-    for pcap_count in range(0, 155):
-        print('PCAP_COUNT', pcap_count)
+    num_packets = len(pcap_obj)
+    packet_count = 0.0
 
-        if pcap_count < 69:
-            f = open('/u/jjk7/mnt/08_19_2020_T08-11_processed/pcap'+str(pcap_count), 'rb')
+    for p in pcap_obj:
+        TOTAL_PACKETS += 1
+        ts = p[0]
+        dns_code = p[1]
+        ip = p[2]
+
+        # For each packet parse the dns responses
+        if (dns_code == -1):
+            TOTAL_DNS += 1
+            #try:
+            try:
+                parse_dns_response(ip, ts)
+            except Exception as e:
+                print(e)
+                continue
         else:
-            f = open('/u/jjk7/mnt/anonflow/netassay_output/pcap'+str(pcap_count), 'rb')
-        pcap_obj = pickle.load(f)
-        f.close()
+            try:
+                parse_tcp(dns_code, ip, ts)
+            except Exception as e:
+                print(e)
+                continue
 
-        num_packets = len(pcap_obj)
-        packet_count = 0.0
-
-        for p in pcap_obj:
-            TOTAL_PACKETS += 1
-            ts = p[0]
-            dns_code = p[1]
-            ip = p[2]
-
-            # For each packet parse the dns responses
-            if (dns_code == -1):
-                TOTAL_DNS += 1
-                #try:
-                try:
-                    parse_dns_response(ip, ts)
-                except Exception as e:
-                    print(e)
-                    continue
-            else:
-                try:
-                    parse_tcp(dns_code, ip, ts)
-                except Exception as e:
-                    print(e)
-                    continue
-
-            packet_count += 1
-            #if (packet_count % 100000 == 0):
-             #   print(packet_count / num_packets)
+        packet_count += 1
+        #if (packet_count % 100000 == 0):
+            #   print(packet_count / num_packets)
         
 
     print('TOTAL PACKETS', TOTAL_PACKETS)

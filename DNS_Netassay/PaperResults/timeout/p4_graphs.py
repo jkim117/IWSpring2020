@@ -19,7 +19,7 @@ with open('parse_limit60_3hr.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('timeout_limits_3hr.txt', 'r')
+f = open('timeout_limits_3hr_3.txt', 'r')
 #f = open('timeout_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -34,7 +34,24 @@ for r in rows:
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
     # count += 10 change for real
+    count += 10
+
+count += 20
+f.close()
+
+f = open('timeout_limits_3hr_3_2.txt', 'r')
+#f = open('timeout_limits.txt', 'r')
+rows = f.read().split('\n')
+
+for r in rows:
+    timeoutList.append(count)
+    values = r.split(',')
+    packets_arr.append(1 - float(values[1]) / packets_60_total)
+    bytes_arr.append(1 - float(values[2]) / bytes_60_total)
+    # count += 10 change for real
     count += 30
+
+f.close()
 
 
 fig, ax = plt.subplots()
@@ -54,7 +71,7 @@ ax.legend()
 ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
 #ax.set_yscale('log', base=10)
 ax.grid()
-fig.savefig("timeout_limit_3hr2.png")
+fig.savefig("timeout_limit_3hr3.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

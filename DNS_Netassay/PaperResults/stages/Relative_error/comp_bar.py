@@ -34,7 +34,7 @@ with open('parse_limit60_3hr.csv') as csvfile:
 domains_final = []
 bytes_true_final = []
 dns_true_final = []
-with open('./08_19_2020_T08-11/stage_limit2_16.csv') as csvfile:
+with open('./08_19_2020_T08-11/stage_limit2_10.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         #if row[0] == 'Domain':
@@ -57,7 +57,7 @@ bytes_true = np.array(bytes_true_final)
 error_before = np.array(error_before)
 error_after = np.array(error_after)
 
-idx = np.argsort(dns_true)
+idx = np.argsort(bytes_true)
 domain_names = domain_names[idx]
 bytes_true = bytes_true[idx]
 error_before = error_before[idx]
@@ -80,7 +80,7 @@ xAxis = 2 * np.arange(0, len(domain_names))
 
 fig, ax = plt.subplots()
 
-width = 0.25
+width = 0.5
 
 '''selectedIndicies = [6,7,8,9,10]
 stage_1 = [stage_arrs[0][i] for i in selectedIndicies]
@@ -90,8 +90,8 @@ stage_8 = [stage_arrs[3][i] for i in selectedIndicies]
 memoryList = [memoryList[i] for i in selectedIndicies]
 memoryList = np.array(memoryList)'''
 
-plt.bar(xAxis-width, error_before, label='Error Before Correction', width=0.25, color='lightsteelblue')
-plt.bar(xAxis, error_after, label='Error After Correction', width=0.25, color='cornflowerblue')
+plt.bar(xAxis-width, error_before, label='Error Before Correction', width=0.5, color='lightsteelblue')
+plt.bar(xAxis, error_after, label='Error After Correction', width=0.5, color='cornflowerblue')
 
 '''line9, = ax.plot(memoryList, stage_arrs[8])
 line9.set_label('9 Stages')
@@ -110,7 +110,7 @@ ax.set(xlabel='Domain Names', ylabel='Relative Error', title='Relative Error of 
 #ax.set_xscale('log', base=2)
 
 plt.tight_layout()
-fig.savefig("comp_bar_3hr_2_16.png")
+fig.savefig("comp_bar_3hr_2_10.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
