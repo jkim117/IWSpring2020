@@ -109,6 +109,11 @@ def parse_dns_response(ip_packet, ts):
                             salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
                             key = clientIP + serverIP
 
+                            empty_entry = -1
+                            best_stage = -1
+                            best_timeout = TIMEOUT
+                            hashes_z = []
+
                             for z in range(0, 8):
 
                                 if modulo > 0:
@@ -116,22 +121,28 @@ def parse_dns_response(ip_packet, ts):
                                     #hashz = hash_function(serverIP32, clientIP32, salts[z]) % modulo
                                 else:
                                     hashz = 0
+                                hashes_z.append(hashz)
 
-                                if(not hashz in usedHashes[g][q][z]):
-                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
-                                elif (ts - usedHashes[g][q][z][hashz][0] > TIMEOUT): # timestamp expires
-                                    netassayTables_stages[g][q][z].pop(usedHashes[g][q][z][hashz][1])
-                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
+                                if(not hashz in usedHashes[g][q][z]): # entry is empty
+                                    empty_entry = z
+                                elif (ts - usedHashes[g][q][z][hashz][0] > best_timeout): # timestamp expires
+                                    best_timeout = ts - usedHashes[g][q][z][hashz][0]
+                                    best_stage = z
                                 elif(usedHashes[g][q][z][hashz][1] == key): # update timestamp for existing entry
                                     usedHashes[g][q][z][hashz] = [ts, key, domain]
-                                elif(g < z + 2):
+                                elif(g < z + 2): # missed dns entry
                                     knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
                                     break
-                                else:
-                                    continue
 
+                            if empty_entry != -1:
+                                usedHashes[g][q][empty_entry][hashes_z[empty_entry]] = [ts, key, domain]
                                 netassayTables_stages[g][q][z][key] = d
-                                break
+                            elif best_stage != -1:
+                                hashz = hashes_z[best_stage]
+                                netassayTables_stages[g][q][best_stage].pop(usedHashes[g][q][best_stage][hashz][1])
+                                usedHashes[g][q][best_stage][hashz] = [ts, key, domain]
+                                netassayTables_stages[g][q][z][key] = d
+
                             break
                     break
         
