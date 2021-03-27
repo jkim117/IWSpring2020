@@ -9,7 +9,7 @@ dns_60_total = 0
 packets_60_total = 0
 bytes_60_total = 0
 
-with open('parse_limit60_3hr.csv') as csvfile:
+with open('parse_limit60_15min.csv') as csvfile:
 #with open('unlimited0000.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
@@ -19,7 +19,7 @@ with open('parse_limit60_3hr.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('timeout_limits_withmem.txt', 'r')
+f = open('timeout_limits_withmem_15min.txt', 'r')
 #f = open('timeout_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -47,7 +47,8 @@ line2, = ax.plot(timeoutList, packets_arr, 'b:')
 line2.set_label('Packets')
 
 plt.axvline(x=100, color='red')
-plt.xlim([0, 600])
+plt.ylim([0, 0.4])
+plt.xlim([0, 500])
 
 ax.legend()
 
