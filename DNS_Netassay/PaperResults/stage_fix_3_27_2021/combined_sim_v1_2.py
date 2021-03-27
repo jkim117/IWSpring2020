@@ -136,7 +136,7 @@ def parse_dns_response(ip_packet, ts):
 
                             if empty_entry != -1:
                                 usedHashes[g][q][empty_entry][hashes_z[empty_entry]] = [ts, key, domain]
-                                netassayTables_stages[g][q][best_stage][key] = d
+                                netassayTables_stages[g][q][empty_entry][key] = d
                             elif best_stage != -1:
                                 hashz = hashes_z[best_stage]
                                 netassayTables_stages[g][q][best_stage].pop(usedHashes[g][q][best_stage][hashz][1])
