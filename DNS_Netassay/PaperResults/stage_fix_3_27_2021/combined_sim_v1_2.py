@@ -127,9 +127,11 @@ def parse_dns_response(ip_packet, ts):
                                 if(not hashz in usedHashes[g][q][z]): # entry is empty
                                     if empty_entry == -1:
                                         empty_entry = z
+                                        break
                                 elif (ts - usedHashes[g][q][z][hashz][0] > best_timeout): # timestamp expires
                                     best_timeout = ts - usedHashes[g][q][z][hashz][0]
                                     best_stage = z
+                                    break
                                 elif(usedHashes[g][q][z][hashz][1] == key): # update timestamp for existing entry
                                     usedHashes[g][q][z][hashz][0] = ts
                                     match_existing = True
