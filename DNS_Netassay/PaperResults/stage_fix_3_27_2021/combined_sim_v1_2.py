@@ -85,8 +85,8 @@ def parse_dns_response(ip_packet, ts):
                     break
             break
 
-    for g in [1, 2, 4, 8]:
-        for q in range(10, 22, 2):
+    for g in [1, 2]:
+        for q in range(12, 20, 2):
 
             modulo = int((2 ** q) / g)
 
@@ -124,7 +124,7 @@ def parse_dns_response(ip_packet, ts):
                                     hashz = 0
                                 hashes_z.append(hashz)
 
-                                if(not hashz in usedHashes[g][q][z]): # entry is empty
+                                if(not hashz in usedHashes[g][q][z] and empty_entry == -1): # entry is empty
                                     empty_entry = z
                                 elif (ts - usedHashes[g][q][z][hashz][0] > best_timeout): # timestamp expires
                                     best_timeout = ts - usedHashes[g][q][z][hashz][0]
@@ -133,7 +133,8 @@ def parse_dns_response(ip_packet, ts):
                                     usedHashes[g][q][z][hashz][0] = ts
                                     match_existing = True
                                     break
-                                elif(g < z + 2): # missed dns entry
+                                
+                                if(g < z + 2): # missed dns entry
                                     break
 
                             if empty_entry != -1 and match_existing == False:
@@ -169,8 +170,8 @@ def parse_tcp(packet_len, ip_packet, ts):
     #clientIP32 = int.from_bytes(socket.inet_aton(dest), byteorder='big')
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
-    for g in [1, 2, 4, 8]:
-        for q in range(10, 22, 2):
+    for g in [1, 2]:
+        for q in range(12, 20, 2):
             
             modulo = int((2 ** q) / g)
 
@@ -239,11 +240,11 @@ if __name__ == '__main__':
             unlimitedKnownDict[d] = [0, 0, 0, 0, 0, 0]
 
 
-    for i in [1, 2, 4, 8]:
+    for i in [1, 2]:
         knownlistDict_mem = {}
         netassayTable_mem = {}
         usedHash_mem = {}
-        for q in range(10, 22, 2):
+        for q in range(12, 20, 2):
             knownlistDict_q = {}
 
             for d in known_domains:
@@ -290,8 +291,8 @@ if __name__ == '__main__':
             print(packet_count / num_packets)
 
     outfile_stage = open('stage_limits.txt', 'w')
-    for v in [1, 2, 4, 8]:
-        for c in range(10, 22, 2):
+    for v in [1, 2]:
+        for c in range(12, 20, 2):
 
             packet_errors = []
             byte_errors = []

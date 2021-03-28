@@ -31,7 +31,7 @@ for i in range(len(by_stage)):
     count = 0
     for r in rows:
         if i == 0:
-            memoryList.append(count)
+            memoryList.append(count + 10)
         values = r.split(',')
         stage_arrs[i].append(1 - float(values[2]) / bytes_60_total)
         count += 2
@@ -41,7 +41,7 @@ fig, ax = plt.subplots()
 
 width = 0.25
 
-selectedIndicies = [4,5,6,7,8,9]
+selectedIndicies = [0,1,2,3,4,5]
 stage_1 = [stage_arrs[0][i] for i in selectedIndicies]
 stage_2 = [stage_arrs[1][i] for i in selectedIndicies]
 stage_4 = [stage_arrs[2][i] for i in selectedIndicies]
