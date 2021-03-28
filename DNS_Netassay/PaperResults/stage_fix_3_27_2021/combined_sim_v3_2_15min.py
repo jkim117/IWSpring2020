@@ -17,9 +17,6 @@ known_domains = []
 unlimitedNetTable = {}
 unlimitedKnownDict = {}
 
-netassayTables_timeout = {}
-knownlistDicts_timeout = {}
-
 netassayTables_stages = {}
 knownlistDicts_stages = {}
 
@@ -62,37 +59,6 @@ def parse_dns_response(ip_packet, ts):
     domain = answers[0].name
     domain_name = domain.split('.')
 
-    for t in range(0, 310, 10):
-        # Parser limitations
-        parser_test = True
-        if (len(domain_name) > 4):
-            parser_test = False
-            continue
-        for part in domain_name:
-            if (len(part) > 15):
-                parser_test = False
-                break
-        if (parser_test == False):
-            continue
-        
-        for d in known_domains:
-            if (matchDomain(d, domain)):
-                
-
-                for rr in answers:
-                    if (rr.type != 1):
-                        continue
-                    if (rr.type == 1): #DNS.A
-                        entry = knownlistDicts_timeout[t][d]
-                        knownlistDicts_timeout[t][d][0] = knownlistDicts_timeout[t][d][0] + 1
-                        
-                        serverIP = socket.inet_ntoa(rr.rdata)
-
-                        key = clientIP + serverIP
-
-                        netassayTables_timeout[t][key] = [d, ts]
-                        break
-                break
     
     # Parser limitations
     if (len(domain_name) > 4):
@@ -142,6 +108,12 @@ def parse_dns_response(ip_packet, ts):
                         salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
                         key = clientIP + serverIP
 
+                        empty_entry = -1
+                        best_stage = -1
+                        best_timeout = u
+                        match_existing = False
+                        hashes_z = []
+
                         for z in range(0, 8):
 
                             if modulo > 0:
@@ -149,22 +121,32 @@ def parse_dns_response(ip_packet, ts):
                                 #hashz = hash_function(serverIP32, clientIP32, salts[z]) % modulo
                             else:
                                 hashz = 0
+                            hashes_z.append(hashz)
 
                             if(not hashz in usedHashes[u][z]):
-                                usedHashes[u][z][hashz] = [ts, key, domain]
-                            elif (ts - usedHashes[u][z][hashz][0] > u): # timestamp expires
-                                netassayTables_stages[u][z].pop(usedHashes[u][z][hashz][1])
-                                usedHashes[u][z][hashz] = [ts, key, domain]
+                                empty_entry = z
+                            elif (ts - usedHashes[u][z][hashz][0] > best_timeout): # timestamp expires
+                                best_timeout = ts - usedHashes[u][z][hashz][0]
+                                best_stage = z
                             elif(usedHashes[u][z][hashz][1] == key): # update timestamp for existing entry
-                                usedHashes[u][z][hashz] = [ts, key, domain]
-                            elif(STAGES < z + 2):
-                                knownlistDicts_stages[u][d][3] = knownlistDicts_stages[u][d][3]+1
+                                usedHashes[u][z][hashz][0] = ts
+                                match_existing = True
                                 break
-                            else:
-                                continue
+                            elif(STAGES < z + 2):
+                                break
+                            
 
-                            netassayTables_stages[u][z][key] = d
-                            break
+                        if empty_entry != -1 and match_existing == False:
+                            usedHashes[u][empty_entry][hashes_z[empty_entry]] = [ts, key, domain]
+                            netassayTables_stages[u][empty_entry][key] = d
+                        elif best_stage != -1 and match_existing == False:
+                            hashz = hashes_z[best_stage]
+                            netassayTables_stages[u][best_stage].pop(usedHashes[u][best_stage][hashz][1])
+                            usedHashes[u][best_stage][hashz] = [ts, key, domain]
+                            netassayTables_stages[u][best_stage][key] = d
+                        elif match_existing == False:
+                            knownlistDicts_stages[u][d][3] = knownlistDicts_stages[u][d][3]+1
+
                         break
                 break
 
@@ -182,13 +164,6 @@ def parse_tcp(packet_len, ip_packet, ts):
     serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(source), byteorder='big'))
     clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
 
-    for t in range(0, 310, 10):
-        if key in netassayTables_timeout[t]:
-            if netassayTables_timeout[t][key][1] + t >= ts:
-                netassayTables_timeout[t][key][1] = ts
-                d = netassayTables_timeout[t][key][0]
-                knownlistDicts_timeout[t][d][1] = knownlistDicts_timeout[t][d][1] + 1
-                knownlistDicts_timeout[t][d][2] = knownlistDicts_timeout[t][d][2] + packet_len
 
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
@@ -261,12 +236,6 @@ if __name__ == '__main__':
     for d in known_domains:
             unlimitedKnownDict[d] = [0, 0, 0, 0, 0, 0]
 
-    for t in range(0, 310, 10):
-        knownlistDict_t = {}
-        for d in known_domains:
-            knownlistDict_t[d] = [0, 0, 0, 0, 0, 0]
-        knownlistDicts_timeout[t] = knownlistDict_t
-        netassayTables_timeout[t] = {}
 
     for i in range(0, 550, 50):
         knownlistDict_mem = {}
@@ -314,46 +283,12 @@ if __name__ == '__main__':
                 continue
 
         packet_count += 1
-        #if (packet_count % 100000 == 0):
-            #   print(packet_count / num_packets)
+        if (packet_count % 100000 == 0):
+            print(packet_count / num_packets)
         
 
     print('TOTAL PACKETS', TOTAL_PACKETS)
     print('TOTAL DNS', TOTAL_DNS)
-    try:
-        np.save('knownlistDicts_timeout.npy', knownlistDicts_timeout)
-    except Exception as e:
-        print(e)
-
-    outfile_t = open('timeout_limits.txt', 'w')
-
-    for t in range(0, 310, 10):
-        
-        with open('timeout_limit' + str(t) + '.csv', 'w') as csvfile:
-            w = csv.writer(csvfile)
-            w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
-
-            for j in knownlistDicts_timeout[t].keys():
-                num_packets = knownlistDicts_timeout[t][j][1]
-                num_bytes = knownlistDicts_timeout[t][j][2]
-                num_missed = knownlistDicts_timeout[t][j][3]
-                num_dns = knownlistDicts_timeout[t][j][0]
-                if (num_dns > 0 and num_missed < num_dns):
-                    knownlistDicts_timeout[t][j][4] = num_packets / (1 - (num_missed / num_dns))
-                    knownlistDicts_timeout[t][j][5] = num_bytes / (1 - (num_missed / num_dns))
-                w.writerow([j, num_dns, num_missed, num_packets, num_bytes, knownlistDicts_timeout[t][j][4], knownlistDicts_timeout[t][j][5]])
-
-        total_dns = 0
-        total_packets = 0
-        total_bytes = 0
-        for m in knownlistDicts_timeout[t].items():
-            total_dns += m[1][0]
-            total_packets += m[1][1]
-            total_bytes += m[1][2]
-        outfile_t.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
-
-    outfile_t.close()
-
 
     outfile_stage = open('timeout_limits_withmem.txt', 'w')
     for v in range(0, 550, 50):

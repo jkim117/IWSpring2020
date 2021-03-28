@@ -112,6 +112,7 @@ def parse_dns_response(ip_packet, ts):
                             empty_entry = -1
                             best_stage = -1
                             best_timeout = TIMEOUT
+                            match_existing = False
                             hashes_z = []
 
                             for z in range(0, 8):
@@ -129,19 +130,22 @@ def parse_dns_response(ip_packet, ts):
                                     best_timeout = ts - usedHashes[g][q][z][hashz][0]
                                     best_stage = z
                                 elif(usedHashes[g][q][z][hashz][1] == key): # update timestamp for existing entry
-                                    usedHashes[g][q][z][hashz] = [ts, key, domain]
+                                    usedHashes[g][q][z][hashz][0] = ts
+                                    match_existing = True
+                                    break
                                 elif(g < z + 2): # missed dns entry
-                                    knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
                                     break
 
-                            if empty_entry != -1:
+                            if empty_entry != -1 and match_existing == False:
                                 usedHashes[g][q][empty_entry][hashes_z[empty_entry]] = [ts, key, domain]
                                 netassayTables_stages[g][q][empty_entry][key] = d
-                            elif best_stage != -1:
+                            elif best_stage != -1 and match_existing == False:
                                 hashz = hashes_z[best_stage]
                                 netassayTables_stages[g][q][best_stage].pop(usedHashes[g][q][best_stage][hashz][1])
                                 usedHashes[g][q][best_stage][hashz] = [ts, key, domain]
                                 netassayTables_stages[g][q][best_stage][key] = d
+                            elif match_existing == False:
+                                knownlistDicts_stages[g][q][d][3] = knownlistDicts_stages[g][q][d][3]+1
 
                             break
                     break
