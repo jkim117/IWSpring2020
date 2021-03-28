@@ -123,8 +123,9 @@ def parse_dns_response(ip_packet, ts):
                                 hashz = 0
                             hashes_z.append(hashz)
 
-                            if(not hashz in usedHashes[u][z] and empty_entry == -1):
-                                empty_entry = z
+                            if(not hashz in usedHashes[u][z]):
+                                if empty_entry == -1:
+                                    empty_entry = z
                             elif (ts - usedHashes[u][z][hashz][0] > best_timeout): # timestamp expires
                                 best_timeout = ts - usedHashes[u][z][hashz][0]
                                 best_stage = z
