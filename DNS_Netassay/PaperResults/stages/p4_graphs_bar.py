@@ -18,7 +18,7 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('stage_limits_comb_v1_2_15min.txt', 'r')
+f = open('stage_limits_final.txt', 'r')
 by_stage = f.read().split('*')
 
 
@@ -69,7 +69,7 @@ plt.xticks(memoryList+1.5*width, memoryList)
 ax.set(xlabel='Memory Length', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Memory Size Limitations')
 ax.grid()
 #ax.set_xscale('log', base=2)
-fig.savefig("stage_limit_v1_2_15min_bar.png")
+fig.savefig("stage_limit_final_bar.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

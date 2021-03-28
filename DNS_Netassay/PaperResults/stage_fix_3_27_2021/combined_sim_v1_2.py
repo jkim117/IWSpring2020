@@ -85,8 +85,8 @@ def parse_dns_response(ip_packet, ts):
                     break
             break
 
-    for g in [1, 2]:
-        for q in range(12, 20, 2):
+    for g in [1, 2, 4, 8]:
+        for q in range(12, 22, 2):
 
             modulo = int((2 ** q) / g)
 
@@ -127,11 +127,9 @@ def parse_dns_response(ip_packet, ts):
                                 if(not hashz in usedHashes[g][q][z]): # entry is empty
                                     if empty_entry == -1:
                                         empty_entry = z
-                                        break
                                 elif (ts - usedHashes[g][q][z][hashz][0] > best_timeout): # timestamp expires
                                     best_timeout = ts - usedHashes[g][q][z][hashz][0]
                                     best_stage = z
-                                    break
                                 elif(usedHashes[g][q][z][hashz][1] == key): # update timestamp for existing entry
                                     usedHashes[g][q][z][hashz][0] = ts
                                     match_existing = True
@@ -173,8 +171,8 @@ def parse_tcp(packet_len, ip_packet, ts):
     #clientIP32 = int.from_bytes(socket.inet_aton(dest), byteorder='big')
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
-    for g in [1, 2]:
-        for q in range(12, 20, 2):
+    for g in [1, 2, 4, 8]:
+        for q in range(12, 22, 2):
             
             modulo = int((2 ** q) / g)
 
@@ -243,11 +241,11 @@ if __name__ == '__main__':
             unlimitedKnownDict[d] = [0, 0, 0, 0, 0, 0]
 
 
-    for i in [1, 2]:
+    for i in [1, 2, 4, 8]:
         knownlistDict_mem = {}
         netassayTable_mem = {}
         usedHash_mem = {}
-        for q in range(12, 20, 2):
+        for q in range(12, 22, 2):
             knownlistDict_q = {}
 
             for d in known_domains:
@@ -294,8 +292,8 @@ if __name__ == '__main__':
             print(packet_count / num_packets)
 
     outfile_stage = open('stage_limits.txt', 'w')
-    for v in [1, 2]:
-        for c in range(12, 20, 2):
+    for v in [1, 2, 4, 8]:
+        for c in range(12, 22, 2):
 
             packet_errors = []
             byte_errors = []
