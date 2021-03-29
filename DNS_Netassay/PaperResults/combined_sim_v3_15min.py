@@ -17,8 +17,8 @@ known_domains = []
 unlimitedNetTable = {}
 unlimitedKnownDict = {}
 
-netassayTables_timeout = {}
-knownlistDicts_timeout = {}
+#netassayTables_timeout = {}
+#knownlistDicts_timeout = {}
 
 netassayTables_stages = {}
 knownlistDicts_stages = {}
@@ -62,7 +62,7 @@ def parse_dns_response(ip_packet, ts):
     domain = answers[0].name
     domain_name = domain.split('.')
 
-    for t in range(0, 310, 10):
+    '''for t in range(0, 310, 10):
         # Parser limitations
         parser_test = True
         if (len(domain_name) > 4):
@@ -92,7 +92,7 @@ def parse_dns_response(ip_packet, ts):
 
                         netassayTables_timeout[t][key] = [d, ts]
                         break
-                break
+                break'''
     
     # Parser limitations
     if (len(domain_name) > 4):
@@ -119,7 +119,7 @@ def parse_dns_response(ip_packet, ts):
                     break
             break
 
-    for u in range(0, 550, 50):
+    for u in range(0, 510, 10):
 
         modulo = int((2 ** MEM) / STAGES)
 
@@ -182,17 +182,17 @@ def parse_tcp(packet_len, ip_packet, ts):
     serverIP32 = np.uint64(int.from_bytes(socket.inet_aton(source), byteorder='big'))
     clientIP32 = np.uint64(int.from_bytes(socket.inet_aton(dest), byteorder='big'))
 
-    for t in range(0, 310, 10):
+    '''for t in range(0, 310, 10):
         if key in netassayTables_timeout[t]:
             if netassayTables_timeout[t][key][1] + t >= ts:
                 netassayTables_timeout[t][key][1] = ts
                 d = netassayTables_timeout[t][key][0]
                 knownlistDicts_timeout[t][d][1] = knownlistDicts_timeout[t][d][1] + 1
-                knownlistDicts_timeout[t][d][2] = knownlistDicts_timeout[t][d][2] + packet_len
+                knownlistDicts_timeout[t][d][2] = knownlistDicts_timeout[t][d][2] + packet_len'''
 
     salts = [np.uint64(134140211), np.uint64(187182238), np.uint64(187238), np.uint64(1853238), np.uint64(1828), np.uint64(12238), np.uint64(72134), np.uint64(152428), np.uint64(164314534), np.uint64(223823)]
 
-    for u in range(0, 550, 50):
+    for u in range(0, 510, 10):
             
         modulo = int((2 ** MEM) / STAGES)
 
@@ -261,14 +261,14 @@ if __name__ == '__main__':
     for d in known_domains:
             unlimitedKnownDict[d] = [0, 0, 0, 0, 0, 0]
 
-    for t in range(0, 310, 10):
+    '''for t in range(0, 310, 10):
         knownlistDict_t = {}
         for d in known_domains:
             knownlistDict_t[d] = [0, 0, 0, 0, 0, 0]
         knownlistDicts_timeout[t] = knownlistDict_t
-        netassayTables_timeout[t] = {}
+        netassayTables_timeout[t] = {}'''
 
-    for i in range(0, 550, 50):
+    for i in range(0, 510, 10):
         knownlistDict_mem = {}
         usedHash_individual_run = []
         netTable_individual = []
@@ -314,13 +314,13 @@ if __name__ == '__main__':
                 continue
 
         packet_count += 1
-        #if (packet_count % 100000 == 0):
-            #   print(packet_count / num_packets)
+        if (packet_count % 1000000 == 0):
+            print(packet_count / num_packets)
         
 
     print('TOTAL PACKETS', TOTAL_PACKETS)
     print('TOTAL DNS', TOTAL_DNS)
-    try:
+    '''try:
         np.save('knownlistDicts_timeout.npy', knownlistDicts_timeout)
     except Exception as e:
         print(e)
@@ -352,11 +352,11 @@ if __name__ == '__main__':
             total_bytes += m[1][2]
         outfile_t.write(str(total_dns)+','+str(total_packets)+','+str(total_bytes)+'\n')
 
-    outfile_t.close()
+    outfile_t.close()'''
 
 
     outfile_stage = open('timeout_limits_withmem.txt', 'w')
-    for v in range(0, 550, 50):
+    for v in range(0, 510, 10):
 
         packet_errors = []
         byte_errors = []
