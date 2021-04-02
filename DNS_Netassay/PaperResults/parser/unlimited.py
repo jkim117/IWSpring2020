@@ -76,16 +76,16 @@ def parse_dns_response(ip_packet, ts):
             if (rr.type != 1):
                 continue
             if (rr.type == 1): #DNS.A
-                if not (domain_name in knownlistDict):
-                    knownlistDict[domain_name] = [0, 0, 0, 0, 0, 0]
+                if not (domain in knownlistDict):
+                    knownlistDict[domain] = [0, 0, 0, 0, 0, 0]
                 
-                knownlistDict[domain_name][0] = knownlistDict[domain_name][0] + 1
+                knownlistDict[domain][0] = knownlistDict[domain][0] + 1
                 
                 serverIP = socket.inet_ntoa(rr.rdata)
 
                 key = clientIP + serverIP
 
-                netassayTable[key] = domain_name
+                netassayTable[key] = domain
                 break
 
 def parse_tcp(packet_len, ip_packet, ts):
