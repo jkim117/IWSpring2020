@@ -76,7 +76,7 @@ def parse_dns_response(ip_packet, ts):
             if (rr.type != 1):
                 continue
             if (rr.type == 1): #DNS.A
-                if domain_name not in knownlistDict:
+                if not (domain_name in knownlistDict):
                     knownlistDict[domain_name] = [0, 0, 0, 0, 0, 0]
                 
                 knownlistDict[domain_name][0] = knownlistDict[domain_name][0] + 1
