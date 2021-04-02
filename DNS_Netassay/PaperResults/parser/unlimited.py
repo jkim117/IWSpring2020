@@ -149,8 +149,7 @@ if __name__ == '__main__':
 
         # For each packet parse the dns responses
         if (dns_code == -1):
-            try:
-                parse_dns_response(ip, ts)
+            parse_dns_response(ip, ts)
         else:
             parse_tcp(dns_code, ip, ts)
 
