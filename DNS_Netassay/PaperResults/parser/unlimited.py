@@ -36,9 +36,14 @@ def parse_dns_response(ip_packet, ts):
         if is_subnet_of(cip_object, ip):
             return
 
-
-    dns = dpkt.dns.DNS(ip_packet.data.data)
+    try:
+        dns = dpkt.dns.DNS(ip_packet.data.data)
+    except:
+        return
     answers = dns.an
+
+    if len(answers) <= 0:
+        return
 
     domain = answers[0].name
     domain_name = domain.split('.')
@@ -111,7 +116,7 @@ def matchDomain(known, domain):
 
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
-    if len(argv) != 6:
+    if len(argv) != 5:
         print('usage: python netassay_python3_p4sim.py pickleFile allowed_dns_dst.txt banned_dns_dst.txt outfilename')
         exit(-1)
     
@@ -134,6 +139,9 @@ if __name__ == '__main__':
     pcap_obj = pickle.load(f)
     f.close()
 
+    num_packets = len(pcap_obj)
+    packet_count = 0.0
+
     for p in pcap_obj:
         ts = p[0]
         dns_code = p[1]
@@ -143,11 +151,12 @@ if __name__ == '__main__':
         if (dns_code == -1):
             try:
                 parse_dns_response(ip, ts)
-            except Exception as e:
-                
-                continue
         else:
             parse_tcp(dns_code, ip, ts)
+
+        packet_count += 1
+        if (packet_count % 1000 == 0):
+            print(packet_count / num_packets)
 
     for i in knownlistDict.keys():
         num_packets = knownlistDict[i][1]
