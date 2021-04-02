@@ -19,7 +19,21 @@ with open('parse_limit60_15min.csv') as csvfile:
         packets_60_total += float(row[3])
         bytes_60_total += float(row[4])
 
-f = open('timeout_limits_withmem_15min.txt', 'r')
+dns_60_total_3 = 0
+packets_60_total_3 = 0
+bytes_60_total_3 = 0
+
+with open('parse_limit60_3hr.csv') as csvfile:
+#with open('unlimited0000.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        if row[0] == 'Domain':
+            continue
+        dns_60_total_3 += float(row[1])
+        packets_60_total_3 += float(row[3])
+        bytes_60_total_3 += float(row[4])
+
+f = open('timeout_limits_withmem_15min_high_res.txt', 'r')
 #f = open('timeout_limits.txt', 'r')
 rows = f.read().split('\n')
 
@@ -34,6 +48,25 @@ for r in rows:
     packets_arr.append(1 - float(values[1]) / packets_60_total)
     bytes_arr.append(1 - float(values[2]) / bytes_60_total)
     # count += 10 change for real
+    count += 10
+
+f.close()
+
+f = open('timeout_limits_withmem.txt', 'r')
+#f = open('timeout_limits.txt', 'r')
+rows = f.read().split('\n')
+
+packets_arr_3 = []
+bytes_arr_3 = []
+timeoutList_3 = []
+
+count = 0
+for r in rows:
+    timeoutList_3.append(count)
+    values = r.split(',')
+    packets_arr_3.append(1 - float(values[1]) / packets_60_total_3)
+    bytes_arr_3.append(1 - float(values[2]) / bytes_60_total_3)
+    # count += 10 change for real
     count += 50
 
 f.close()
@@ -41,10 +74,10 @@ f.close()
 fig, ax = plt.subplots()
 
 line3, = ax.plot(timeoutList, bytes_arr, 'b--')
-line3.set_label('Bytes')
+line3.set_label('15 Min Trace')
 
-line2, = ax.plot(timeoutList, packets_arr, 'b:')
-line2.set_label('Packets')
+line2, = ax.plot(timeoutList_3, bytes_arr_3, 'b:')
+line2.set_label('3 Hr Trace')
 
 plt.axvline(x=100, color='red')
 plt.ylim([0, 0.4])
@@ -53,10 +86,10 @@ plt.xlim([0, 500])
 ax.legend()
 
 
-ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
+ax.set(xlabel='Timemout (s)', ylabel='Ratio of Bytes Lost', title='Ratio of Bytes Lost Due to Timeout')
 #ax.set_yscale('log', base=10)
 ax.grid()
-fig.savefig("timeout_limit_withmem.png")
+fig.savefig("timeout_limit_withmem_final.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)

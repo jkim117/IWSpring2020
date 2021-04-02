@@ -43,32 +43,45 @@ def parse_dns_response(ip_packet, ts):
     domain = answers[0].name
     domain_name = domain.split('.')
 
+    parseable = True
+
     # Parser limitations
-    '''if (len(domain_name) > 4):
-        return
+    if (len(domain_name) > 4):
+        parseable = False
     for part in domain_name:
         if (len(part) > 15):
-            return'''
+            parseable = False
 
-    for d in known_domains:
-        if (matchDomain(d, domain)):
-            
+    if (parseable):
+        for rr in answers:
+            if (rr.type != 1):
+                continue
+            if (rr.type == 1): #DNS.A
+                entry = knownlistDict['*']
+                knownlistDict['*'][0] = knownlistDict['*'][0] + 1
+                
+                serverIP = socket.inet_ntoa(rr.rdata)
 
-            for rr in answers:
-                if (rr.type != 1):
-                    continue
-                if (rr.type == 1): #DNS.A
-                    entry = knownlistDict[d]
-                    knownlistDict[d][0] = knownlistDict[d][0] + 1
-                    
-                    serverIP = socket.inet_ntoa(rr.rdata)
+                key = clientIP + serverIP
 
-                    key = clientIP + serverIP
+                netassayTable[key] = '*'
+                break
+    else:
+        for rr in answers:
+            if (rr.type != 1):
+                continue
+            if (rr.type == 1): #DNS.A
+                if domain_name not in knownlistDict:
+                    knownlistDict[domain_name] = [0, 0, 0, 0, 0, 0]
+                
+                knownlistDict[domain_name][0] = knownlistDict[domain_name][0] + 1
+                
+                serverIP = socket.inet_ntoa(rr.rdata)
 
-                    netassayTable[key] = d
-                    break
-            break
-        
+                key = clientIP + serverIP
+
+                netassayTable[key] = domain_name
+                break
 
 def parse_tcp(packet_len, ip_packet, ts):
     source = socket.inet_ntoa(ip_packet['src']) #server
@@ -99,29 +112,23 @@ def matchDomain(known, domain):
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
     if len(argv) != 6:
-        print('usage: python netassay_python3_p4sim.py pickleFile knownlist.txt allowed_dns_dst.txt banned_dns_dst.txt outfilename')
+        print('usage: python netassay_python3_p4sim.py pickleFile allowed_dns_dst.txt banned_dns_dst.txt outfilename')
         exit(-1)
     
     # Parse allowed IP and banned IP files
-    allowed_ip_file = open(argv[3], 'r')
+    allowed_ip_file = open(argv[2], 'r')
     allowed_ip_list = allowed_ip_file.read().split()
     allowed_ip_file.close()
     for ip in allowed_ip_list:
         allowed_ips.append(ipaddress.ip_network(ip))
 
-    banned_ip_file = open(argv[4], 'r')
+    banned_ip_file = open(argv[3], 'r')
     banned_ip_list = banned_ip_file.read().split()
     banned_ip_file.close()
     for ip in banned_ip_list:
         banned_ips.append(ipaddress.ip_network(ip))
 
-    # Create knownlist
-    knownlist = open(argv[2], 'r')
-    known_domains = knownlist.read().split()
-    knownlist.close()
-
-    for d in known_domains:
-        knownlistDict[d] = [0, 0, 0, 0, 0, 0]
+    knownlistDict['*'] = [0, 0, 0, 0, 0, 0]
 
     f = open(argv[1], 'rb')
     pcap_obj = pickle.load(f)

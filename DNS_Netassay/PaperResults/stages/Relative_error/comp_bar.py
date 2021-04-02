@@ -17,9 +17,9 @@ domain_names = []
 bytes_true = {}
 dns_true = {}
 
-banned_domains = ['*.*.*.net', '*.*.*', '*.*.com', '*.*.*.com', '*.*.net']
+banned_domains = ['*.*.*.net', '*.*.*', '*.*.com', '*.*.*.com', '*.*.net', '*.edu', '*.com', '*.*.org']
 
-with open('parse_limit60_3hr.csv') as csvfile:
+with open('parse_limit60_15min.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         if row[0] == 'Domain' or row[0] in banned_domains:
@@ -34,7 +34,7 @@ with open('parse_limit60_3hr.csv') as csvfile:
 domains_final = []
 bytes_true_final = []
 dns_true_final = []
-with open('./08_19_2020_T08-11/stage_limit2_10.csv') as csvfile:
+with open('./15min_timeout100/stage_limit2_16.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         #if row[0] == 'Domain':
@@ -57,7 +57,7 @@ bytes_true = np.array(bytes_true_final)
 error_before = np.array(error_before)
 error_after = np.array(error_after)
 
-idx = np.argsort(bytes_true)
+idx = np.argsort(dns_true)
 domain_names = domain_names[idx]
 bytes_true = bytes_true[idx]
 error_before = error_before[idx]
@@ -110,7 +110,7 @@ ax.set(xlabel='Domain Names', ylabel='Relative Error', title='Relative Error of 
 #ax.set_xscale('log', base=2)
 
 plt.tight_layout()
-fig.savefig("comp_bar_3hr_2_10.png")
+fig.savefig("comp_bar_15min_2_16.png")
 
 plt.show()
 #scatter_compare(python_byt, p4_byt)
