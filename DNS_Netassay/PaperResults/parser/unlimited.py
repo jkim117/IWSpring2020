@@ -167,7 +167,7 @@ if __name__ == '__main__':
             knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
 
 
-    with open(argv[5], 'w') as csvfile:
+    with open(argv[4], 'w') as csvfile:
         w = csv.writer(csvfile)
         w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
 
