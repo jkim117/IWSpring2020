@@ -155,9 +155,17 @@ if __name__ == '__main__':
 
             # For each packet parse the dns responses
             if (dns_code == -1):
-                parse_dns_response(ip, ts)
+                try:
+                    parse_dns_response(ip, ts)
+                except Exception as e:
+                    print(e)
+                    continue
             else:
-                parse_tcp(dns_code, ip, ts)
+                try:
+                    parse_tcp(dns_code, ip, ts)
+                except Exception as e:
+                    print(e)
+                    continue
 
             packet_count += 1
             '''if (packet_count % 1000 == 0):
