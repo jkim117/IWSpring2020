@@ -89,7 +89,9 @@ if __name__ == '__main__':
 
         # For each packet parse the dns responses
         if (dns_code == -1):
-            parse_dns_response(ip, ts)
+            r = parse_dns_response(ip, ts)
+            if r != 0:
+                upperCaseDomains.append(r)
         
         packet_count += 1
         if (packet_count % 1000 == 0):
