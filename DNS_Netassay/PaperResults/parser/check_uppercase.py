@@ -47,12 +47,43 @@ def parse_dns_response(ip_packet, ts):
 
     domain = answers[0].name
     if (any(c.isupper() for c in domain)):
-        print(domain)
-        return domain
-    else:
-        return 0
+        domain_name = domain.split('.')
+
+        # Parser limitations
+        if (len(domain_name) > 4):
+            return
+        for part in domain_name:
+            if (len(part) > 15):
+                return
+
+        for rr in answers:
+            if (rr.type != 1):
+                continue
+            if (rr.type == 1): #DNS.A
+                if not (domain in knownlistDict):
+                    knownlistDict[domain] = [0, 0, 0, 0, 0, 0]
+                
+                knownlistDict[domain][0] = knownlistDict[domain][0] + 1
+                
+                serverIP = socket.inet_ntoa(rr.rdata)
+
+                key = clientIP + serverIP
+
+                netassayTable[key] = domain
+                break
 
 
+def parse_tcp(packet_len, ip_packet, ts):
+    source = socket.inet_ntoa(ip_packet['src']) #server
+    dest = socket.inet_ntoa(ip_packet['dst']) #client
+    
+    key = dest + source
+    if key in netassayTable:
+        d = netassayTable[key]
+        knownlistDict[d][1] = knownlistDict[d][1] + 1
+        knownlistDict[d][2] = knownlistDict[d][2] + packet_len
+
+    
 # parse the command line argument and open the file specified
 if __name__ == '__main__':
 
@@ -73,8 +104,6 @@ if __name__ == '__main__':
     for ip in banned_ip_list:
         banned_ips.append(ipaddress.ip_network(ip))
 
-    upperCaseDomains = []
-
     f = open(argv[1], 'rb')
     pcap_obj = pickle.load(f)
     f.close()
@@ -89,16 +118,27 @@ if __name__ == '__main__':
 
         # For each packet parse the dns responses
         if (dns_code == -1):
-            r = parse_dns_response(ip, ts)
-            if r != 0:
-                upperCaseDomains.append(r)
+            parse_dns_response(ip, ts)
+        else:
+            parse_tcp(dns_code, ip, ts)
         
         packet_count += 1
-        if (packet_count % 1000 == 0):
+        if (packet_count % 10000 == 0):
             print(packet_count / num_packets)
 
-    outf = open(argv[4], 'w')
-    for d in upperCaseDomains:
-        outf.write(d + '\n')
-    outf.close()
+    for i in knownlistDict.keys():
+        num_packets = knownlistDict[i][1]
+        num_bytes = knownlistDict[i][2]
+        num_missed = knownlistDict[i][3]
+        num_dns = knownlistDict[i][0]
+        if (num_dns > 0 and num_missed < num_dns):
+            knownlistDict[i][4] = num_packets / (1 - (num_missed / num_dns))
+            knownlistDict[i][5] = num_bytes / (1 - (num_missed / num_dns))
+
+    with open(argv[4], 'w') as csvfile:
+        w = csv.writer(csvfile)
+        w.writerow(["Domain", "Number of DNS requests", "Missed DNS requests missed", "Number of Packets", "Number of Bytes", "Estimated Packets", "Estimated Bytes"])
+
+        for i in knownlistDict.items():
+            w.writerow([i[0], i[1][0], i[1][3], i[1][1], i[1][2], i[1][4], i[1][5]])
 
