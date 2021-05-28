@@ -35,6 +35,7 @@ for r in rows:
     dns_arr.append(1 - float(values[0]) / true_dns_total)
     packets_arr.append(1 - float(values[1]) / true_packets_total)
     bytes_arr.append(1 - float(values[2]) / true_bytes_total)
+    print(count, 1 - float(values[2]) / true_bytes_total)
     if (count==15):
         print(dns_arr[-1])
         print(packets_arr[-1])
@@ -60,7 +61,7 @@ plt.ylim(bottom=0)
 
 ax.legend()
 
-ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Domain Name Parser Limitations')
+ax.set(xlabel='Maximum Bytes allowed in Domain Name Parser', ylabel='Ratio of Traffic Missed', title='Ratio of Traffic Missed Due to Domain Name Parser Limitations')
 ax.grid()
 fig.savefig("dns_parser_limit_3hr.png")
 

@@ -68,7 +68,7 @@ plt.xlim([0, 600])
 ax.legend()
 
 
-ax.set(xlabel='Timemout (s)', ylabel='Ratio of Traffic Lost', title='Ratio of Traffic Lost Due to Timeout')
+ax.set(xlabel='Timeout (s)', ylabel='Ratio of Traffic Missed', title='Ratio of Traffic Missed Due to Timeout')
 #ax.set_yscale('log', base=10)
 ax.grid()
 fig.savefig("timeout_limit_3hr3.png")

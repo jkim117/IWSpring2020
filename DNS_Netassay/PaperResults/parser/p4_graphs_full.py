@@ -19,6 +19,11 @@ with open('unlimited_15min_full.csv') as csvfile:
         true_packets_total += float(row[3])
         true_bytes_total += float(row[4])
 
+avg_dns = 0
+avg_packet = 0
+avg_byte = 0
+num = 0
+
 with open ('unlimited_percent_15min.csv', 'w') as csvout:
     writer = csv.writer(csvout)
 
@@ -33,7 +38,17 @@ with open ('unlimited_percent_15min.csv', 'w') as csvout:
             packet_percent = float(row[3])/true_packets_total
             bytes_percent = float(row[4])/true_bytes_total
 
+            if row[0] != '*':
+                avg_dns += dns_percent
+                avg_packet += packet_percent
+                avg_byte += bytes_percent
+                num += 1
+
             writer.writerow([row[0], dns_percent, packet_percent, bytes_percent])
+
+print(avg_dns / num)
+print(avg_packet / num)
+print(avg_byte / num)
 
 #scatter_compare(python_byt, p4_byt)
 #rank_compare(python_byt, p4_byt)

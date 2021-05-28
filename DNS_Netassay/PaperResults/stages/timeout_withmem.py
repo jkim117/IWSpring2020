@@ -74,10 +74,10 @@ f.close()
 fig, ax = plt.subplots()
 
 line3, = ax.plot(timeoutList, bytes_arr, 'b--')
-line3.set_label('15 Min Trace')
+line3.set_label('High load traffic')
 
 line2, = ax.plot(timeoutList_3, bytes_arr_3, 'b:')
-line2.set_label('3 Hr Trace')
+line2.set_label('Low load traffic')
 
 plt.axvline(x=100, color='red')
 plt.ylim([0, 0.4])
@@ -86,7 +86,7 @@ plt.xlim([0, 500])
 ax.legend()
 
 
-ax.set(xlabel='Timemout (s)', ylabel='Ratio of Bytes Lost', title='Ratio of Bytes Lost Due to Timeout')
+ax.set(xlabel='Timeout (s)', ylabel='Ratio of Bytes Missed', title='Ratio of Bytes Missed Due to Timeout')
 #ax.set_yscale('log', base=10)
 ax.grid()
 fig.savefig("timeout_limit_withmem_final.png")
