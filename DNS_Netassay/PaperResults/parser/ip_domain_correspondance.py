@@ -112,12 +112,12 @@ if __name__ == '__main__':
         w.writerow(["IP Address", "Num Domains", "Domains"])
 
         for i in ipDict.keys():
-            w.writerow(i, len(ipDict[i]), ipDict[i])
+            w.writerow([i, len(ipDict[i]), ipDict[i]])
 
     with open('domaindict_15min.csv', 'w') as csvfile:
         w = csv.writer(csvfile)
         w.writerow(["Domain", "Num IPs", "IPs"])
 
         for i in knownlistDict.keys():
-            w.writerow(i, len(knownlistDict[i]), knownlistDict[i])
+            w.writerow([i, len(knownlistDict[i]), knownlistDict[i]])
 
