@@ -44,26 +44,24 @@ def parse_dns_response(ip_packet, ts):
         return
 
     domain = answers[0].name
-    if (any(c.isupper() for c in domain)):
-        domain_name = domain.split('.')
 
-        for rr in answers:
-            if (rr.type != 1):
-                continue
-            if (rr.type == 1): #DNS.A
-                serverIP = socket.inet_ntoa(rr.rdata)
+    for rr in answers:
+        if (rr.type != 1):
+            continue
+        if (rr.type == 1): #DNS.A
+            serverIP = socket.inet_ntoa(rr.rdata)
 
-                if not (domain in knownlistDict):
-                    knownlistDict[domain] = []
-                if not (serverIP in ipDict):
-                    ipDict[serverIP] = []
-                
-                if not (serverIP in knownlistDict[domain]):
-                    knownlistDict[domain].append(serverIP)
-                if not (domain in ipDict[serverIP]):
-                    ipDict[serverIP].append(domain)
+            if not (domain in knownlistDict):
+                knownlistDict[domain] = []
+            if not (serverIP in ipDict):
+                ipDict[serverIP] = []
+            
+            if not (serverIP in knownlistDict[domain]):
+                knownlistDict[domain].append(serverIP)
+            if not (domain in ipDict[serverIP]):
+                ipDict[serverIP].append(domain)
 
-                break
+            break
 
     
 # parse the command line argument and open the file specified
